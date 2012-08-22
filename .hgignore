@@ -11,6 +11,7 @@ syntax:glob
 build.out
 test.out
 goinstall.log
+gohg.sublime-workspace
 
 syntax:regexp
 ^bin/
