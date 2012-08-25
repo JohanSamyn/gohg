@@ -7,12 +7,26 @@
 //
 // For Mercurial see: http://mercurial/selenic.com/wiki.
 // For the Hg Command Server see: http://mercurial.selenic.com/wiki/CommandServer.
-package main
+package gohg
 
 import (
 	"fmt"
 )
 
-func main() {
+func init() {
 	fmt.Println("Hello from gohg!")
+}
+
+func Connect() error {
+	// Maybe we can even manage multiple connections ?
+	// Question: can we manage more than 1 repo from the same Hg Command Server
+	// instance ? If not then I don't think multiple connections will work.
+}
+
+func Close() {
+
+}
+
+func RunCommand() {
+
 }
