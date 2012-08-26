@@ -18,9 +18,6 @@ func init() {
 }
 
 func Connect() error {
-	// Maybe we can even manage multiple connections ?
-	// Question: can we manage more than 1 repo from the same Hg Command Server
-	// instance ? If not then I don't think multiple connections will work.
 }
 
 func Close() {
