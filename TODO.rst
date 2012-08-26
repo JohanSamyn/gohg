@@ -1,6 +1,8 @@
 TODO
 ****
 
+(in no particular order, and order can change anytime)
+
 1.  Use the stats.py example from the python-hglib tool for testing.
     That can be a simple means of being able to verify the output
     by comparing the results of both gohg and python-hglib.
