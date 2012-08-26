@@ -21,3 +21,5 @@ TODO
     I can handle in one move. Some buffering is required, to capture _all_ data
     from the pipe.
 
+#.  Maybe I should rename into gohglib ?
+
