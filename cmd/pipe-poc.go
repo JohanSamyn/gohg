@@ -11,6 +11,7 @@ import (
 	"io"
 	"log"
 	"os/exec"
+	"strings"
 )
 
 func main() {
@@ -19,7 +20,9 @@ func main() {
 
 	cmd := exec.Command("M:\\DEV\\hg-stable\\hg",
 		"-R", "C:\\DEV\\go\\src\\golout\\",
-		"--config", "ui.interactive=True", "serve", "--cmdserver", "pipe")
+		"--config", "ui.interactive=True",
+		"--config", "color=False",
+		"serve", "--cmdserver", "pipe")
 
 	pout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -169,11 +172,15 @@ func main() {
 	var hgm2 hgMsg
 	for {
 		hgm2 = readFromHg(pout)
+		hgm2.Data = strings.Replace(hgm2.Data, "\n", "\\n", -1)
 		fmt.Printf("hgm2=%s\n", hgm2)
 		// fmt.Printf("hgm2=%v\nhgm2=%s", hgm2, hgm2)
 		// switch {
 		// 	case
 		// }
+		if hgm2.Ch == "r" {
+			break
+		}
 	}
 
 	// ========== Closing the connection ==========
