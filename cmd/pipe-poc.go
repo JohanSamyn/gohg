@@ -10,6 +10,7 @@ import (
 	"encoding/binary"
 	"io"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -38,10 +39,10 @@ func main() {
 
 	// ========== Receiving a massage drom the Hg CS ==========
 
-	// 4101:	1 byte for the channel
+	// 1029:	1 byte for the channel
 	//			4 bytes for the message length
-	//			up to 4096 bytes of data
-	s := make([]byte, 1+4+8096)
+	//			up to 1024 bytes of data
+	s := make([]byte, 1+4+1024)
 
 	// change this, so we can read only 5 bytes first, and so determine the
 	// channel and the length of the data. If channel = I or L, Hg is asking
@@ -79,7 +80,7 @@ func main() {
 
 	msg := new(hgCmd)
 	msg.Cmd = "runcommand\n"
-	msg.Args = "log\x00-l\x003"
+	msg.Args = "summary"
 	msg.Ln = uint(len(msg.Args))
 	hgc0.Cmd = strings.Replace(msg.Cmd, "\n", "\\n", -1)
 	hgc0.Args = strings.Replace(msg.Args, "\n", "\\n", -1)
@@ -147,23 +148,43 @@ func main() {
 		  45             break
 	*/
 
-	// var br []byte
 	var hgm2 hgMsg
+	var show bool
 	for {
 		hgm2 = receiveFromHg(pout)
-		hgm0.Data = strings.Replace(hgm2.Data, "\n", "\\n", -1)
-		fmt.Printf("hgMsg={Channel: \"%s\"    Length: %v\n       Data: \"%s\"}\n",
-			hgm2.Ch, hgm2.Ln, hgm0.Data)
-		// hgm2.Data = strings.Replace(hgm2.Data, "\n", "\\n", -1)
-		// fmt.Printf("hgm2=%s\n", hgm2)
-		// fmt.Printf("hgm2=%v\nhgm2=%s", hgm2, hgm2)
-		// switch {
-		// 	case
-		// }
-		// if hgm2.Ch == "r" {
-		// 	break
-		// }
-	}
+		show = true
+		switch {
+		case hgm2.Ch == "o":
+			{
+			}
+		case hgm2.Ch == "e":
+			{
+			}
+		case hgm2.Ch == "r":
+			{
+			}
+		case hgm2.Ch == "I":
+			{
+			}
+		case hgm2.Ch == "L":
+			{
+			}
+		default:
+			{
+				show = false
+				// fmt.Printf("unexpected channel: %s %d\n", hgm2.Ch, hgm2.Ln)
+				if hgm2.Ch == strings.ToUpper(hgm2.Ch) {
+					os.Exit(1)
+				}
+			}
+		} // switch
+		if show == true {
+			// hgm0.Data = strings.Replace(hgm2.Data, "\n", "\\n", -1)
+			hgm0.Data = hgm2.Data
+			fmt.Printf("hgMsg={Channel: \"%s\"    Length: %v\n       Data: \"%s\"}\n",
+				hgm2.Ch, hgm2.Ln, hgm0.Data)
+		}
+	} // for
 
 	// ========== Closing the connection ==========
 
@@ -192,14 +213,14 @@ type hgCmd struct {
 // }
 
 func receiveFromHg(pout io.ReadCloser) hgMsg {
-	s := make([]byte, 4101)
 
 	// change this, so we can read only 5 bytes first, and so determine the
 	// channel and the length of the data. If channel = I or L, Hg is asking
 	// for input, not sending us data. Otherwise we can go on reading 'length'
 	// bytes. See the simple example on the Hg CS page.
 
-	i, err := pout.Read(s)
+	s1 := make([]byte, 1+4)
+	i, err := pout.Read(s1)
 	if err != io.EOF && err != nil {
 		log.Fatal("[5] ", i, err)
 	}
@@ -208,20 +229,31 @@ func receiveFromHg(pout io.ReadCloser) hgMsg {
 
 	hgm := new(hgMsg)
 
-	if s[0] == byte("r"[0]) {
+	if s1[0] == byte("r"[0]) {
 		return *hgm
 	}
 	var l uint32
-	buf := bytes.NewBuffer(s[1:5])
+	buf := bytes.NewBuffer(s1[1:5])
 	err = binary.Read(buf, binary.BigEndian, &l)
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
 	}
 	// fmt.Printf("buf=%v\n", *buf)
 
-	hgm.Ch = string(s[0])
+	hgm.Ch = string(s1[0])
 	hgm.Ln = uint(l)
-	hgm.Data = string(s[5 : 5+hgm.Ln])
+
+	if hgm.Ln == 0 {
+		return *hgm
+	}
+	s2 := make([]byte, hgm.Ln)
+	i, err = pout.Read(s2)
+	if err != io.EOF && err != nil {
+		log.Fatal("[5] ", i, err)
+	}
+
+	// hgm.Data = string(s2[5 : 5+hgm.Ln])
+	hgm.Data = string(s2[:])
 	// fmt.Printf("hgMsg={\nChannel=%s\nLength=%v\nData=%s\n}\n",
 	// 	hgm.Ch, hgm.Ln, hgm.Data)
 
