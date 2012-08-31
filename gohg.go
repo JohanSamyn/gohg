@@ -1,5 +1,5 @@
 // Copyright (c) 2012, Johan P. P. Samyn <johan.samyn@gmail.com> All rights reserved.
-// Use of this source code is governed by the BSD-2-clause license
+// Use of this source code is governed by the Simplified BSD License
 // that can be found in the LICENSE.txt file.
 
 // Package gohg is a Go client library for using the Mercurial dvcs
