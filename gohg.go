@@ -1,5 +1,5 @@
 // Copyright (c) 2012, Johan P. P. Samyn <johan.samyn@gmail.com> All rights reserved.
-// Use of this source code is governed by the BSD-2-clause license
+// Use of this source code is governed by the Simplified BSD License
 // that can be found in the LICENSE.txt file.
 
 // Package gohg is a Go client library for using the Mercurial dvcs
@@ -10,20 +10,162 @@
 package gohg
 
 import (
+	"encoding/binary"
+	"bytes"
 	"fmt"
+	"io"
+	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 )
 
+const t = "hg serve [OPTION]"
+
+var server *exec.Cmd
+var pout io.ReadCloser
+var pin io.WriteCloser
+var repo string
+
+type hgMsg struct {
+	Ch   string
+	Ln   uint
+	Data string
+}
+
+type hgCmd struct {
+	Cmd  string
+	Ln   uint
+	Args string
+}
+
 func init() {
-	fmt.Println("Hello from gohg!")
-}
+	// fmt.Println("Hello from gohg!")
+} // init()
 
-func Connect() error {
-}
+func Connect(hg string, repo_arg string, config []string) error {
 
-func Close() {
+	// for example:
+	// server = exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
+	// 		"-R", "C:\\DEV\\go\\src\\golout\\",			// the repo
+	// 		"--config", "ui.interactive=True",			// mandatory settings
+	// 		"--config", "extensions.color=!",			// more settings (for Windows)
+	// 		"serve", "--cmdserver", "pipe")				// start the Command Server
 
-}
+	// Maybe accept a channel as an extra argument for sending the logging to ?
+	// And if it's nil, log into a textfile in the folder of this lib.
+	// Also do not override that logfile every launch, but insert a timestamp
+	// to mark a new run. Maybe even do this in the init() function ?
+
+	if hg == "" {
+		// Use the default Mercurial.
+		hg = "hg"
+	}
+
+	var err error
+	var oriRepo string
+	sep := string(os.PathSeparator)
+	// The Hg Command Server needs a repository.
+	repo = repo_arg
+	if repo == "" {
+		repo, err = os.Getwd()
+	} else {
+		repo = strings.TrimRight(repo, sep)
+	}
+	oriRepo = repo
+	// If we do not find a Hg repo in the current dir, we search for one
+	// up the path, in case we're deeper in it's working copy.
+	for {
+		_, err = os.Stat(repo + sep + ".hg")
+		if err == nil {
+			break
+		}
+		var dir, file string
+		dir, file = filepath.Split(repo)
+		if dir == "" || file == "" {
+			repo = ""
+			break
+		}
+		repo = dir
+	}
+	if err != nil || repo == "" {
+		log.Fatal("could not find a Hg repository at: " + oriRepo)
+	}
+
+	// if len(config) > 0 {
+	// 	var cfg string
+	// 	for i := 0; i < range(config) {
+	// 		cfg = cfg + "," + config[i]
+	// 	}
+	// 	cmd = cmd + "," + cfg
+	// }
+
+	server = exec.Command(hg)
+	server.Args = append(server.Args, "-R", repo)
+	server.Args = append(server.Args,
+		// These arguments are fixed.
+		"--config", "ui.interactive=True",
+		"--config", "extensions.color=!",
+		"serve", "--cmdserver", "pipe")
+
+	pout, err = server.StdoutPipe()
+	if err != nil {
+		log.Fatal("could not connect StdoutPipe: ", err)
+	}
+	pin, err = server.StdinPipe()
+	if err != nil {
+		log.Fatal("could not connect StdinPipe: ", err)
+	}
+	if err := server.Start(); err != nil {
+		log.Fatal("could not start the Hg Command Server: ", err)
+	}
+	// temporarily, to avoid compilation error that pin is not used
+	_, err = pin.Write(make([]byte, 0))
+	// fmt.Printf("pout=%v,    pin=%v\n", pout, pin)
+
+	s := make([]byte, 1+4+1024)
+	_, err = pout.Read(s)
+	if err != io.EOF && err != nil {
+		log.Fatal(err)
+	}
+	if len(s) == 0 {
+		log.Fatal("no data received from Hg Command Server")
+	}
+	var ln uint32
+	buf := bytes.NewBuffer(s[1:5])
+	err = binary.Read(buf, binary.BigEndian, &ln)
+	if err != nil {
+		fmt.Println("binary.Read failed:", err)
+	}
+	t := "capabilities:"
+	l := len(t)
+	// fmt.Println("[[" + string(s[5:5+l]) + "]]")
+	if string(s[5:5+l]) != t {
+		log.Fatal("could not connect a Hg Command Server")
+	}
+
+	fmt.Println("Connection established with Hg Command Server at: " + repo)
+
+	return nil
+
+} // Connect()
+
+func Close() error {
+	// fmt.Println("start of Close()")
+	pout.Close()
+	// fmt.Println("after pout.Close()")
+	pin.Close()
+	// fmt.Println("after pin.Close()")
+	err := server.Wait()
+	if err != nil {
+		return err
+	}
+	// fmt.Println("before normal return of Close()")
+	fmt.Println("Connection ended with Hg Command Server at: " + repo)
+	return nil
+} // Close()
 
 func RunCommand() {
 
-}
+} // RunCommand()
