@@ -129,8 +129,6 @@ func Connect(hg string, repo_arg string, config []string) error {
 	if err := server.Start(); err != nil {
 		log.Fatal("could not start the Hg Command Server: ", err)
 	}
-	// temporarily, to avoid compilation error that pin is not used
-	_, err = pin.Write(make([]byte, 0))
 
 	s := make([]byte, 1+4+1024)
 	_, err = pout.Read(s)
