@@ -21,10 +21,12 @@ import (
 	"path/filepath"
 )
 
-const t = "hg serve [OPTION]"
+const t1 = "caapabilities:"
+const t2 = "hg serve [OPTION]"
 
 var server *exec.Cmd
 var repo string
+var err error
 
 // pout and pin are to be considered from the point of view of the
 // Hg Command Server instance.
@@ -70,7 +72,6 @@ func Connect(hg string, repo_arg string, config []string) error {
 		hg = "hg"
 	}
 
-	var err error
 	var oriRepo string
 	sep := string(os.PathSeparator)
 	// The Hg Command Server needs a repository.
@@ -149,9 +150,12 @@ func Connect(hg string, repo_arg string, config []string) error {
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
 	}
-	t := "capabilities:"
-	l := len(t)
-	if string(s[5:5+l]) != t {
+	l := len(t2)
+	if string(s[0:l]) == t2 {
+		log.Fatal("this version of Mercurial does not support the Command Server")
+	}
+	l = len(t1)
+	if string(s[5:5+l]) != t1 {
 		log.Fatal("could not connect a Hg Command Server")
 	}
 
@@ -164,7 +168,7 @@ func Connect(hg string, repo_arg string, config []string) error {
 func Close() error {
 	pout.Close()
 	pin.Close()
-	err := server.Wait()
+	err = server.Wait()
 	if err != nil {
 		return err
 	}
