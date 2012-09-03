@@ -12,6 +12,7 @@ package gohg
 import (
 	"encoding/binary"
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -59,6 +60,10 @@ func Connect(hg string, repo_arg string, config []string) error {
 	// And if it's nil, log into a textfile in the folder of this lib.
 	// Also do not override that logfile every launch, but insert a timestamp
 	// to mark a new run. Maybe even do this in the init() function ?
+
+	if server != nil {
+		return errors.New("A Hg Command Server is already connected.")
+	}
 
 	if hg == "" {
 		// Use the default Mercurial.

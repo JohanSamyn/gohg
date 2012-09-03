@@ -21,6 +21,11 @@ func main() {
 		}
 		os.Exit(1)
 	}
+	// err = gohg.Connect("M:\\DEV\\hg-stable\\hg", repo, a)
+	// if err != nil {
+	// 	fmt.Println("from Connect():", err)
+	// }
+
 	err = gohg.Close()
 	if err != nil {
 		fmt.Println("from Close():", err)
