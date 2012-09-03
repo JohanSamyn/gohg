@@ -18,7 +18,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
+	// "strings"
 	// "time"
 )
 
@@ -69,12 +69,15 @@ func Connect(hg string, repo_arg string, config []string) error {
 	sep := string(os.PathSeparator)
 	// The Hg Command Server needs a repository.
 	repo = repo_arg
-	if repo == "" {
-		repo, err = os.Getwd()
-	} else {
-		repo = strings.TrimRight(repo, sep)
+
+	// first make a correct path from repo
+	repo, err = filepath.Abs(repo)
+	if err != nil {
+		log.Fatal("could not find absolute path for: " + repo)
 	}
+	repo = filepath.Clean(repo)
 	oriRepo = repo
+
 	// If we do not find a Hg repo in the current dir, we search for one
 	// up the path, in case we're deeper in it's working copy.
 	for {
@@ -146,7 +149,7 @@ func Connect(hg string, repo_arg string, config []string) error {
 		log.Fatal("could not connect a Hg Command Server")
 	}
 
-	fmt.Println("Connection established with Hg Command Server at: " + repo)
+	fmt.Println("Connected with Hg Command Server at: " + repo)
 
 	return nil
 
@@ -167,7 +170,7 @@ func Close() error {
 		return err
 	}
 	// fmt.Println("before normal return of Close()")
-	fmt.Println("Connection ended with Hg Command Server at: " + repo)
+	fmt.Println("Disconnected from Hg Command Server at: " + repo)
 	return nil
 } // Close()
 

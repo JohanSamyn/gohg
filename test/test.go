@@ -8,8 +8,16 @@ import (
 )
 
 func main() {
+	var repo string
+	if len(os.Args) > 1 {
+		repo = os.Args[1]
+	} else {
+		repo = "."
+	}
 	a := make([]string, 1)
-	err := gohg.Connect("M:\\DEV\\hg-stable\\hg", "C:\\DEV\\go\\src\\golout", a)
+	// err := gohg.Connect("M:\\DEV\\hg-stable\\hg", "C:\\DEV\\go\\src\\golout", a)
+	// err := gohg.Connect("M:\\DEV\\hg-stable\\hg", ".", a)
+	err := gohg.Connect("M:\\DEV\\hg-stable\\hg", repo, a)
 	if err != nil {
 		fmt.Print(err)
 		err = gohg.Close()
