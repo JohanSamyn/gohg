@@ -12,14 +12,15 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	// "strconv"
 	"strings"
 )
 
 func main() {
 
 	// ========== Connecting to the Hg CS ==========
-	// cmd := "M:\\DEV\\hg-stable\\hg" // hg
-	cmd := "hg"
+	cmd := "M:\\DEV\\hg-stable\\hg" // hg
+	// cmd := "hg"
 	server := exec.Command(cmd)
 	server.Args = append(server.Args, "-R", "C:\\DEV\\go\\src\\golout\\")
 	server.Args = append(server.Args,
@@ -45,7 +46,7 @@ func main() {
 		log.Fatal("[3] ", err)
 	}
 
-	// ========== Receiving a massage drom the Hg CS ==========
+	// ========== Receiving a message from the Hg CS ==========
 
 	// 1029:	1 byte for the channel
 	//			4 bytes for the message length
@@ -76,11 +77,14 @@ func main() {
 	// fmt.Printf("s=[[%s]]\n", s[0:100])
 
 	var l uint32
+	// var l64 uint64
+	// l64, err = strconv.ParseUint(string(s[1:5]), 16, 32)
 	buf := bytes.NewBuffer(s[1:5])
 	err = binary.Read(buf, binary.BigEndian, &l)
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
 	}
+	// l = uint32(l64)
 	// fmt.Printf("buf=%v\n", *buf)
 
 	hgm0 := new(hgMsg)
