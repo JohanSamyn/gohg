@@ -98,6 +98,10 @@ func Connect(hg string, repo_arg string, config []string) error {
 		log.Fatal("could not find a Hg repository at: " + oriRepo)
 	}
 
+	// Maybe we can also offer the possibility of a config file?
+	// f.i.: a file gohg.cfg in the same folder as the gohg.exe,
+	// and a section per repo, and one "general" section.
+
 	// if len(config) > 0 {
 	// 	var cfg string
 	// 	for i := 0; i < range(config) {
