@@ -17,12 +17,12 @@ func main() {
 		}
 		os.Exit(1)
 	}
-	fmt.Println("before Close()")
+	// fmt.Println("before Close()")
 	err = gohg.Close()
 	if err != nil {
 		fmt.Print("from Close():", err)
 		os.Exit(1)
 	}
-	fmt.Println("after Close()")
+	// fmt.Println("after Close()")
 	os.Exit(0)
 }

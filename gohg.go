@@ -25,7 +25,8 @@ const t = "hg serve [OPTION]"
 
 var server *exec.Cmd
 var pout io.ReadCloser
-var pin io.ReadCloser
+var pin io.WriteCloser
+var repo string
 
 type hgMsg struct {
 	Ch   string
@@ -43,7 +44,7 @@ func init() {
 	// fmt.Println("Hello from gohg!")
 } // init()
 
-func Connect(hg string, repo string, config []string) error {
+func Connect(hg string, repo_arg string, config []string) error {
 
 	// for example:
 	// server = exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
@@ -51,6 +52,11 @@ func Connect(hg string, repo string, config []string) error {
 	// 		"--config", "ui.interactive=True",			// mandatory settings
 	// 		"--config", "extensions.color=!",			// more settings (for Windows)
 	// 		"serve", "--cmdserver", "pipe")				// start the Command Server
+
+	// Maybe accept a channel as an extra argument for sending the logging to ?
+	// And if it's nil, log into a textfile in the folder of this lib.
+	// Also do not override that logfile every launch, but insert a timestamp
+	// to mark a new run. Maybe even do this in the init() function ?
 
 	if hg == "" {
 		// Use the default Mercurial.
@@ -61,14 +67,13 @@ func Connect(hg string, repo string, config []string) error {
 	var oriRepo string
 	sep := string(os.PathSeparator)
 	// The Hg Command Server needs a repository.
+	repo = repo_arg
 	if repo == "" {
-		if repo == "" {
-			repo, err = os.Getwd()
-			oriRepo = repo
-		} else {
-			repo = strings.TrimRight(repo, sep)
-		}
+		repo, err = os.Getwd()
+	} else {
+		repo = strings.TrimRight(repo, sep)
 	}
+	oriRepo = repo
 	// If we do not find a Hg repo in the current dir, we search for one
 	// up the path, in case we're deeper in it's working copy.
 	for {
@@ -104,12 +109,10 @@ func Connect(hg string, repo string, config []string) error {
 		"--config", "extensions.color=!",
 		"serve", "--cmdserver", "pipe")
 
-	var pout io.ReadCloser
 	pout, err = server.StdoutPipe()
 	if err != nil {
 		log.Fatal("could not connect StdoutPipe: ", err)
 	}
-	var pin io.WriteCloser
 	pin, err = server.StdinPipe()
 	if err != nil {
 		log.Fatal("could not connect StdinPipe: ", err)
@@ -117,7 +120,7 @@ func Connect(hg string, repo string, config []string) error {
 	if err := server.Start(); err != nil {
 		log.Fatal("could not start the Hg Command Server: ", err)
 	}
-	// temporarily, fo avoid compilation error that pin is not used
+	// temporarily, to avoid compilation error that pin is not used
 	_, err = pin.Write(make([]byte, 0))
 	// fmt.Printf("pout=%v,    pin=%v\n", pout, pin)
 
@@ -149,14 +152,17 @@ func Connect(hg string, repo string, config []string) error {
 } // Connect()
 
 func Close() error {
-	fmt.Println("start of Close()")
-	// pout.Close()
-	// pin.Close()
+	// fmt.Println("start of Close()")
+	pout.Close()
+	// fmt.Println("after pout.Close()")
+	pin.Close()
+	// fmt.Println("after pin.Close()")
 	err := server.Wait()
 	if err != nil {
 		return err
 	}
-	fmt.Println("before normal return of Close()")
+	// fmt.Println("before normal return of Close()")
+	fmt.Println("Connection ended with Hg Command Server at: " + repo)
 	return nil
 } // Close()
 
