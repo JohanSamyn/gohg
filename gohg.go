@@ -19,6 +19,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	// "time"
 )
 
 const t = "hg serve [OPTION]"
@@ -153,10 +154,14 @@ func Connect(hg string, repo_arg string, config []string) error {
 
 func Close() error {
 	// fmt.Println("start of Close()")
+	// time.Sleep(5 * time.Second)
 	pout.Close()
 	// fmt.Println("after pout.Close()")
+	// time.Sleep(5 * time.Second)
 	pin.Close()
 	// fmt.Println("after pin.Close()")
+	// time.Sleep(5 * time.Second)
+	// fmt.Println("before server.Wait()")
 	err := server.Wait()
 	if err != nil {
 		return err

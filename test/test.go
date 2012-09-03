@@ -4,6 +4,7 @@ import (
 	"gohg"
 	"fmt"
 	"os"
+	// "time"
 )
 
 func main() {
@@ -17,6 +18,11 @@ func main() {
 		}
 		os.Exit(1)
 	}
+
+	// // keeping the gohg lib 'open' for a while
+	// fmt.Println("sleeping 5 seconds ...")
+	// time.Sleep(5 * time.Second)
+
 	// fmt.Println("before Close()")
 	err = gohg.Close()
 	if err != nil {
