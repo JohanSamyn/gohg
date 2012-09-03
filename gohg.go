@@ -107,6 +107,7 @@ func Connect(hg string, repo_arg string, config []string) error {
 	// Maybe we can also offer the possibility of a config file?
 	// f.i.: a file gohg.cfg in the same folder as the gohg.exe,
 	// and a section per repo, and one "general" section.
+	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
 
 	// if len(config) > 0 {
 	// 	var cfg string
