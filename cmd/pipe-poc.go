@@ -18,22 +18,30 @@ import (
 func main() {
 
 	// ========== Connecting to the Hg CS ==========
+	// cmd := "M:\\DEV\\hg-stable\\hg" // hg
+	cmd := "hg"
+	server := exec.Command(cmd)
+	server.Args = append(server.Args, "-R", "C:\\DEV\\go\\src\\golout\\")
+	server.Args = append(server.Args,
+		"--config", "ui.interactive=True", "--config",
+		"extensions.color=False", "serve", "--cmdserver", "pipe")
+	fmt.Printf("server=[[%v]]\n", server)
 
-	cmd := exec.Command("M:\\DEV\\hg-stable\\hg",
-		"-R", "C:\\DEV\\go\\src\\golout\\",
-		"--config", "ui.interactive=True",
-		"--config", "extensions.color=False",
-		"serve", "--cmdserver", "pipe")
+	// cmd := exec.Command("M:\\DEV\\hg-stable\\hg",
+	// 	"-R", "C:\\DEV\\go\\src\\golout\\",
+	// 	"--config", "ui.interactive=True",
+	// 	"--config", "extensions.color=False",
+	// 	"serve", "--cmdserver", "pipe")
 
-	pout, err := cmd.StdoutPipe()
+	pout, err := server.StdoutPipe()
 	if err != nil {
 		log.Fatal("[1] ", err)
 	}
-	pin, err := cmd.StdinPipe()
+	pin, err := server.StdinPipe()
 	if err != nil {
 		log.Fatal("[2] ", err)
 	}
-	if err := cmd.Start(); err != nil {
+	if err := server.Start(); err != nil {
 		log.Fatal("[3] ", err)
 	}
 
@@ -53,6 +61,17 @@ func main() {
 	if err != io.EOF && err != nil {
 		log.Fatal("[5] ", i, err)
 	}
+	// Als s begint met "hg server [OPTIONS]" dan is er iets mis.
+	// Hoogstwaarschijnlijk heeft de Hg versie geen Command Server capability.
+	var t string
+	t = "hg serve [OPTION]"
+	if string(s[0:len(t)]) == t {
+		log.Fatal("This version of Mercurial does not have the Command Server capability.")
+	}
+	fmt.Printf("len(s)=%d    s=%s\n", len(s), s)
+	if len(s) == 0 {
+		log.Fatal("no data received")
+	}
 	// fmt.Printf("s=%v\n", s[0:100])
 	// fmt.Printf("s=[[%s]]\n", s[0:100])
 
@@ -70,6 +89,7 @@ func main() {
 	hgm := new(hgMsg)
 	hgm.Ch = string(s[0])
 	hgm.Ln = uint(l)
+	fmt.Printf("hgm.Ln=%d\n", hgm.Ln)
 	hgm.Data = string(s[5 : 5+hgm.Ln])
 
 	hgm0.Data = strings.Replace(hgm.Data, "\n", "\\n", -1)
@@ -190,7 +210,7 @@ func main() {
 
 	pout.Close()
 	pin.Close()
-	if err := cmd.Wait(); err != nil {
+	if err := server.Wait(); err != nil {
 		log.Fatal("[4] ", err)
 	}
 
@@ -207,10 +227,6 @@ type hgCmd struct {
 	Ln   uint
 	Args string
 }
-
-// func decodeHgMsg(s string) (hgMsg, error) {
-// 	return "", nil
-// }
 
 func receiveFromHg(pout io.ReadCloser) hgMsg {
 
