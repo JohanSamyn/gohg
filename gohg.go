@@ -18,16 +18,17 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	// "strings"
-	// "time"
 )
 
 const t = "hg serve [OPTION]"
 
 var server *exec.Cmd
+var repo string
+
+// pout and pin are to be considered from the point of view of the
+// Hg Command Server instance.
 var pout io.ReadCloser
 var pin io.WriteCloser
-var repo string
 
 type hgMsg struct {
 	Ch   string
@@ -126,7 +127,6 @@ func Connect(hg string, repo_arg string, config []string) error {
 	}
 	// temporarily, to avoid compilation error that pin is not used
 	_, err = pin.Write(make([]byte, 0))
-	// fmt.Printf("pout=%v,    pin=%v\n", pout, pin)
 
 	s := make([]byte, 1+4+1024)
 	_, err = pout.Read(s)
@@ -144,7 +144,6 @@ func Connect(hg string, repo_arg string, config []string) error {
 	}
 	t := "capabilities:"
 	l := len(t)
-	// fmt.Println("[[" + string(s[5:5+l]) + "]]")
 	if string(s[5:5+l]) != t {
 		log.Fatal("could not connect a Hg Command Server")
 	}
@@ -156,20 +155,12 @@ func Connect(hg string, repo_arg string, config []string) error {
 } // Connect()
 
 func Close() error {
-	// fmt.Println("start of Close()")
-	// time.Sleep(5 * time.Second)
 	pout.Close()
-	// fmt.Println("after pout.Close()")
-	// time.Sleep(5 * time.Second)
 	pin.Close()
-	// fmt.Println("after pin.Close()")
-	// time.Sleep(5 * time.Second)
-	// fmt.Println("before server.Wait()")
 	err := server.Wait()
 	if err != nil {
 		return err
 	}
-	// fmt.Println("before normal return of Close()")
 	fmt.Println("Disconnected from Hg Command Server at: " + repo)
 	return nil
 } // Close()
