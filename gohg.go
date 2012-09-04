@@ -1,12 +1,12 @@
-// Copyright (c) 2012, Johan P. P. Samyn <johan.samyn@gmail.com> All rights reserved.
+// Copyright (C) 2012, Johan P. P. Samyn <johan.samyn@gmail.com> All rights reserved.
 // Use of this source code is governed by the Simplified BSD License
 // that can be found in the LICENSE.txt file.
 
 // Package gohg is a Go client library for using the Mercurial dvcs
-// using it's Command Server for better performance.
+// via it's Command Server.
 //
-// For Mercurial see: http://mercurial/selenic.com/wiki.
-// For the Hg Command Server see: http://mercurial.selenic.com/wiki/CommandServer.
+// For Mercurial see: http://mercurial/selenic.com/wiki
+// For the Hg Command Server see: http://mercurial.selenic.com/wiki/CommandServer
 package gohg
 
 import (
@@ -18,18 +18,19 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 )
 
-const t1 = "capabilities:"
-const t2 = "hg serve [OPTION]"
-
-var server *exec.Cmd
 var repo string
 var err error
+var libdir string
+var logfile string
 
-// pout and pin are to be considered from the point of view of the
-// Hg Command Server instance.
+var hgserver *exec.Cmd
+
+// The in and out pipe ends are to be considered from the point of view
+// of the Hg Command Server instance. So closing pin closes the Hg CS.
 var pout io.ReadCloser
 var pin io.WriteCloser
 
@@ -46,36 +47,87 @@ type hgCmd struct {
 }
 
 func init() {
-	// fmt.Println("Hello from gohg!")
+	var exedir string
+	exedir = path.Dir(os.Args[0])
+	exedir, err = filepath.Abs(exedir)
+	if err != nil {
+		log.Fatal("Could not determine path for the gohg.log logfile.")
+	}
+	logfile = exedir + string(os.PathSeparator) + "gohg.log"
 } // init()
 
-func Connect(hg string, repo_arg string, config []string) error {
+func Connect(hg string, reponame string, config []string) error {
 
 	// for example:
-	// server = exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
-	// 		"-R", "C:\\DEV\\go\\src\\golout\\",			// the repo
-	// 		"--config", "ui.interactive=True",			// mandatory settings
-	// 		"--config", "extensions.color=!",			// more settings (for Windows)
-	// 		"serve", "--cmdserver", "pipe")				// start the Command Server
+	// hgserver = exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
+	// 		"-R", "C:\\DEV\\go\\src\\golout\\",				// the repo
+	// 		"--config", "ui.interactive=True",				// mandatory settings
+	// 		"--config", "extensions.color=!",				// more settings (for Windows)
+	// 		"serve", "--cmdserver", "pipe")					// start the Command Server
 
 	// Maybe accept a channel as an extra argument for sending the logging to ?
 	// And if it's nil, log into a textfile in the folder of this lib.
-	// Also do not override that logfile every launch, but insert a timestamp
-	// to mark a new run. Maybe even do this in the init() function ?
+	// Also do not override that logfile every launch.
+	// Maybe even do this in the init() function ?
 
-	if server != nil {
+	if hgserver != nil {
 		return errors.New("A Hg Command Server is already connected.")
 	}
 
 	if hg == "" {
-		// Use the default Mercurial.
+		// Use the default Mercurial for this machine/user combination.
 		hg = "hg"
 	}
+	// fmt.Printf("hg: %s\n", hg)
 
-	var oriRepo string
-	sep := string(os.PathSeparator)
 	// The Hg Command Server needs a repository.
-	repo = repo_arg
+	repo = locateRepository(reponame)
+	if repo == "" {
+		log.Fatal("could not find a Hg repository at: " + reponame)
+	}
+	// fmt.Printf("repo: %s\n", repo)
+
+	// Maybe we can also offer the possibility of a config file?
+	// f.i.: a file gohg.cfg in the same folder as the gohg.exe,
+	// and a section per repo, and one "general" section.
+	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
+
+	var hgconfig []string
+	hgconfig = composeHgConfig(hg, repo, config)
+	// fmt.Printf("hgconfig: %v\n", hgconfig)
+
+	hgserver = exec.Command(hg)
+	hgserver.Args = hgconfig
+	hgserver.Dir = repo
+	// fmt.Printf("hgserver: %v\n", hgserver)
+
+	pout, err = hgserver.StdoutPipe()
+	if err != nil {
+		log.Fatal("could not connect StdoutPipe: ", err)
+	}
+	pin, err = hgserver.StdinPipe()
+	if err != nil {
+		log.Fatal("could not connect StdinPipe: ", err)
+	}
+
+	if err := hgserver.Start(); err != nil {
+		log.Fatal("could not start the Hg Command Server: ", err)
+	}
+
+	err = readHelloMessage()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Connected with Hg Command Server at: " + repo)
+
+	return nil
+
+} // Connect()
+
+func locateRepository(reponame string) string {
+	repo = reponame
+	sep := string(os.PathSeparator)
 
 	// first make a correct path from repo
 	repo, err = filepath.Abs(repo)
@@ -83,9 +135,8 @@ func Connect(hg string, repo_arg string, config []string) error {
 		log.Fatal("could not find absolute path for: " + repo)
 	}
 	repo = filepath.Clean(repo)
-	oriRepo = repo
 
-	// If we do not find a Hg repo in the current dir, we search for one
+	// If we do not find a Hg repo in this dir, we search for one
 	// up the path, in case we're deeper in it's working copy.
 	for {
 		_, err = os.Stat(repo + sep + ".hg")
@@ -101,13 +152,15 @@ func Connect(hg string, repo_arg string, config []string) error {
 		repo = dir
 	}
 	if err != nil || repo == "" {
-		log.Fatal("could not find a Hg repository at: " + oriRepo)
+		return ""
 	}
 
-	// Maybe we can also offer the possibility of a config file?
-	// f.i.: a file gohg.cfg in the same folder as the gohg.exe,
-	// and a section per repo, and one "general" section.
-	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
+	return repo
+
+} // locateRepository()
+
+func composeHgConfig(hgcmd string, repo string, config []string) []string {
+	var hgconfig []string
 
 	// if len(config) > 0 {
 	// 	var cfg string
@@ -117,33 +170,28 @@ func Connect(hg string, repo_arg string, config []string) error {
 	// 	cmd = cmd + "," + cfg
 	// }
 
-	server = exec.Command(hg)
-	server.Args = append(server.Args, "-R", repo)
-	server.Args = append(server.Args,
+	hgconfig = append(hgconfig, hgcmd,
+		"-R", repo,
 		// These arguments are fixed.
 		"--config", "ui.interactive=True",
 		"--config", "extensions.color=!",
 		"serve", "--cmdserver", "pipe")
 
-	pout, err = server.StdoutPipe()
-	if err != nil {
-		log.Fatal("could not connect StdoutPipe: ", err)
-	}
-	pin, err = server.StdinPipe()
-	if err != nil {
-		log.Fatal("could not connect StdinPipe: ", err)
-	}
-	if err := server.Start(); err != nil {
-		log.Fatal("could not start the Hg Command Server: ", err)
-	}
+	return hgconfig
+}
+
+func readHelloMessage() error {
+	const t1 = "capabilities:"
+	const t2 = "hg serve [OPTION]"
 
 	s := make([]byte, 1+4+1024)
 	_, err = pout.Read(s)
 	if err != io.EOF && err != nil {
-		log.Fatal(err)
+		return err
 	}
+	// fmt.Printf("s: %s\n", s)
 	if len(s) == 0 {
-		log.Fatal("no data received from Hg Command Server")
+		return errors.New("no data received from Hg Command Server")
 	}
 	var ln uint32
 	buf := bytes.NewBuffer(s[1:5])
@@ -153,31 +201,23 @@ func Connect(hg string, repo_arg string, config []string) error {
 	}
 	l := len(t2)
 	if string(s[0:l]) == t2 {
-		log.Fatal("this version of Mercurial does not support the Command Server")
+		return errors.New("this version of Mercurial does not support the Command Server")
 	}
 	l = len(t1)
 	if string(s[5:5+l]) != t1 {
-		log.Fatal("could not connect a Hg Command Server")
+		return errors.New("could not connect a Hg Command Server")
 	}
-
-	fmt.Println("Connected with Hg Command Server at: " + repo)
-
 	return nil
-
-} // Connect()
+}
 
 func Close() error {
 	pout.Close()
 	// Closing it's stdin is what really closes the Hg Command Server.
 	pin.Close()
-	err = server.Wait()
+	err = hgserver.Wait()
 	if err != nil {
 		return err
 	}
 	fmt.Println("Disconnected from Hg Command Server at: " + repo)
 	return nil
 } // Close()
-
-func RunCommand() {
-
-} // RunCommand()
