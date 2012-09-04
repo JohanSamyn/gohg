@@ -61,17 +61,18 @@ func init() {
 
 // Connect establishes the connection with the Mercurial CommandServer.
 //
-// If anything went wrong when trying to make the connection,
-// an error is returned.
+// Arguments:
+//		hgexe
+//			The command to run mercurial. Optional.
+//		reponame
+//			The folder of the Hg repository to work on. Optional.
+//			When blanc the folder where the program is run is used
+//			(see locateRepository).
+//		config
+//			Configuration settings that will be added to the necessary
+//			/fixed settings (see composeHgConfig() for more).
 //
-// Parameters:
-//		hg			The command to run mercurial. Optional.
-//		reponame	The folder of the Hg repository to work on. Optional.
-//					When blanc the folder where the program is run is used
-//					(see locateRepository).
-//		config		Configuration settings that will be added to the necessary
-//					default/fixed settings (see composeHgConfig() for more).
-// Returns an error if the connection could not be established flawlessly.
+// Returns an error if the connection could not be established properly.
 func Connect(hgexe string, reponame string, config []string) error {
 
 	// for example:
@@ -242,7 +243,7 @@ func readHelloMessage() error {
 
 // Close ends the conection with the Mercurial CommandServer.
 //
-// In fact it's closing the stdin of the Hg CS that closes connection,
+// In fact it's closing the stdin of the Hg CS that closes the connection,
 // as per the Hg CS documentation.
 func Close() error {
 	pout.Close()
