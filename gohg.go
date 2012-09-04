@@ -46,6 +46,8 @@ type hgCmd struct {
 	Args string
 }
 
+// init takes care of some householding, namely preparing a logfile where
+// all communication between this lib and the Hg CS can be logged.
 func init() {
 	var exedir string
 	exedir = path.Dir(os.Args[0])
@@ -142,6 +144,9 @@ func Connect(hg string, reponame string, config []string) error {
 
 } // Connect()
 
+// locateRepository takes care of assuring we have a Merurial repository
+// available for working on via the Hg CommandServer, as that is necessary
+// to be able to use the Hg CS.
 func locateRepository(reponame string) (string, error) {
 	repo = reponame
 	sep := string(os.PathSeparator)
@@ -177,6 +182,8 @@ func locateRepository(reponame string) (string, error) {
 
 } // locateRepository()
 
+// composeHgConfig handles the different config settings that will be used
+// to make the connection with the Hg CS. It concerns settings specially for Hg.
 func composeHgConfig(hgcmd string, repo string, config []string) []string {
 	var hgconfig []string
 
@@ -198,6 +205,10 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 	return hgconfig
 }
 
+// readHelloMessage reads the special hello message send by the Hg CS.
+//
+// It has a fixed format, and contains info about the possibilities
+// of the Hg CS at hand. It's also a first proof of a working connection.
 func readHelloMessage() error {
 	const t1 = "capabilities:"
 	const t2 = "hg serve [OPTION]"
@@ -228,6 +239,10 @@ func readHelloMessage() error {
 	return nil
 }
 
+// Close ends the conection with the Mercurial CommandServer.
+//
+// In fact it's closing the stdin of the Hg CS that closes connection,
+// as per the Hg CS documentation.
 func Close() error {
 	pout.Close()
 	// Closing it's stdin is what really closes the Hg Command Server.
