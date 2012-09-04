@@ -72,7 +72,7 @@ func init() {
 //		config		Configuration settings that will be added to the necessary
 //					default/fixed settings (see composeHgConfig() for more).
 // Returns an error if the connection could not be established flawlessly.
-func Connect(hg string, reponame string, config []string) error {
+func Connect(hgexe string, reponame string, config []string) error {
 
 	// for example:
 	// hgserver = exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
@@ -90,12 +90,12 @@ func Connect(hg string, reponame string, config []string) error {
 		return errors.New("A Hg Command Server is already connected.")
 	}
 
-	if hg == "" {
+	if hgexe == "" {
 		// Let the OS determine what Mercurial to run
 		// for this machine/user combination.
-		hg = "hg"
+		hgexe = "hg"
 	}
-	// fmt.Printf("hg: %s\n", hg)
+	// fmt.Printf("hgexe: %s\n", hgexe)
 
 	// The Hg Command Server needs a repository.
 	repo, err = locateRepository(reponame)
@@ -113,10 +113,10 @@ func Connect(hg string, reponame string, config []string) error {
 	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
 
 	var hgconfig []string
-	hgconfig = composeHgConfig(hg, repo, config)
+	hgconfig = composeHgConfig(hgexe, repo, config)
 	// fmt.Printf("hgconfig: %v\n", hgconfig)
 
-	hgserver = exec.Command(hg)
+	hgserver = exec.Command(hgexe)
 	hgserver.Args = hgconfig
 	hgserver.Dir = repo
 	// fmt.Printf("hgserver: %v\n", hgserver)
