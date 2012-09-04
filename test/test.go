@@ -3,6 +3,7 @@ package main
 import (
 	"gohg"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -14,12 +15,13 @@ func main() {
 	a := make([]string, 1)
 	err := gohg.Connect("M:\\DEV\\hg-stable\\hg", repo, a)
 	if err != nil {
-		fmt.Println("from Connect():", err)
-		err = gohg.Close()
-		if err != nil {
-			fmt.Println("from Close():", err)
-		}
-		os.Exit(1)
+		log.Fatal(err)
+		// fmt.Println("from Connect():", err)
+		// err = gohg.Close()
+		// if err != nil {
+		// 	fmt.Println("from Close():", err)
+		// }
+		// os.Exit(1)
 	}
 	// err = gohg.Connect("M:\\DEV\\hg-stable\\hg", repo, a)
 	// if err != nil {

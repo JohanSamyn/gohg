@@ -75,15 +75,19 @@ func Connect(hg string, reponame string, config []string) error {
 	}
 
 	if hg == "" {
-		// Use the default Mercurial for this machine/user combination.
+		// Let the OS determine what Mercurial to run
+		// for this machine/user combination.
 		hg = "hg"
 	}
 	// fmt.Printf("hg: %s\n", hg)
 
 	// The Hg Command Server needs a repository.
-	repo = locateRepository(reponame)
+	repo, err = locateRepository(reponame)
+	if err != nil {
+		return err
+	}
 	if repo == "" {
-		log.Fatal("could not find a Hg repository at: " + reponame)
+		return errors.New("could not find a Hg repository at: " + reponame)
 	}
 	// fmt.Printf("repo: %s\n", repo)
 
@@ -103,20 +107,20 @@ func Connect(hg string, reponame string, config []string) error {
 
 	pout, err = hgserver.StdoutPipe()
 	if err != nil {
-		log.Fatal("could not connect StdoutPipe: ", err)
+		return errors.New("could not connect StdoutPipe: " + err.Error())
 	}
 	pin, err = hgserver.StdinPipe()
 	if err != nil {
-		log.Fatal("could not connect StdinPipe: ", err)
+		log.Fatal("could not connect StdinPipe: " + err.Error())
 	}
 
 	if err := hgserver.Start(); err != nil {
-		log.Fatal("could not start the Hg Command Server: ", err)
+		return errors.New("could not start the Hg Command Server: " + err.Error())
 	}
 
 	err = readHelloMessage()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	fmt.Println("Connected with Hg Command Server at: " + repo)
@@ -125,14 +129,15 @@ func Connect(hg string, reponame string, config []string) error {
 
 } // Connect()
 
-func locateRepository(reponame string) string {
+func locateRepository(reponame string) (string, error) {
 	repo = reponame
 	sep := string(os.PathSeparator)
 
 	// first make a correct path from repo
 	repo, err = filepath.Abs(repo)
 	if err != nil {
-		log.Fatal("could not find absolute path for: " + repo)
+		return "", errors.New(err.Error() +
+			"\ncould not find absolute path for: " + repo)
 	}
 	repo = filepath.Clean(repo)
 
@@ -152,10 +157,10 @@ func locateRepository(reponame string) string {
 		repo = dir
 	}
 	if err != nil || repo == "" {
-		return ""
+		return "", nil
 	}
 
-	return repo
+	return repo, nil
 
 } // locateRepository()
 
