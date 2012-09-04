@@ -5,8 +5,9 @@
 // Package gohg is a Go client library for using the Mercurial dvcs
 // via it's Command Server.
 //
-// For Mercurial see: http://mercurial/selenic.com/wiki
-// For the Hg Command Server see: http://mercurial.selenic.com/wiki/CommandServer
+// For Mercurial see: http://mercurial/selenic.com/wiki.
+//
+// For the Hg Command Server see: http://mercurial.selenic.com/wiki/CommandServer.
 package gohg
 
 import (
