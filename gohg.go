@@ -56,6 +56,19 @@ func init() {
 	logfile = exedir + string(os.PathSeparator) + "gohg.log"
 } // init()
 
+// Connect establishes the connection with the Mercurial CommandServer.
+//
+// If anything went wrong when trying to make the connection,
+// an error is returned.
+//
+// Parameters:
+//		hg			The command to run mercurial. Optional.
+//		reponame	The folder of the Hg repository to work on. Optional.
+//					When blanc the folder where the program is run is used
+//					(see locateRepository).
+//		config		Configuration settings that will be added to the necessary
+//					default/fixed settings (see composeHgConfig() for more).
+// Returns an error if the connection could not be established flawlessly.
 func Connect(hg string, reponame string, config []string) error {
 
 	// for example:
