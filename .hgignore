@@ -12,6 +12,7 @@ build.out
 test.out
 goinstall.log
 gohg.sublime-workspace
+test/t.cmd
 
 syntax:regexp
 ^bin/
