@@ -9,6 +9,5 @@ import (
 )
 
 func RunCommand() {
-	// place this function in a separate sourcefile
 	log.Println("RunCommand: not implemented yet")
 } // RunCommand()
