@@ -1,5 +1,6 @@
 @echo off
 
+cls
 cd C:\DEV\go\src\gohg
 go build gohg.go
 choice /c yn /m "Continue?"
