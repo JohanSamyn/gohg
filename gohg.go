@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 )
 
-const t1 = "caapabilities:"
+const t1 = "capabilities:"
 const t2 = "hg serve [OPTION]"
 
 var server *exec.Cmd
@@ -168,6 +168,7 @@ func Connect(hg string, repo_arg string, config []string) error {
 
 func Close() error {
 	pout.Close()
+	// Closing it's stdin is what really closes the Hg Command Server.
 	pin.Close()
 	err = server.Wait()
 	if err != nil {
