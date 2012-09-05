@@ -31,7 +31,7 @@ var logfile string
 var hgserver *exec.Cmd
 
 // The in and out pipe ends are to be considered from the point of view
-// of the Hg Command Server instance. So closing pin closes the Hg CS.
+// of the Hg Command Server instance.
 var pout io.ReadCloser
 var pin io.WriteCloser
 
@@ -62,15 +62,15 @@ func init() {
 // Connect establishes the connection with the Mercurial CommandServer.
 //
 // Arguments:
-//		hgexe
-//			The command to run mercurial. Optional.
-//		reponame
-//			The folder of the Hg repository to work on. Optional.
-//			When blanc the folder where the program is run is used
-//			(see locateRepository).
-//		config
-//			Configuration settings that will be added to the necessary
-//			/fixed settings (see composeHgConfig() for more).
+//	hgexe
+//		The command to run mercurial. Optional.
+//	reponame
+//		The folder of the Hg repository to work on. Optional.
+//		When blanc the folder where the program is run is used
+//		(see function locateRepository()).
+//	config
+//		Configuration settings that will be added to the necessary
+//		/fixed settings (see composeHgConfig() for more).
 //
 // Returns an error if the connection could not be established properly.
 func Connect(hgexe string, reponame string, config []string) error {
@@ -205,7 +205,7 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 		"serve", "--cmdserver", "pipe")
 
 	return hgconfig
-}
+} // composeHgConfig()
 
 // readHelloMessage reads the special hello message send by the Hg CS.
 //
@@ -224,11 +224,17 @@ func readHelloMessage() error {
 	if len(s) == 0 {
 		return errors.New("no data received from Hg Command Server")
 	}
+	if s[0] != "o" {
+		return errors.New("no hello message received from Hg CommandServer")
+	}
 	var ln uint32
 	buf := bytes.NewBuffer(s[1:5])
 	err = binary.Read(buf, binary.BigEndian, &ln)
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
+	}
+	if ln <= 0 {
+		return errors.New("no hello message received from Hg CommandServer")
 	}
 	l := len(t2)
 	if string(s[0:l]) == t2 {
@@ -239,9 +245,9 @@ func readHelloMessage() error {
 		return errors.New("could not connect a Hg Command Server")
 	}
 	return nil
-}
+} // readHelloMessage()
 
-// Close ends the conection with the Mercurial CommandServer.
+// Close ends the connection with the Mercurial CommandServer.
 //
 // In fact it's closing the stdin of the Hg CS that closes the connection,
 // as per the Hg CS documentation.
