@@ -13,6 +13,8 @@ if errorlevel == 0 goto end
 cd C:\DEV\go\src\gohg\test
 go build test.go
 choice /c yn /m "Continue?"
+if errorlevel == 2 goto end
+::if errorlevel == 1 goto test
 cls & test
 
 :end
