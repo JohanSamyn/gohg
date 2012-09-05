@@ -11,8 +11,8 @@
 package gohg
 
 import (
-	"encoding/binary"
 	"bytes"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
@@ -96,7 +96,6 @@ func Connect(hgexe string, reponame string, config []string) error {
 		// for this machine/user combination.
 		hgexe = "hg"
 	}
-	// fmt.Printf("hgexe: %s\n", hgexe)
 
 	// The Hg Command Server needs a repository.
 	repo, err = locateRepository(reponame)
@@ -106,7 +105,6 @@ func Connect(hgexe string, reponame string, config []string) error {
 	if repo == "" {
 		return errors.New("could not find a Hg repository at: " + reponame)
 	}
-	// fmt.Printf("repo: %s\n", repo)
 
 	// Maybe we can also offer the possibility of a config file?
 	// f.i.: a file gohg.cfg in the same folder as the gohg.exe,
@@ -115,12 +113,10 @@ func Connect(hgexe string, reponame string, config []string) error {
 
 	var hgconfig []string
 	hgconfig = composeHgConfig(hgexe, repo, config)
-	// fmt.Printf("hgconfig: %v\n", hgconfig)
 
 	hgserver = exec.Command(hgexe)
 	hgserver.Args = hgconfig
 	hgserver.Dir = repo
-	// fmt.Printf("hgserver: %v\n", hgserver)
 
 	pout, err = hgserver.StdoutPipe()
 	if err != nil {
@@ -146,9 +142,8 @@ func Connect(hgexe string, reponame string, config []string) error {
 
 } // Connect()
 
-// locateRepository takes care of assuring we have a Merurial repository
-// available for working on via the Hg CommandServer, as that is necessary
-// to be able to use the Hg CS.
+// locateRepository assures we have a Mercurial repository available,
+// which is required for working with the Hg CommandServer.
 func locateRepository(reponame string) (string, error) {
 	repo = reponame
 	sep := string(os.PathSeparator)
@@ -185,7 +180,7 @@ func locateRepository(reponame string) (string, error) {
 } // locateRepository()
 
 // composeHgConfig handles the different config settings that will be used
-// to make the connection with the Hg CS. It concerns settings specially for Hg.
+// to make the connection with the Hg CS. It concerns specific Hg settings.
 func composeHgConfig(hgcmd string, repo string, config []string) []string {
 	var hgconfig []string
 
@@ -212,20 +207,22 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 // It has a fixed format, and contains info about the possibilities
 // of the Hg CS at hand. It's also a first proof of a working connection.
 func readHelloMessage() error {
-	const t1 = "capabilities:"
-	const t2 = "hg serve [OPTION]"
-
-	s := make([]byte, 1+4+1024)
+	s := make([]byte, 5)
 	_, err = pout.Read(s)
 	if err != io.EOF && err != nil {
 		return err
 	}
-	// fmt.Printf("s: %s\n", s)
 	if len(s) == 0 {
-		return errors.New("no data received from Hg Command Server")
+		return errors.New("no hello message data received from Hg CommandServer")
 	}
-	if s[0] != "o" {
-		return errors.New("no hello message received from Hg CommandServer")
+	const t1 = "hg se" // hg send: "hg serve [OPTION]"
+	if string(s[0:len(t1)]) == t1 {
+		return errors.New("this version of Mercurial does not support the CommandServer")
+	}
+	ch := string(s[0])
+	if ch != "o" {
+		return errors.New("received unexpected channel '" + ch +
+			"' for hello message from Hg CommandServer")
 	}
 	var ln uint32
 	buf := bytes.NewBuffer(s[1:5])
@@ -234,15 +231,17 @@ func readHelloMessage() error {
 		fmt.Println("binary.Read failed:", err)
 	}
 	if ln <= 0 {
-		return errors.New("no hello message received from Hg CommandServer")
+		return errors.New("received invalid length '" + string(ln) +
+			"' for hello message from Hg CommandServer")
 	}
-	l := len(t2)
-	if string(s[0:l]) == t2 {
-		return errors.New("this version of Mercurial does not support the Command Server")
+	s = make([]byte, ln)
+	_, err = pout.Read(s)
+	if err != io.EOF && err != nil {
+		return err
 	}
-	l = len(t1)
-	if string(s[5:5+l]) != t1 {
-		return errors.New("could not connect a Hg Command Server")
+	const t2 = "capabilities:"
+	if string(s[0:len(t2)]) != t2 {
+		return errors.New("could not determine the capabilities of the Hg CommandServer")
 	}
 	return nil
 } // readHelloMessage()
@@ -253,7 +252,6 @@ func readHelloMessage() error {
 // as per the Hg CS documentation.
 func Close() error {
 	pout.Close()
-	// Closing it's stdin is what really closes the Hg Command Server.
 	pin.Close()
 	err = hgserver.Wait()
 	if err != nil {
