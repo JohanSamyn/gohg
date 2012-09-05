@@ -5,9 +5,40 @@
 package gohg
 
 import (
-	"log"
+	"fmt"
 )
 
 func RunCommand() {
-	log.Println("RunCommand: not implemented yet")
+	err = sendToHg("runcommand", []byte("summary"))
+	if err != nil {
+		fmt.Println(err)
+	}
+	var channel string
+	var alldata []byte
+	var adata []byte
+	var ch string
+	var data []byte
+	for {
+		ch, data, err = readFromHg()
+		if err != nil || ch == "" || ch == "r" {
+			break
+		}
+		if ch == channel {
+			var l1, l2 int
+			l1 = len(alldata)
+			l2 = len(data)
+			adata = make([]byte, l1+l2)
+			if l1 > 0 {
+				copy(adata[0:l1], alldata)
+			}
+			copy(adata[l1:l1+l2], data)
+			alldata = adata
+		} else {
+			alldata = data
+		}
+		if channel == "" {
+			channel = ch
+		}
+	}
+	fmt.Printf("channel -> %s\ndata ->\n%s\n", channel, alldata)
 } // RunCommand()

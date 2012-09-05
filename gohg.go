@@ -21,6 +21,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"strings"
 )
 
 var repo string
@@ -193,9 +194,11 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 	// }
 
 	hgconfig = append(hgconfig, hgcmd,
+		"--cwd", repo,
 		"-R", repo,
 		// These arguments are fixed.
-		"--config", "ui.interactive=True",
+		// "--config", "ui.interactive=True",
+		"--config", "ui.interactive=False",
 		"--config", "extensions.color=!",
 		"serve", "--cmdserver", "pipe")
 
@@ -260,3 +263,73 @@ func Close() error {
 	fmt.Println("Disconnected from Hg Command Server at: " + repo)
 	return nil
 } // Close()
+
+// readFromHg returns the channel and all the data read from it.
+// Eventually it returns no (or empty) data but an error.
+func readFromHg() (string, []byte, error) {
+	var ch string
+
+	data := make([]byte, 5)
+	_, err = pout.Read(data)
+	if err != io.EOF && err != nil {
+		return ch, data, err
+	}
+	if data == nil {
+		return ch, data, errors.New("no data read")
+	}
+	ch = string(data[0])
+	if ch == "" {
+		return ch, data, errors.New("no channel read")
+	}
+
+	var ln uint32
+	buf := bytes.NewBuffer(data[1:5])
+	err = binary.Read(buf, binary.BigEndian, &ln)
+	if err != nil {
+		return ch, data, errors.New("binary.Read failed:" + string(err.Error()))
+	}
+
+	data = make([]byte, ln)
+	_, err = pout.Read(data)
+	if err != io.EOF && err != nil {
+		return ch, data, err
+	}
+
+	return ch, data, nil
+}
+
+// sendToHg writes data to the Hg CS,
+// returning an error if something went wrong.
+func sendToHg(cmd string, args []byte) error {
+	l1 := len(cmd) + 1
+	l2 := len(args)
+	data := make([]byte, l1+1+4+l2)
+	if strings.HasSuffix(cmd, "\n") == false {
+		cmd = cmd + "\n"
+	}
+	copy(data[0:l1], cmd)
+	// copy(data[l1+1:l1+1], lf)
+	copy(data[l1+4:l1+4+l2], args)
+
+	ln := uint32(len(args))
+	wbuf := new(bytes.Buffer)
+	err = binary.Write(wbuf, binary.BigEndian, ln)
+	if err != nil {
+		return errors.New("binary.Write failed: " + string(err.Error()))
+	}
+	b := make([]byte, 4)
+	_, err = io.ReadFull(wbuf, b)
+	if err != nil {
+		return errors.New("io.ReadFull failed: " + string(err.Error()))
+	}
+	copy(data[l1:l1+4], b)
+
+	var i int
+	i, err = pin.Write(data)
+	if i != len(data) {
+		return errors.New("writing length of data failed: " +
+			string(err.Error()))
+	}
+
+	return nil
+}

@@ -5,10 +5,12 @@
 package main
 
 import (
+	// "bytes"
 	"fmt"
 	"gohg"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
@@ -23,6 +25,10 @@ func main() {
 	}
 
 	// do whatever you want to do via the Hg CS
+
+	gohg.RunCommand()
+
+	time.Sleep(1 * time.Second)
 
 	err = gohg.Close()
 	if err != nil {
