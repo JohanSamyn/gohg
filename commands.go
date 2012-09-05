@@ -1,5 +1,5 @@
-// Copyright (C) 2012, Johan P. P. Samyn <johan.samyn@gmail.com> All rights reserved.
-// Use of this source code is governed by the Simplified BSD License
+// Copyright (C) 2012, The gohg Authors. All rights reserved.
+// Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE.txt file.
 
 package gohg

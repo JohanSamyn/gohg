@@ -1,3 +1,7 @@
+// Copyright (C) 2012, The gohg Authors. All rights reserved.
+// Use of this source code is governed by a BSD style license
+// that can be found in the LICENSE.txt file.
+
 // This program is for exploring how to work with pipes in Go.
 // As the communication with the Mercurial Command Server works via pipes,
 // this is a vital part of this project.
