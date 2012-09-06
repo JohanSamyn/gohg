@@ -269,6 +269,7 @@ func Close() error {
 func readFromHg() (string, []byte, error) {
 	var ch string
 
+	// get channel and length
 	data := make([]byte, 5)
 	_, err = pout.Read(data)
 	if err != io.EOF && err != nil {
@@ -282,6 +283,7 @@ func readFromHg() (string, []byte, error) {
 		return ch, data, errors.New("no channel read")
 	}
 
+	// get the uint that the Hg CS sent us as the length value
 	var ln uint32
 	buf := bytes.NewBuffer(data[1:5])
 	err = binary.Read(buf, binary.BigEndian, &ln)
@@ -289,6 +291,7 @@ func readFromHg() (string, []byte, error) {
 		return ch, data, errors.New("binary.Read failed:" + string(err.Error()))
 	}
 
+	// now get ln bytes of data
 	data = make([]byte, ln)
 	_, err = pout.Read(data)
 	if err != io.EOF && err != nil {
@@ -296,34 +299,46 @@ func readFromHg() (string, []byte, error) {
 	}
 
 	return ch, data, nil
-}
+} // readFromHg()
 
 // sendToHg writes data to the Hg CS,
 // returning an error if something went wrong.
 func sendToHg(cmd string, args []byte) error {
-	l1 := len(cmd) + 1
-	l2 := len(args)
-	data := make([]byte, l1+1+4+l2)
-	if strings.HasSuffix(cmd, "\n") == false {
-		cmd = cmd + "\n"
+	cmd = strings.TrimRight(cmd, "\n") + "\n"
+	lc := len(cmd)
+	la := len(args)
+	var l int
+	if la > 0 {
+		l = lc + 4 + la
+	} else {
+		// in case cmd == "getencoding" f.i.
+		l = lc
 	}
-	copy(data[0:l1], cmd)
-	// copy(data[l1+1:l1+1], lf)
-	copy(data[l1+4:l1+4+l2], args)
+	data := make([]byte, l)
 
-	ln := uint32(len(args))
-	wbuf := new(bytes.Buffer)
-	err = binary.Write(wbuf, binary.BigEndian, ln)
-	if err != nil {
-		return errors.New("binary.Write failed: " + string(err.Error()))
-	}
-	b := make([]byte, 4)
-	_, err = io.ReadFull(wbuf, b)
-	if err != nil {
-		return errors.New("io.ReadFull failed: " + string(err.Error()))
-	}
-	copy(data[l1:l1+4], b)
+	// send the command
+	copy(data[0:lc], cmd)
 
+	if la > 0 {
+		// send the length of the command arguments
+		ln := uint32(len(args))
+		wbuf := new(bytes.Buffer)
+		err = binary.Write(wbuf, binary.BigEndian, ln)
+		if err != nil {
+			return errors.New("binary.Write failed: " + string(err.Error()))
+		}
+		b := make([]byte, 4)
+		_, err = io.ReadFull(wbuf, b)
+		if err != nil {
+			return errors.New("io.ReadFull failed: " + string(err.Error()))
+		}
+		copy(data[lc:lc+4], b)
+
+		// send the command arguments
+		copy(data[lc+4:lc+4+la], args)
+	}
+
+	// perform the actual send to the Hg CS
 	var i int
 	i, err = pin.Write(data)
 	if i != len(data) {
@@ -332,4 +347,4 @@ func sendToHg(cmd string, args []byte) error {
 	}
 
 	return nil
-}
+} // sendToHg()

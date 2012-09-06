@@ -5,40 +5,50 @@
 package gohg
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
+	"log"
+	"strings"
 )
 
-func RunCommand() {
-	err = sendToHg("runcommand", []byte("summary"))
+func RunCommand(hgcmd []string) {
+	args := []byte(strings.Join(hgcmd, string(0x0)))
+
+	err = sendToHg("runcommand", args)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
-	var channel string
-	var alldata []byte
-	var adata []byte
-	var ch string
 	var data []byte
-	for {
+	var buf bytes.Buffer
+	var ret int32
+	endOfRead := false
+	for endOfRead == false {
+		var ch string
 		ch, data, err = readFromHg()
-		if err != nil || ch == "" || ch == "r" {
-			break
+		if err != nil || ch == "" {
+			log.Fatal("readFromHg failed: " + string(err.Error()))
 		}
-		if ch == channel {
-			var l1, l2 int
-			l1 = len(alldata)
-			l2 = len(data)
-			adata = make([]byte, l1+l2)
-			if l1 > 0 {
-				copy(adata[0:l1], alldata)
+		switch ch {
+		case "o":
+			buf.WriteString(string(data))
+		case "r":
+			{
+				if command == "getencoding" {
+					buf.WriteString(string(data))
+				} else {
+					// get the signed int that the Hg CS sent us as the return code
+					buf := bytes.NewBuffer(data[0:4])
+					err = binary.Read(buf, binary.BigEndian, &ret)
+					if err != nil {
+						log.Fatal("binary.read failed: " + string(err.Error()))
+					}
+				}
+				endOfRead = true
 			}
-			copy(adata[l1:l1+l2], data)
-			alldata = adata
-		} else {
-			alldata = data
-		}
-		if channel == "" {
-			channel = ch
-		}
-	}
-	fmt.Printf("channel -> %s\ndata ->\n%s\n", channel, alldata)
+		} // switch
+	} // for
+	fmt.Printf("command -> %s\nhgcmd -> %s\ndata ->\n%s\nreturncode -> %d\n",
+		command, hgcmd, []byte(buf.String()), ret)
 } // RunCommand()

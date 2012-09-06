@@ -10,7 +10,7 @@ import (
 	"gohg"
 	"log"
 	"os"
-	"time"
+	// "time"
 )
 
 func main() {
@@ -25,10 +25,11 @@ func main() {
 	}
 
 	// do whatever you want to do via the Hg CS
+	hgcmd := []string{"log", "-l", "2"}
+	gohg.RunCommand(hgcmd)
 
-	gohg.RunCommand()
-
-	time.Sleep(1 * time.Second)
+	// give time to see the Hg CS session live and die
+	// time.Sleep(1 * time.Second)
 
 	err = gohg.Close()
 	if err != nil {
