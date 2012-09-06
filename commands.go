@@ -13,9 +13,10 @@ import (
 )
 
 func RunCommand(hgcmd []string) {
+	command := "runcommand"
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 
-	err = sendToHg("runcommand", args)
+	err = sendToHg(command, args)
 	if err != nil {
 		fmt.Println(err)
 		return
