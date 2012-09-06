@@ -20,3 +20,4 @@ syntax:regexp
 ^src/cmd/(.*)/6?\1$
 ^.*/core.[0-9]*$
 glob:LICENSE-2.txt
+glob:pyhglib.py*
