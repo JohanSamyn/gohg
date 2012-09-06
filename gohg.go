@@ -24,10 +24,22 @@ import (
 	"strings"
 )
 
+// var libdir string
 var repo string
 var err error
-var libdir string
 var logfile string
+var capabilities []string
+var encoding string
+
+// Type Hgclient will act as a (kind of) object for working with the Hg CS
+// from any program using this gohg client lib.
+// It will get a bunch of attributes and methods to make working with it
+// as go-like as possible. It might even get a few channels for communications.
+type Hgclient struct {
+	capabilities []string
+	encoding     string
+	repo         string
+}
 
 var hgserver *exec.Cmd
 
@@ -36,12 +48,14 @@ var hgserver *exec.Cmd
 var pout io.ReadCloser
 var pin io.WriteCloser
 
+// hgMsg is what we receive from the Hg CS
 type hgMsg struct {
 	Ch   string
 	Ln   uint
 	Data string
 }
 
+// hgCmd is what we send to the Hg CS
 type hgCmd struct {
 	Cmd  string
 	Ln   uint
@@ -347,6 +361,7 @@ func sendToHg(cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
+// calcDataLength converts a 4-byte slice into an unsigned int
 func calcDataLength(s []byte) (uint32, error) {
 	var ln uint32
 	buf := bytes.NewBuffer(s[0:4])
