@@ -362,15 +362,26 @@ func sendToHg(cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
-func RunCommand(hgcmd []string) {
-	command := "runcommand"
-	// command := "getencoding"
+func GetEncoding() (string, error) {
+	var encoding []byte
+	encoding, _, err = runInHg("getencoding", []string{})
+	return string(encoding), err
+}
+
+func RunCommand(hgcmd []string) ([]byte, int32, error) {
+	var data []byte
+	var ret int32
+	data, ret, err = runInHg("runcommand", hgcmd)
+	return data, ret, err
+}
+
+func runInHg(command string, hgcmd []string) ([]byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 
 	err = sendToHg(command, args)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return nil, 0, err
 	}
 
 	var data []byte
@@ -406,9 +417,10 @@ func RunCommand(hgcmd []string) {
 			log.Fatal("unexpected channel '" + ch + "' detected")
 		} // switch ch
 	} // for endOfRead == false
-	fmt.Printf("command -> %s\nhgcmd -> %s\ndata ->\n%s\nreturncode -> %d\n",
-		command, hgcmd, []byte(buf.String()), ret)
-} // RunCommand()
+
+	return []byte(buf.String()), ret, nil
+
+} // runInHg()
 
 // calcLengthDataReceived converts a 4-byte slice into an unsigned int
 func calcLengthReceivedData(s []byte) (uint32, error) {
