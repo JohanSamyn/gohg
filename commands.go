@@ -14,6 +14,7 @@ import (
 
 func RunCommand(hgcmd []string) {
 	command := "runcommand"
+	// command := "getencoding"
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 
 	err = sendToHg(command, args)
@@ -21,6 +22,7 @@ func RunCommand(hgcmd []string) {
 		fmt.Println(err)
 		return
 	}
+
 	var data []byte
 	var buf bytes.Buffer
 	var ret int32
@@ -39,17 +41,29 @@ func RunCommand(hgcmd []string) {
 				if command == "getencoding" {
 					buf.WriteString(string(data))
 				} else {
-					// get the signed int that the Hg CS sent us as the return code
-					buf := bytes.NewBuffer(data[0:4])
-					err = binary.Read(buf, binary.BigEndian, &ret)
+					ret, err = calcReturncode(data[0:4])
 					if err != nil {
 						log.Fatal("binary.read failed: " + string(err.Error()))
 					}
 				}
 				endOfRead = true
 			}
-		} // switch
-	} // for
+		case "e":
+		case "d":
+		case "I":
+		case "L":
+		default:
+			log.Fatal("unexpected channel '" + ch + "' detected")
+		} // switch ch
+	} // for endOfRead == false
 	fmt.Printf("command -> %s\nhgcmd -> %s\ndata ->\n%s\nreturncode -> %d\n",
 		command, hgcmd, []byte(buf.String()), ret)
 } // RunCommand()
+
+// calcReturncode converts a 4-byte slice into a signed int
+func calcReturncode(s []byte) (int32, error) {
+	var ret int32
+	buf := bytes.NewBuffer(s[0:4])
+	err := binary.Read(buf, binary.BigEndian, &ret)
+	return ret, err
+}

@@ -25,16 +25,17 @@ func main() {
 	}
 
 	// do whatever you want to do via the Hg CS
-	hgcmd := []string{"log", "-l", "2"}
+	// hgcmd := []string{"log", "-l", "2"}
+	hgcmd := []string{"branches"}
 	gohg.RunCommand(hgcmd)
 
-	// give time to see the Hg CS session live and die
+	// give time to see the Hg CS session live and die from Process Explorer
 	// time.Sleep(1 * time.Second)
 
 	err = gohg.Close()
 	if err != nil {
-		fmt.Println("from Close():", err)
-		os.Exit(1)
+		log.Fatal("from Close(): " + string(err.Error()))
 	}
+
 	os.Exit(0)
 }

@@ -259,6 +259,7 @@ func readHelloMessage() error {
 	if string(s[0:len(t2)]) != t2 {
 		return errors.New("could not determine the capabilities of the Hg CommandServer")
 	}
+	fmt.Printf("s: %s\n", s)
 	return nil
 } // readHelloMessage()
 

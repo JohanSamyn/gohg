@@ -5,6 +5,8 @@ TODO
 
 1.  ADD TESTS !!!
 
+#.  Capture capabilities and encoding from the hellomessage.
+
 #.  Use the stats.py example from the python-hglib tool for testing.
     That can be a simple means of being able to verify the output
     by comparing the results of both gohg and python-hglib.
