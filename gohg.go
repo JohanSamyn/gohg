@@ -274,7 +274,7 @@ func Close() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Disconnected from Hg Command Server at: " + HgClient.repo)
+	fmt.Println("--------------------\nDisconnected from Hg Command Server at: " + HgClient.repo)
 	return nil
 } // Close()
 

@@ -31,7 +31,7 @@ func main() {
 	if err != nil {
 		log.Fatal("from GetEncoding : " + string(err.Error()))
 	}
-	fmt.Printf("command -> getencoding\ndata -> %s\n", encoding)
+	fmt.Printf("--------------------\ncommand -> getencoding\ndata -> %s\n", encoding)
 
 	var data []byte
 	var ret int32
@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatal("from RunCommand : " + string(err.Error()))
 	}
-	fmt.Printf("command -> runcommand\nhgcmd -> %s\ndata ->\n%s\nreturncode -> %d\n",
+	fmt.Printf("--------------------\ncommand -> runcommand\nhgcmd -> %s\ndata ->\n%s\nreturncode -> %d\n",
 		hgcmd, data, ret)
 
 	// give time to see the Hg CS session live and die from Process Explorer
