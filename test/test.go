@@ -6,7 +6,7 @@ package main
 
 import (
 	// "bytes"
-	"fmt"
+	// "fmt"
 	"gohg"
 	"log"
 	"os"
@@ -26,7 +26,7 @@ func main() {
 
 	// do whatever you want to do via the Hg CS
 	// hgcmd := []string{"log", "-l", "2"}
-	hgcmd := []string{"branches"}
+	hgcmd := []string{"identify"}
 	gohg.RunCommand(hgcmd)
 
 	// give time to see the Hg CS session live and die from Process Explorer

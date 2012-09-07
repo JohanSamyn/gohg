@@ -24,29 +24,15 @@ import (
 	"strings"
 )
 
-// var libdir string
-var repo string
-var err error
-var logfile string
-var capabilities []string
-var encoding string
-
-// Type Hgclient will act as a (kind of) object for working with the Hg CS
+// Type hgclient will act as a (kind of) object for working with the Hg CS
 // from any program using this gohg client lib.
 // It will get a bunch of attributes and methods to make working with it
 // as go-like as possible. It might even get a few channels for communications.
-type Hgclient struct {
+type hgclient struct {
 	capabilities []string
 	encoding     string
 	repo         string
 }
-
-var hgserver *exec.Cmd
-
-// The in and out pipe ends are to be considered from the point of view
-// of the Hg Command Server instance.
-var pout io.ReadCloser
-var pin io.WriteCloser
 
 // hgMsg is what we receive from the Hg CS
 type hgMsg struct {
@@ -61,6 +47,15 @@ type hgCmd struct {
 	Ln   uint
 	Args string
 }
+
+// The in and out pipe ends are to be considered from the point of view
+// of the Hg Command Server instance.
+var pout io.ReadCloser
+var pin io.WriteCloser
+var err error
+var logfile string
+var hgserver *exec.Cmd
+var HgClient hgclient
 
 // init takes care of some householding, namely preparing a logfile where
 // all communication between this lib and the Hg CS can be logged.
@@ -113,11 +108,11 @@ func Connect(hgexe string, reponame string, config []string) error {
 	}
 
 	// The Hg Command Server needs a repository.
-	repo, err = locateRepository(reponame)
+	HgClient.repo, err = locateRepository(reponame)
 	if err != nil {
 		return err
 	}
-	if repo == "" {
+	if HgClient.repo == "" {
 		return errors.New("could not find a Hg repository at: " + reponame)
 	}
 
@@ -127,11 +122,11 @@ func Connect(hgexe string, reponame string, config []string) error {
 	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
 
 	var hgconfig []string
-	hgconfig = composeHgConfig(hgexe, repo, config)
+	hgconfig = composeHgConfig(hgexe, HgClient.repo, config)
 
 	hgserver = exec.Command(hgexe)
 	hgserver.Args = hgconfig
-	hgserver.Dir = repo
+	hgserver.Dir = HgClient.repo
 
 	pout, err = hgserver.StdoutPipe()
 	if err != nil {
@@ -151,7 +146,7 @@ func Connect(hgexe string, reponame string, config []string) error {
 		return err
 	}
 
-	fmt.Println("Connected with Hg Command Server at: " + repo)
+	fmt.Println("Connected with Hg Command Server at: " + HgClient.repo)
 
 	return nil
 
@@ -160,7 +155,7 @@ func Connect(hgexe string, reponame string, config []string) error {
 // locateRepository assures we have a Mercurial repository available,
 // which is required for working with the Hg CommandServer.
 func locateRepository(reponame string) (string, error) {
-	repo = reponame
+	repo := reponame
 	sep := string(os.PathSeparator)
 
 	// first make a correct path from repo
@@ -250,16 +245,21 @@ func readHelloMessage() error {
 		return errors.New("received invalid length '" + string(ln) +
 			"' for hello message from Hg CommandServer")
 	}
-	s = make([]byte, ln)
-	_, err = pout.Read(s)
+	hello := make([]byte, ln)
+	_, err = pout.Read(hello)
 	if err != io.EOF && err != nil {
 		return err
 	}
 	const t2 = "capabilities:"
-	if string(s[0:len(t2)]) != t2 {
+	if string(hello[0:len(t2)]) != t2 {
 		return errors.New("could not determine the capabilities of the Hg CommandServer")
 	}
-	fmt.Printf("s: %s\n", s)
+	if strings.Contains(string(hello), "runcommand") == false {
+		log.Fatal("could not detect the 'runcommand' capability")
+	}
+	attr := strings.Split(string(hello), "\n")
+	HgClient.capabilities = strings.Fields(attr[0])[1:]
+	HgClient.encoding = strings.Split(attr[1], ": ")[1]
 	return nil
 } // readHelloMessage()
 
@@ -274,7 +274,7 @@ func Close() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Disconnected from Hg Command Server at: " + repo)
+	fmt.Println("Disconnected from Hg Command Server at: " + HgClient.repo)
 	return nil
 } // Close()
 
@@ -362,10 +362,72 @@ func sendToHg(cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
+func RunCommand(hgcmd []string) {
+	command := "runcommand"
+	// command := "getencoding"
+	args := []byte(strings.Join(hgcmd, string(0x0)))
+
+	err = sendToHg(command, args)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var data []byte
+	var buf bytes.Buffer
+	var ret int32
+	endOfRead := false
+	for endOfRead == false {
+		var ch string
+		ch, data, err = readFromHg()
+		if err != nil || ch == "" {
+			log.Fatal("readFromHg failed: " + string(err.Error()))
+		}
+		switch ch {
+		case "d":
+		case "e":
+		case "o":
+			buf.WriteString(string(data))
+		case "r":
+			{
+				if command == "getencoding" {
+					buf.WriteString(string(data))
+				} else {
+					ret, err = calcReturncode(data[0:4])
+					if err != nil {
+						log.Fatal("binary.read failed: " + string(err.Error()))
+					}
+				}
+				endOfRead = true
+			}
+		case "I":
+		case "L":
+		default:
+			log.Fatal("unexpected channel '" + ch + "' detected")
+		} // switch ch
+	} // for endOfRead == false
+	fmt.Printf("command -> %s\nhgcmd -> %s\ndata ->\n%s\nreturncode -> %d\n",
+		command, hgcmd, []byte(buf.String()), ret)
+} // RunCommand()
+
 // calcLengthDataReceived converts a 4-byte slice into an unsigned int
 func calcLengthReceivedData(s []byte) (uint32, error) {
-	var ln uint32
+	var ln int32
+	ln, err = calcIntFromBytes(s)
+	return uint32(ln), err
+}
+
+// calcReturncode converts a 4-byte slice into a signed int
+func calcReturncode(s []byte) (int32, error) {
+	var ret int32
+	ret, err = calcIntFromBytes(s)
+	return ret, err
+}
+
+// calcIntFromBytes performs the real conversion
+func calcIntFromBytes(s []byte) (int32, error) {
+	var i int32
 	buf := bytes.NewBuffer(s[0:4])
-	err := binary.Read(buf, binary.BigEndian, &ln)
-	return ln, err
+	err := binary.Read(buf, binary.BigEndian, &i)
+	return i, err
 }
