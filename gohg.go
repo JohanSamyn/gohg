@@ -242,7 +242,7 @@ func readHelloMessage() error {
 			"' for hello message from Hg CommandServer")
 	}
 	var ln uint32
-	ln, err = calcDataLength(s[1:5])
+	ln, err = calcLengthReceivedData(s[1:5])
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
 	}
@@ -298,7 +298,7 @@ func readFromHg() (string, []byte, error) {
 
 	// get the uint that the Hg CS sent us as the length value
 	var ln uint32
-	ln, err = calcDataLength(data[1:5])
+	ln, err = calcLengthReceivedData(data[1:5])
 	if err != nil {
 		return ch, data, errors.New("binary.Read failed:" + string(err.Error()))
 	}
@@ -361,8 +361,8 @@ func sendToHg(cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
-// calcDataLength converts a 4-byte slice into an unsigned int
-func calcDataLength(s []byte) (uint32, error) {
+// calcLengthDataReceived converts a 4-byte slice into an unsigned int
+func calcLengthReceivedData(s []byte) (uint32, error) {
 	var ln uint32
 	buf := bytes.NewBuffer(s[0:4])
 	err := binary.Read(buf, binary.BigEndian, &ln)
