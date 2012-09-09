@@ -24,14 +24,15 @@ import (
 	"strings"
 )
 
-// Type hgclient will act as a (kind of) object for working with the Hg CS
+// Type hgclient will act as an object (kind of) for working with the Hg CS
 // from any program using this gohg client lib.
-// It will get a bunch of attributes and methods to make working with it
+// It will get a bunch of fields and methods to make working with it
 // as go-like as possible. It might even get a few channels for communications.
 type hgclient struct {
 	capabilities []string
 	encoding     string
 	repo         string
+	// config       []string
 }
 
 // hgMsg is what we receive from the Hg CS
@@ -237,7 +238,7 @@ func readHelloMessage() error {
 			"' for hello message from Hg CommandServer")
 	}
 	var ln uint32
-	ln, err = calcLengthReceivedData(s[1:5])
+	ln, err = calcDataLength(s[1:5])
 	if err != nil {
 		fmt.Println("binary.Read failed:", err)
 	}
@@ -299,7 +300,7 @@ func readFromHg() (string, []byte, error) {
 
 	// get the uint that the Hg CS sent us as the length value
 	var ln uint32
-	ln, err = calcLengthReceivedData(data[1:5])
+	ln, err = calcDataLength(data[1:5])
 	if err != nil {
 		return ch, data, errors.New("binary.Read failed:" + string(err.Error()))
 	}
@@ -422,18 +423,26 @@ func runInHg(command string, hgcmd []string) ([]byte, int32, error) {
 
 } // runInHg()
 
-// calcLengthDataReceived converts a 4-byte slice into an unsigned int
-func calcLengthReceivedData(s []byte) (uint32, error) {
-	var ln int32
-	ln, err = calcIntFromBytes(s)
-	return uint32(ln), err
+// calcDataLength converts a 4-byte slice into an unsigned int
+func calcDataLength(s []byte) (uint32, error) {
+	// var ln int32
+	// ln, err = calcIntFromBytes(s)
+	// return uint32(ln), err
+
+	// ln, err := byteslice4(s[0:4]).ToUint32()
+	// return ln, err
+
+	return sliceof4bytes(s).ToUint32()
 }
 
 // calcReturncode converts a 4-byte slice into a signed int
 func calcReturncode(s []byte) (int32, error) {
-	var ret int32
-	ret, err = calcIntFromBytes(s)
-	return ret, err
+	// return calcIntFromBytes(s)
+
+	// ret, err := byteslice4(s[0:4]).ToInt32()
+	// return ret, err
+
+	return sliceof4bytes(s).ToInt32()
 }
 
 // calcIntFromBytes performs the real conversion
@@ -442,4 +451,23 @@ func calcIntFromBytes(s []byte) (int32, error) {
 	buf := bytes.NewBuffer(s[0:4])
 	err := binary.Read(buf, binary.BigEndian, &i)
 	return i, err
+}
+
+// Also look at page 257 in TheWayToGo.pdf, for another way of providing
+// a means for converting a (4)byte-slice into an uint32/int32,
+// by providing an extra method on type byteslice4.
+
+// We could also name ToInt32 as CalcReturncode
+// and ToUint32 as CalcDataLength.
+
+type sliceof4bytes []byte
+
+func (s4b sliceof4bytes) ToInt32() (int32, error) {
+	i, err := calcIntFromBytes(s4b[0:4])
+	return i, err
+}
+
+func (s4b sliceof4bytes) ToUint32() (uint32, error) {
+	i, err := calcIntFromBytes(s4b[0:4])
+	return uint32(i), err
 }

@@ -5,6 +5,9 @@ TODO
 
 1.  ADD TESTS !!!
 
+#.  catch returncode <> 0, and avoid showing the help text returned by th Hg CS
+    in that case.
+
 #.  Use the stats.py example from the python-hglib tool for testing.
     That can be a simple means of being able to verify the output
     by comparing the results of both gohg and python-hglib.

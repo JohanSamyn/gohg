@@ -9,7 +9,8 @@ import (
 	"gohg"
 	"log"
 	"os"
-	// "time"
+
+// "time"
 )
 
 func main() {
@@ -45,7 +46,8 @@ func main() {
 		hgcmd, data, ret)
 
 	// give time to see the Hg CS session live and die from Process Explorer
-	// time.Sleep(1 * time.Second)
+	// fmt.Print("waiting...")
+	// time.Sleep(3 * time.Second)
 
 	err = gohg.Close()
 	if err != nil {
