@@ -30,6 +30,7 @@ import (
 // It will get a bunch of fields and methods to make working with it
 // as go-like as possible. It might even get a few channels for communications.
 type hgclient struct {
+	HgPath        string   // which hg is used ?
 	Capabilities  []string // as per the hello message
 	Encoding      string   // as per the hello message
 	Repo          string   // the full path to the Hg repo
@@ -150,7 +151,10 @@ func Connect(hgexe string, reponame string, config []string) error {
 		return err
 	}
 
-	fmt.Println("Connected with Hg Command Server at: " + HgClient.Repo)
+	fmt.Println("--------------------\nConnected with Hg Command Server at: " +
+		HgClient.Repo)
+
+	HgClient.HgPath = hgexe
 
 	err = HgVersion()
 	if err != nil {
@@ -158,14 +162,12 @@ func Connect(hgexe string, reponame string, config []string) error {
 	}
 
 	fmt.Printf("--------------------\n"+
-		"HgClient.Capabilities: %s\n"+
-		"HgClient.Encoding: %s\n"+
+		"HgClient.HgPath: %s\nHgClient.HgVersion: %s\n"+
 		"HgClient.Repo: %s\n"+
-		"HgClient.HgVersion: %s\n"+
-		"HgClient.HgFullVersion:\n%s\n",
-		HgClient.Capabilities, HgClient.Encoding,
+		"HgClient.Capabilities: %s\nHgClient.Encoding: %s\n",
+		HgClient.HgPath, HgClient.HgVersion,
 		HgClient.Repo,
-		HgClient.HgVersion, HgClient.HgFullVersion)
+		HgClient.Capabilities, HgClient.Encoding)
 
 	return nil
 
@@ -248,7 +250,8 @@ func readHelloMessage() error {
 	}
 	const t1 = "hg se" // hg send: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
-		return errors.New("this version of Mercurial does not support the CommandServer")
+		return errors.New("this version of Mercurial does not support the CommandServer" +
+			"\n(type 'hg version' and 'which hg' to verify)")
 	}
 	ch := string(s[0])
 	if ch != "o" {
@@ -293,8 +296,8 @@ func HgVersion() error {
 		return errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
 	}
 	HgClient.HgFullVersion = string(data)
-	v := []byte(strings.Split(HgClient.HgFullVersion, "\n")[0])
-	v = v[strings.LastIndex(string(v), " ")+1 : len(v)-1]
+	v := strings.Split(HgClient.HgFullVersion, "\n")[0]
+	v = v[strings.LastIndex(v, " ")+1 : len(v)-1]
 	HgClient.HgVersion = string(v)
 	return nil
 } // HgVersion()
@@ -310,7 +313,8 @@ func Close() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("--------------------\nDisconnected from Hg Command Server at: " + HgClient.Repo)
+	fmt.Println("--------------------\nDisconnected from Hg Command Server at: " +
+		HgClient.Repo + "\n--------------------\n")
 	return nil
 } // Close()
 
