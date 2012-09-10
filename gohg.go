@@ -21,6 +21,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -283,14 +284,16 @@ func readHelloMessage() error {
 
 func HgVersion() error {
 	var data []byte
-	c := make([]string, 1)
-	c[0] = "version"
-	data, _, err = RunCommand(c)
+	var ret int32
+	data, ret, err = RunCommand([]string{"version"})
 	if err != nil {
 		return err
 	}
+	if ret != 0 {
+		return errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
+	}
 	HgClient.HgFullVersion = string(data)
-	v := []byte(strings.Split(string(data), "\n")[0])
+	v := []byte(strings.Split(HgClient.HgFullVersion, "\n")[0])
 	v = v[strings.LastIndex(string(v), " ")+1 : len(v)-1]
 	HgClient.HgVersion = string(v)
 	return nil
