@@ -29,9 +29,11 @@ import (
 // It will get a bunch of fields and methods to make working with it
 // as go-like as possible. It might even get a few channels for communications.
 type hgclient struct {
-	capabilities []string
-	encoding     string
-	repo         string
+	Capabilities  []string // as per the hello message
+	Encoding      string   // as per the hello message
+	Repo          string   // the full path to the Hg repo
+	HgVersion     string   // the version number only
+	HgFullVersion string   // the complete version message returned by the Hg CS
 	// config       []string
 }
 
@@ -109,11 +111,11 @@ func Connect(hgexe string, reponame string, config []string) error {
 	}
 
 	// The Hg Command Server needs a repository.
-	HgClient.repo, err = locateRepository(reponame)
+	HgClient.Repo, err = locateRepository(reponame)
 	if err != nil {
 		return err
 	}
-	if HgClient.repo == "" {
+	if HgClient.Repo == "" {
 		return errors.New("could not find a Hg repository at: " + reponame)
 	}
 
@@ -123,11 +125,11 @@ func Connect(hgexe string, reponame string, config []string) error {
 	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
 
 	var hgconfig []string
-	hgconfig = composeHgConfig(hgexe, HgClient.repo, config)
+	hgconfig = composeHgConfig(hgexe, HgClient.Repo, config)
 
 	hgserver = exec.Command(hgexe)
 	hgserver.Args = hgconfig
-	hgserver.Dir = HgClient.repo
+	hgserver.Dir = HgClient.Repo
 
 	pout, err = hgserver.StdoutPipe()
 	if err != nil {
@@ -147,7 +149,22 @@ func Connect(hgexe string, reponame string, config []string) error {
 		return err
 	}
 
-	fmt.Println("Connected with Hg Command Server at: " + HgClient.repo)
+	fmt.Println("Connected with Hg Command Server at: " + HgClient.Repo)
+
+	err = HgVersion()
+	if err != nil {
+		log.Fatal("from HgVersion() : " + string(err.Error()))
+	}
+
+	fmt.Printf("--------------------\n"+
+		"HgClient.Capabilities: %s\n"+
+		"HgClient.Encoding: %s\n"+
+		"HgClient.Repo: %s\n"+
+		"HgClient.HgVersion: %s\n"+
+		"HgClient.HgFullVersion:\n%s\n",
+		HgClient.Capabilities, HgClient.Encoding,
+		HgClient.Repo,
+		HgClient.HgVersion, HgClient.HgFullVersion)
 
 	return nil
 
@@ -259,10 +276,25 @@ func readHelloMessage() error {
 		log.Fatal("could not detect the 'runcommand' capability")
 	}
 	attr := strings.Split(string(hello), "\n")
-	HgClient.capabilities = strings.Fields(attr[0])[1:]
-	HgClient.encoding = strings.Split(attr[1], ": ")[1]
+	HgClient.Capabilities = strings.Fields(attr[0])[1:]
+	HgClient.Encoding = strings.Split(attr[1], ": ")[1]
 	return nil
 } // readHelloMessage()
+
+func HgVersion() error {
+	var data []byte
+	c := make([]string, 1)
+	c[0] = "version"
+	data, _, err = RunCommand(c)
+	if err != nil {
+		return err
+	}
+	HgClient.HgFullVersion = string(data)
+	v := []byte(strings.Split(string(data), "\n")[0])
+	v = v[strings.LastIndex(string(v), " ")+1 : len(v)-1]
+	HgClient.HgVersion = string(v)
+	return nil
+} // HgVersion()
 
 // Close ends the connection with the Mercurial CommandServer.
 //
@@ -275,7 +307,7 @@ func Close() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("--------------------\nDisconnected from Hg Command Server at: " + HgClient.repo)
+	fmt.Println("--------------------\nDisconnected from Hg Command Server at: " + HgClient.Repo)
 	return nil
 } // Close()
 

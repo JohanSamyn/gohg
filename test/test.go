@@ -37,7 +37,7 @@ func main() {
 	var data []byte
 	var ret int32
 	// hgcmd := []string{"log", "-l", "2"}
-	hgcmd := []string{"identify"}
+	hgcmd := []string{"summary"}
 	data, ret, err = gohg.RunCommand(hgcmd)
 	if err != nil {
 		log.Fatal("from RunCommand : " + string(err.Error()))
