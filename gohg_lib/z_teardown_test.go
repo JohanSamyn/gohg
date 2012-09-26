@@ -6,15 +6,29 @@ package gohg_lib_test
 
 import (
 	. "gohg/gohg_lib"
-	"log"
+	"os"
 	"testing"
 )
 
 // TestTearDown closes the connection to the Hg CS after all tests.
 
-func TestTearDown(*testing.T) {
+func TestTearDown(t *testing.T) {
 	err := Close()
 	if err != nil {
-		log.Fatal("from Close(): " + string(err.Error()))
+		t.Error("from Close(): " + string(err.Error()))
 	}
+
+	// cleanup temporary folders/files
+	tempdir := os.TempDir()
+	path := tempdir + "\\gohg-init-success\\"
+	err = os.RemoveAll(path)
+	if err != nil {
+		t.Log(err)
+	}
+	path = tempdir + "\\gohg-init-failure\\"
+	err = os.RemoveAll(path)
+	if err != nil {
+		t.Log(err)
+	}
+
 }
