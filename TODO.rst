@@ -3,13 +3,17 @@ TODO
 
 (in no particular order, and order can change anytime)
 
-1.  ADD TESTS !!! (good for learning to use the testing package)
+1.  ADD TESTS !!! (good for learning to use the testing package too)
 
-#.  catch returncode <> 0, and avoid showing the help text returned by the Hg CS
+#.  Catch returncode <> 0, and avoid showing the help text returned by the Hg CS
     in that case.
+    Also take care of the fact that there can be an error at the Hg side, and
+    that it returns a (rather large) help text instead of the expected result.
 
-#.  Take care of the fact that there can be an error at the Hg side, and that it
-    returns a (rather large) help text instead of the expected result.
+#.  Add the possibility to configure (or use a command-line option with) gohg so
+    that it creates a dummy Hg repo first in case there is none available yet.
+    Then switching repos or using a repo pool should allow to use the correct
+    repo.
 
 #.  Use the stats.py example from the python-hglib tool for testing.
     That can be a simple means of being able to verify the output
@@ -19,28 +23,37 @@ TODO
     than I can handle in one move. Some buffering is required, to capture _all_
     data from the pipe.
 
-#.  Maybe I should rename into gohglib ? Mmm, or maybe not.
-
 #.  Place all error messages together (in a separate file?) and give them a
     concise varname (perhaps 'msg0001' ?) that can be more easily used in a
-    testing situation.
+    testing situation. (or: e0001 for errors, w0001 for warnings, etc.?)
 
 #.  If the Hg CS aborts (because of an unknown command f.i.), gracefully
     re-establish the connection. Up to a max number of times, otherwise
     abort the client too.
 
-#.  KNOWN LIMITATION
+#.  Perhaps rename gohg.go into gohglib.go, and add a new gohg.go as a command,
+    so one can use the 'gohg' command from the commandline the same way one uses
+    the original 'hg' one (see the chg tool Yuya developped) ?
+
+#.  QUESTION -
+    Ask for an example of how to start the Hg CS in debug mode (logging to '-').
+
+#.  KNOWN LIMITATION -
     Currently only UTF8 encoding is supported.
 
-#.  KNOWN LIMITATION
+#.  KNOWN LIMITATION -
     Currently no interaction is supported (ui.interactive=False).
 
-#.  ADVANCED
+#.  ADVANCED -
     Maybe we can even manage multiple connections (see JavaHg) ?
     Question: can we manage more than 1 repo from the same Hg Command Server
     instance ? If not then I don't think multiple connections will work.
 
-#.  ADVANCED
+#.  ADVANCED -
+    Add the possibility to switch to another repo then the one used to start the
+    Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
+
+#.  ADVANCED -
     Is it possible to run a Hg CS as a Windows service, and connect to it ?
     See http://code.google.com/p/winsvc/ and search for it's counterpart for
     Python.
