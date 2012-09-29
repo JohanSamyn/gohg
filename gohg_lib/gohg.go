@@ -30,6 +30,13 @@ import (
 // It will get a bunch of fields and methods to make working with it
 // as go-like as possible. It might even get a few channels for communications.
 type hgclient struct {
+	// HgServer isn't meant to be exported, but this is necessary for testing.
+	HgServer *exec.Cmd
+	// The in and out pipe ends are to be considered from the point of view
+	// of the Hg Command Server instance.
+	pin  io.WriteCloser
+	pout io.ReadCloser
+	// Connected can be eliminated once HgServer is in use
 	Connected     bool     // already connected to a Hg CS ?
 	HgPath        string   // which hg is used ?
 	Capabilities  []string // as per the hello message
@@ -54,15 +61,9 @@ type hgCmd struct {
 	Args string
 }
 
-// The in and out pipe ends are to be considered from the point of view
-// of the Hg Command Server instance.
-var pout io.ReadCloser
-var pin io.WriteCloser
 var err error
 var logfile string
 
-// Var Hgserver isn't meant to be exported, but this is necessary for testing.
-var Hgserver *exec.Cmd
 var HgClient hgclient
 
 // init takes care of some householding, namely preparing a logfile where
@@ -77,7 +78,12 @@ func init() {
 	logfile = exedir + string(os.PathSeparator) + "gohg.log"
 } // init()
 
-// Connect establishes the connection with the Mercurial CommandServer.
+func NewHgClient() *hgclient {
+	var hgclient = new(hgclient)
+	return hgclient
+}
+
+// Connect establishes the connection with the Mercurial Command Server.
 //
 // Arguments:
 //	hgexe
@@ -92,21 +98,22 @@ func init() {
 //		fixed settings (see composeHgConfig() for more).
 //
 // Returns an error if the connection could not be established properly.
-func Connect(hgexe string, reponame string, config []string) error {
+func (hgclient) Connect(hgexe string, reponame string, config []string) error {
 
 	// for example:
-	// Hgserver = exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
-	// 		"-R", "C:\\DEV\\go\\src\\golout\\",				// the repo
-	// 		"--config", "ui.interactive=True",				// mandatory settings
-	// 		"--config", "extensions.color=!",				// more settings (for Windows)
-	// 		"serve", "--cmdserver", "pipe")					// start the Command Server
+	// HgClient.HgServer =
+	//		exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
+	// 		"-R", "C:\\DEV\\go\\src\\golout\\",		// the repo
+	// 		"--config", "ui.interactive=True",		// mandatory settings
+	// 		"--config", "extensions.color=!",		// more settings (for Windows)
+	// 		"serve", "--cmdserver", "pipe")			// start the Command Server
 
 	// Maybe accept a channel as an extra argument for sending the logging to ?
 	// And if it's nil, log into a textfile in the folder of this lib.
 	// Also do not override that logfile every launch.
 	// Maybe even do this in the init() function ?
 
-	if Hgserver != nil {
+	if HgClient.HgServer != nil {
 		return errors.New("A Hg Command Server is already connected.")
 	}
 
@@ -133,20 +140,20 @@ func Connect(hgexe string, reponame string, config []string) error {
 	var hgconfig []string
 	hgconfig = composeHgConfig(hgexe, HgClient.Repo, config)
 
-	Hgserver = exec.Command(hgexe)
-	Hgserver.Args = hgconfig
-	Hgserver.Dir = HgClient.Repo
+	HgClient.HgServer = exec.Command(hgexe)
+	HgClient.HgServer.Args = hgconfig
+	HgClient.HgServer.Dir = HgClient.Repo
 
-	pout, err = Hgserver.StdoutPipe()
+	HgClient.pout, err = HgClient.HgServer.StdoutPipe()
 	if err != nil {
 		return errors.New("could not connect StdoutPipe: " + err.Error())
 	}
-	pin, err = Hgserver.StdinPipe()
+	HgClient.pin, err = HgClient.HgServer.StdinPipe()
 	if err != nil {
 		log.Fatal("could not connect StdinPipe: " + err.Error())
 	}
 
-	if err := Hgserver.Start(); err != nil {
+	if err := HgClient.HgServer.Start(); err != nil {
 		return errors.New("could not start the Hg Command Server: " + err.Error())
 	}
 
@@ -166,8 +173,27 @@ func Connect(hgexe string, reponame string, config []string) error {
 
 } // Connect()
 
+// Close ends the connection with the Mercurial Command Server.
+//
+// In fact it's closing the stdin of the Hg CS that closes the connection,
+// as per the Hg CS documentation.
+func (hgclient) Close() error {
+	if HgClient.HgServer == nil {
+		return nil
+	}
+
+	HgClient.pin.Close()
+	HgClient.pout.Close()
+	err = HgClient.HgServer.Wait()
+	if err != nil {
+		return err
+	}
+	HgClient.HgServer = nil
+	return nil
+} // Close()
+
 // locateRepository assures we have a Mercurial repository available,
-// which is required for working with the Hg CommandServer.
+// which is required for working with the Hg Command Server.
 func locateRepository(reponame string) (string, error) {
 	repo := reponame
 	sep := string(os.PathSeparator)
@@ -234,22 +260,22 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 // of the Hg CS at hand. It's also a first proof of a working connection.
 func readHelloMessage() error {
 	s := make([]byte, 5)
-	_, err = pout.Read(s)
+	_, err = HgClient.pout.Read(s)
 	if err != io.EOF && err != nil {
 		return err
 	}
 	if len(s) == 0 {
-		return errors.New("no hello message data received from Hg CommandServer")
+		return errors.New("no hello message data received from Hg Command Server")
 	}
 	const t1 = "hg se" // hg send: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
-		return errors.New("this version of Mercurial does not support the CommandServer" +
+		return errors.New("this version of Mercurial does not support the Command Server" +
 			"\n(type 'hg version' and 'which hg' to verify)")
 	}
 	ch := string(s[0])
 	if ch != "o" {
 		return errors.New("received unexpected channel '" + ch +
-			"' for hello message from Hg CommandServer")
+			"' for hello message from Hg Command Server")
 	}
 	var ln uint32
 	ln, err = calcDataLength(s[1:5])
@@ -258,16 +284,16 @@ func readHelloMessage() error {
 	}
 	if ln <= 0 {
 		return errors.New("received invalid length '" + string(ln) +
-			"' for hello message from Hg CommandServer")
+			"' for hello message from Hg Command Server")
 	}
 	hello := make([]byte, ln)
-	_, err = pout.Read(hello)
+	_, err = HgClient.pout.Read(hello)
 	if err != io.EOF && err != nil {
 		return err
 	}
 	const t2 = "capabilities:"
 	if string(hello[0:len(t2)]) != t2 {
-		return errors.New("could not determine the capabilities of the Hg CommandServer")
+		return errors.New("could not determine the capabilities of the Hg Command Server")
 	}
 	if strings.Contains(string(hello), "runcommand") == false {
 		log.Fatal("could not detect the 'runcommand' capability")
@@ -290,7 +316,7 @@ func getHgVersion() error {
 // func HgVersion() error {
 // 	var data []byte
 // 	var ret int32
-// 	data, ret, err = RunCommand([]string{"version"})
+// 	data, ret, err = HgClient.RunCommand([]string{"version"})
 // 	if err != nil {
 // 		return err
 // 	}
@@ -304,21 +330,6 @@ func getHgVersion() error {
 // 	return nil
 // } // HgVersion()
 
-// Close ends the connection with the Mercurial CommandServer.
-//
-// In fact it's closing the stdin of the Hg CS that closes the connection,
-// as per the Hg CS documentation.
-func Close() error {
-	pout.Close()
-	pin.Close()
-	err = Hgserver.Wait()
-	if err != nil {
-		return err
-	}
-	Hgserver = nil
-	return nil
-} // Close()
-
 // readFromHg returns the channel and all the data read from it.
 // Eventually it returns no (or empty) data but an error.
 func readFromHg() (string, []byte, error) {
@@ -326,7 +337,7 @@ func readFromHg() (string, []byte, error) {
 
 	// get channel and length
 	data := make([]byte, 5)
-	_, err = pout.Read(data)
+	_, err = HgClient.pout.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -347,7 +358,7 @@ func readFromHg() (string, []byte, error) {
 
 	// now get ln bytes of data
 	data = make([]byte, ln)
-	_, err = pout.Read(data)
+	_, err = HgClient.pout.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -394,7 +405,7 @@ func sendToHg(cmd string, args []byte) error {
 
 	// perform the actual send to the Hg CS
 	var i int
-	i, err = pin.Write(data)
+	i, err = HgClient.pin.Write(data)
 	if i != len(data) {
 		return errors.New("writing length of data failed: " +
 			string(err.Error()))
@@ -405,7 +416,7 @@ func sendToHg(cmd string, args []byte) error {
 
 // GetEncoding returns the servers encoding on the result channel.
 // Currently only UTF8 is supported.
-func GetEncoding() (string, error) {
+func (hgclient) GetEncoding() (string, error) {
 	var encoding []byte
 	encoding, _, err = runInHg("getencoding", []string{})
 	return string(encoding), err
@@ -413,7 +424,7 @@ func GetEncoding() (string, error) {
 
 // RunCommand allows to run a Mercurial command in the Hg Command Server.
 // You can run any command that is available on the Mercurial command line.
-func RunCommand(hgcmd []string) ([]byte, int32, error) {
+func (hgclient) RunCommand(hgcmd []string) ([]byte, int32, error) {
 	var data []byte
 	var ret int32
 	data, ret, err = runInHg("runcommand", hgcmd)

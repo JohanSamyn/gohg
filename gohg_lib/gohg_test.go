@@ -20,7 +20,7 @@ import (
 // 	}
 
 // 	cfg := make([]string, 0)
-// 	err = Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
+// 	err = HgClient.Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
 // 	if err != nil {
 // 		log.Fatal(err)
 // 	}
@@ -29,7 +29,7 @@ import (
 func TestGetEncoding(t *testing.T) {
 	var err error
 	var encoding string
-	encoding, err = GetEncoding()
+	encoding, err = HgClient.GetEncoding()
 	if err != nil {
 		t.Error("from GetEncoding : " + string(err.Error()))
 	}
@@ -45,16 +45,14 @@ func TestRunCommand(t *testing.T) {
 	// hgcmd := []string{"log", "-l", "2"}
 	hgcmd := []string{"summary"}
 	// data, ret, err = RunCommand(hgcmd)
-	_, _, err = RunCommand(hgcmd)
+	_, _, err = HgClient.RunCommand(hgcmd)
 	if err != nil {
 		t.Error("from RunCommand : " + string(err.Error()))
 	}
-	// fmt.Printf("--------------------\ncommand -> runcommand\nhgcmd -> %s\ndata ->\n%s\nreturncode -> %d\n",
-	// 	hgcmd, data, ret)
 }
 
 // func TestClose(t *testing.T) {
-// 	err := Close()
+// 	err := HgClient.Close()
 // 	if err != nil {
 // 		t.Error("from Close(): " + string(err.Error()))
 // 	}

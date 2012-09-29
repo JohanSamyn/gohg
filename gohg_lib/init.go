@@ -18,14 +18,14 @@ func (hgclient) Init(path string) error {
 
 	if path == "" || path == "." || fa == HgClient.Repo {
 		return errors.New("HgClient.Init: path for new repo must be different" +
-			" from the CommandServer repo path")
+			" from the Command Server repo path")
 	}
 
 	var data []byte
 	var ret int32
 
 	hgcmd := []string{"init", fa}
-	data, ret, err = RunCommand(hgcmd)
+	data, ret, err = HgClient.RunCommand(hgcmd)
 	if err != nil {
 		return errors.New("from RunCommand(): " + string(err.Error()))
 	}

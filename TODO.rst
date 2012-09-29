@@ -7,6 +7,9 @@ TODO
 
 #.  Use a dedicated repo for the tests.
 
+#.  Refactor Connect() and Close() into methods of HgServer.
+    Or even of HgClient, and eliminate HgServer ?
+
 #.  Catch returncode <> 0, and avoid showing the help text returned by the Hg CS
     in that case.
     Also take care of the fact that there can be an error at the Hg side, and

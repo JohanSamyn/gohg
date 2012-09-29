@@ -14,7 +14,7 @@ import (
 func (hgclient) Version() (ver string, fullver string, err error) {
 	var data []byte
 	var ret int32
-	data, ret, err = RunCommand([]string{"version"})
+	data, ret, err = HgClient.RunCommand([]string{"version"})
 	if err != nil {
 		return "", "", err
 	}

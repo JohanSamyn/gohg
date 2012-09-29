@@ -12,7 +12,7 @@ import (
 // TestTearDown closes the connection to the Hg CS after all tests.
 
 func TestTearDown(t *testing.T) {
-	err := Close()
+	err := HgClient.Close()
 	if err != nil {
 		t.Error("from Close(): " + string(err.Error()))
 	}
