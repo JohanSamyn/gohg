@@ -10,6 +10,7 @@ import (
 	"strconv"
 )
 
+// Init implements the 'hg init' command.
 func (hgclient) Init(path string) error {
 	var err error
 	var fa string

@@ -21,7 +21,6 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -82,14 +81,15 @@ func init() {
 //
 // Arguments:
 //	hgexe
-//		The command to run mercurial. Optional.
+//		The command to run mercurial. Optional. The 'hg' command will be used
+//		when not provided. This allows to run a specific version of Mercurial.
 //	reponame
 //		The folder of the Hg repository to work on. Optional.
 //		When blanc the folder where the program is run is used
 //		(see function locateRepository()).
 //	config
 //		Configuration settings that will be added to the necessary
-//		/fixed settings (see composeHgConfig() for more).
+//		fixed settings (see composeHgConfig() for more).
 //
 // Returns an error if the connection could not be established properly.
 func Connect(hgexe string, reponame string, config []string) error {
@@ -157,7 +157,7 @@ func Connect(hgexe string, reponame string, config []string) error {
 
 	HgClient.HgPath = hgexe
 
-	err = HgVersion()
+	err = getHgVersion()
 	if err != nil {
 		log.Fatal("from HgVersion() : " + string(err.Error()))
 	}
@@ -278,22 +278,31 @@ func readHelloMessage() error {
 	return nil
 } // readHelloMessage()
 
-func HgVersion() error {
-	var data []byte
-	var ret int32
-	data, ret, err = RunCommand([]string{"version"})
+func getHgVersion() error {
+	HgClient.HgVersion, HgClient.HgFullVersion, err = HgClient.Version()
 	if err != nil {
 		return err
 	}
-	if ret != 0 {
-		return errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
-	}
-	HgClient.HgFullVersion = string(data)
-	v := strings.Split(HgClient.HgFullVersion, "\n")[0]
-	v = v[strings.LastIndex(v, " ")+1 : len(v)-1]
-	HgClient.HgVersion = string(v)
 	return nil
-} // HgVersion()
+}
+
+// // HgVersion should be moved into it's own version.go, as it's a Hg command.
+// func HgVersion() error {
+// 	var data []byte
+// 	var ret int32
+// 	data, ret, err = RunCommand([]string{"version"})
+// 	if err != nil {
+// 		return err
+// 	}
+// 	if ret != 0 {
+// 		return errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
+// 	}
+// 	HgClient.HgFullVersion = string(data)
+// 	v := strings.Split(HgClient.HgFullVersion, "\n")[0]
+// 	v = v[strings.LastIndex(v, " ")+1 : len(v)-1]
+// 	HgClient.HgVersion = string(v)
+// 	return nil
+// } // HgVersion()
 
 // Close ends the connection with the Mercurial CommandServer.
 //
@@ -394,12 +403,16 @@ func sendToHg(cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
+// GetEncoding returns the servers encoding on the result channel.
+// Currently only UTF8 is supported.
 func GetEncoding() (string, error) {
 	var encoding []byte
 	encoding, _, err = runInHg("getencoding", []string{})
 	return string(encoding), err
 }
 
+// RunCommand allows to run a Mercurial command in the Hg Command Server.
+// You can run any command that is available on the Mercurial command line.
 func RunCommand(hgcmd []string) ([]byte, int32, error) {
 	var data []byte
 	var ret int32

@@ -12,7 +12,7 @@ TODO
     Also take care of the fact that there can be an error at the Hg side, and
     that it returns a (rather large) help text instead of the expected result.
 
-#.  Add the possibility to configure (or use a command-line option with) gohg so
+#.  Add the possibility to configure (or use a command line option with) gohg so
     that it creates a dummy Hg repo first in case there is none available yet.
     Then switching repos or using a repo pool should allow to use the correct
     repo.
