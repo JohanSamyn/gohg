@@ -28,13 +28,14 @@ import (
 
 func TestGetEncoding(t *testing.T) {
 	var err error
-	// var encoding string
-	// encoding, err = GetEncoding()
-	_, err = GetEncoding()
+	var encoding string
+	encoding, err = GetEncoding()
 	if err != nil {
 		t.Error("from GetEncoding : " + string(err.Error()))
 	}
-	// fmt.Printf("--------------------\ncommand -> getencoding\ndata -> %s\n", encoding)
+	if encoding == "" {
+		t.Error("GetEncoding did not return a valid encoding")
+	}
 }
 
 func TestRunCommand(t *testing.T) {

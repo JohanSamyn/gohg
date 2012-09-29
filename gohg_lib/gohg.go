@@ -155,23 +155,12 @@ func Connect(hgexe string, reponame string, config []string) error {
 		return err
 	}
 
-	// fmt.Println("--------------------\nConnected with Hg Command Server at: " +
-	// 	HgClient.Repo)
-
 	HgClient.HgPath = hgexe
 
 	err = HgVersion()
 	if err != nil {
 		log.Fatal("from HgVersion() : " + string(err.Error()))
 	}
-
-	// fmt.Printf("--------------------\n"+
-	// 	"HgClient.HgPath: %s\nHgClient.HgVersion: %s\n"+
-	// 	"HgClient.Repo: %s\n"+
-	// 	"HgClient.Capabilities: %s\nHgClient.Encoding: %s\n",
-	// 	HgClient.HgPath, HgClient.HgVersion,
-	// 	HgClient.Repo,
-	// 	HgClient.Capabilities, HgClient.Encoding)
 
 	return nil
 
@@ -318,9 +307,6 @@ func Close() error {
 		return err
 	}
 	Hgserver = nil
-	// fmt.Printf("Hgserver = %v\n", Hgserver)
-	// fmt.Println("--------------------\nDisconnected from Hg Command Server at: " +
-	// 	HgClient.Repo + "\n--------------------\n")
 	return nil
 } // Close()
 
@@ -470,24 +456,16 @@ func runInHg(command string, hgcmd []string) ([]byte, int32, error) {
 
 // calcDataLength converts a 4-byte slice into an unsigned int
 func calcDataLength(s []byte) (uint32, error) {
-	// var ln int32
-	// ln, err = calcIntFromBytes(s)
-	// return uint32(ln), err
-
-	// ln, err := byteslice4(s[0:4]).ToUint32()
-	// return ln, err
-
-	return sliceof4bytes(s).ToUint32()
+	var ln int32
+	ln, err = calcIntFromBytes(s)
+	return uint32(ln), err
 }
 
 // calcReturncode converts a 4-byte slice into a signed int
 func calcReturncode(s []byte) (int32, error) {
-	// return calcIntFromBytes(s)
-
-	// ret, err := byteslice4(s[0:4]).ToInt32()
-	// return ret, err
-
-	return sliceof4bytes(s).ToInt32()
+	var rc int32
+	rc, err = calcIntFromBytes(s)
+	return rc, err
 }
 
 // calcIntFromBytes performs the real conversion
@@ -496,23 +474,4 @@ func calcIntFromBytes(s []byte) (int32, error) {
 	buf := bytes.NewBuffer(s[0:4])
 	err := binary.Read(buf, binary.BigEndian, &i)
 	return i, err
-}
-
-// Also look at page 257 in TheWayToGo.pdf, for another way of providing
-// a means for converting a (4)byte-slice into an uint32/int32,
-// by providing an extra method on type byteslice4.
-
-// We could also name ToInt32 as CalcReturncode
-// and ToUint32 as CalcDataLength.
-
-type sliceof4bytes []byte
-
-func (s4b sliceof4bytes) ToInt32() (int32, error) {
-	i, err := calcIntFromBytes(s4b[0:4])
-	return i, err
-}
-
-func (s4b sliceof4bytes) ToUint32() (uint32, error) {
-	i, err := calcIntFromBytes(s4b[0:4])
-	return uint32(i), err
 }
