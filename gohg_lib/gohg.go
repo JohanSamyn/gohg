@@ -114,7 +114,8 @@ func (hgclient) Connect(hgexe string, reponame string, config []string) error {
 	// Maybe even do this in the init() function ?
 
 	if HgClient.HgServer != nil {
-		return errors.New("A Hg Command Server is already connected.")
+		return errors.New("A Hg Command Server is already connected to " +
+			HgClient.Repo)
 	}
 
 	if hgexe == "" {

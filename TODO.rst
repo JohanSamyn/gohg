@@ -7,7 +7,8 @@ TODO
 
 #.  Use a dedicated repo for the tests.
 
-#.  Refactor Connect() and Close() into methods of HgServer.
+#.  DONE
+    Refactor Connect() and Close() into methods of HgServer.
     Or even of HgClient, and eliminate HgServer ?
 
 #.  Catch returncode <> 0, and avoid showing the help text returned by the Hg CS
@@ -39,6 +40,8 @@ TODO
 #.  Perhaps rename gohg.go into gohglib.go, and add a new gohg.go as a command,
     so one can use the 'gohg' command from the commandline the same way one uses
     the original 'hg' one (see the chg tool Yuya developped) ?
+    Used another solution: I put gohg.go into folder gohg_lib, so I can add a
+    command sourcefile in folder gohg_cmd.
 
 #.  QUESTION -
     Ask for an example of how to start the Hg CS in debug mode (logging to '-').
