@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestHgClient_Version(t *testing.T) {
+func TestHgClient_Version_Minimal(t *testing.T) {
 	ver, _, err := HgClient.Version()
 	if err != nil {
 		t.Fatal(err)
@@ -17,5 +17,15 @@ func TestHgClient_Version(t *testing.T) {
 	minimalversion := "1.9"
 	if ver < minimalversion {
 		t.Error("HgClient.Version(): expected value >= " + minimalversion + " but got " + ver)
+	}
+}
+
+func TestHgClient_Version_AsConnected(t *testing.T) {
+	ver, _, err := HgClient.Version()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if ver != HgClient.HgVersion {
+		t.Error("HgClient.Version(): expected value " + HgClient.HgVersion + " but got " + ver)
 	}
 }
