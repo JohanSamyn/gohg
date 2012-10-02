@@ -11,13 +11,13 @@ syntax:glob
 build.out
 test.out
 goinstall.log
+#gohg.sublime-project
 gohg.sublime-workspace
 test/t.cmd
+pyhglib.py*
 
 syntax:regexp
 ^bin/
 ^pkg/
 ^src/cmd/(.*)/6?\1$
 ^.*/core.[0-9]*$
-glob:LICENSE-2.txt
-glob:pyhglib.py*

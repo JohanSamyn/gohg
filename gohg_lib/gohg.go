@@ -98,10 +98,10 @@ func NewHgClient() *hgclient {
 //		fixed settings (see composeHgConfig() for more).
 //
 // Returns an error if the connection could not be established properly.
-func (hgclient) Connect(hgexe string, reponame string, config []string) error {
+func (hgcl *hgclient) Connect(hgexe string, reponame string, config []string) error {
 
 	// for example:
-	// HgClient.HgServer =
+	// hgcl.HgServer =
 	//		exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
 	// 		"-R", "C:\\DEV\\go\\src\\golout\\",		// the repo
 	// 		"--config", "ui.interactive=True",		// mandatory settings
@@ -113,9 +113,9 @@ func (hgclient) Connect(hgexe string, reponame string, config []string) error {
 	// Also do not override that logfile every launch.
 	// Maybe even do this in the init() function ?
 
-	if HgClient.HgServer != nil {
+	if hgcl.HgServer != nil {
 		return errors.New("A Hg Command Server is already connected to " +
-			HgClient.Repo)
+			hgcl.Repo)
 	}
 
 	if hgexe == "" {
@@ -125,11 +125,11 @@ func (hgclient) Connect(hgexe string, reponame string, config []string) error {
 	}
 
 	// The Hg Command Server needs a repository.
-	HgClient.Repo, err = locateRepository(reponame)
+	hgcl.Repo, err = locateRepository(reponame)
 	if err != nil {
 		return err
 	}
-	if HgClient.Repo == "" {
+	if hgcl.Repo == "" {
 		return errors.New("could not find a Hg repository at: " + reponame)
 	}
 
@@ -139,22 +139,22 @@ func (hgclient) Connect(hgexe string, reponame string, config []string) error {
 	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
 
 	var hgconfig []string
-	hgconfig = composeHgConfig(hgexe, HgClient.Repo, config)
+	hgconfig = composeHgConfig(hgexe, hgcl.Repo, config)
 
-	HgClient.HgServer = exec.Command(hgexe)
-	HgClient.HgServer.Args = hgconfig
-	HgClient.HgServer.Dir = HgClient.Repo
+	hgcl.HgServer = exec.Command(hgexe)
+	hgcl.HgServer.Args = hgconfig
+	hgcl.HgServer.Dir = hgcl.Repo
 
-	HgClient.pout, err = HgClient.HgServer.StdoutPipe()
+	hgcl.pout, err = hgcl.HgServer.StdoutPipe()
 	if err != nil {
 		return errors.New("could not connect StdoutPipe: " + err.Error())
 	}
-	HgClient.pin, err = HgClient.HgServer.StdinPipe()
+	hgcl.pin, err = hgcl.HgServer.StdinPipe()
 	if err != nil {
 		log.Fatal("could not connect StdinPipe: " + err.Error())
 	}
 
-	if err := HgClient.HgServer.Start(); err != nil {
+	if err := hgcl.HgServer.Start(); err != nil {
 		return errors.New("could not start the Hg Command Server: " + err.Error())
 	}
 
@@ -163,7 +163,7 @@ func (hgclient) Connect(hgexe string, reponame string, config []string) error {
 		return err
 	}
 
-	HgClient.HgPath = hgexe
+	hgcl.HgPath = hgexe
 
 	err = getHgVersion()
 	if err != nil {
@@ -178,18 +178,18 @@ func (hgclient) Connect(hgexe string, reponame string, config []string) error {
 //
 // In fact it's closing the stdin of the Hg CS that closes the connection,
 // as per the Hg CS documentation.
-func (hgclient) Close() error {
-	if HgClient.HgServer == nil {
+func (hgcl *hgclient) Close() error {
+	if hgcl.HgServer == nil {
 		return nil
 	}
 
-	HgClient.pin.Close()
-	HgClient.pout.Close()
-	err = HgClient.HgServer.Wait()
+	hgcl.pin.Close()
+	hgcl.pout.Close()
+	err = hgcl.HgServer.Wait()
 	if err != nil {
 		return err
 	}
-	HgClient.HgServer = nil
+	hgcl.HgServer = nil
 	return nil
 } // Close()
 

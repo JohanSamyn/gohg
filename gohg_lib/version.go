@@ -11,10 +11,10 @@ import (
 )
 
 // Version implements the 'hg version' command.
-func (hgclient) Version() (ver string, fullver string, err error) {
+func (hgcl *hgclient) Version() (ver string, fullver string, err error) {
 	var data []byte
 	var ret int32
-	data, ret, err = HgClient.RunCommand([]string{"version"})
+	data, ret, err = hgcl.RunCommand([]string{"version"})
 	if err != nil {
 		return "", "", err
 	}
