@@ -7,6 +7,8 @@ TODO
 
 #.  Use a dedicated repo for the tests.
 
+#.  Add the other Hg CS channels to readToHg() and sendToHg().
+
 #.  DONE
     Refactor Connect() and Close() into methods of HgServer.
     Or even of HgClient, and eliminate HgServer ?
