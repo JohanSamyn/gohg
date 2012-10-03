@@ -10,8 +10,8 @@ import (
 	"strconv"
 )
 
-// Init implements the 'hg init' command.
-func (hgcl *hgclient) Init(path string) error {
+// Init provides the 'hg init' command.
+func (hgcl *HgClient) Init(path string) error {
 	var err error
 	var fa string
 	fa, err = filepath.Abs(path)

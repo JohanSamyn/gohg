@@ -6,7 +6,7 @@ package gohg_lib
 
 import ()
 
-// Add implements the 'hg summary' command.
-func (hgcl *hgclient) Summary(files []string) error {
+// Summary provides the 'hg summary' command.
+func (hgcl *HgClient) Summary(files []string) error {
 	return nil
 }

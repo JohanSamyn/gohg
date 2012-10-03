@@ -46,6 +46,28 @@ type hgclient struct {
 	// config       []string
 }
 
+// Type HgClient will act as an object (kind of) for working with the Hg CS
+// from any program using this gohg client lib.
+// It will in fact act as a stand-in for the regular 'hg' command.
+// It will get a bunch of fields and methods to make working with it
+// as go-like as possible. It might even get a few channels for communications.
+type HgClient struct {
+	hgserver *exec.Cmd
+	// The in and out pipe ends are to be considered from the point of view
+	// of the Hg Command Server instance.
+	pin  io.WriteCloser
+	pout io.ReadCloser
+	// Connected can be eliminated once hgserver is in use
+	Connected     bool     // already connected to a Hg CS ?
+	HgPath        string   // which hg is used ?
+	Capabilities  []string // as per the hello message
+	Encoding      string   // as per the hello message
+	Repo          string   // the full path to the Hg repo
+	HgVersion     string   // the version number only
+	HgFullVersion string   // the complete version message returned by the Hg CS
+	// config       []string
+}
+
 // hgMsg is what we receive from the Hg CS
 type hgMsg struct {
 	Ch   string
@@ -63,7 +85,7 @@ type hgCmd struct {
 var err error
 var logfile string
 
-var HgClient hgclient
+var Hgclient HgClient
 
 // init takes care of some householding, namely preparing a logfile where
 // all communication between this lib and the Hg CS can be logged.
@@ -77,8 +99,8 @@ func init() {
 	logfile = exedir + string(os.PathSeparator) + "gohg.log"
 } // init()
 
-func NewHgClient() *hgclient {
-	var hgclient = new(hgclient)
+func NewHgClient() *HgClient {
+	var hgclient = new(HgClient)
 	return hgclient
 }
 
@@ -97,7 +119,7 @@ func NewHgClient() *hgclient {
 //		fixed settings (see composeHgConfig() for more).
 //
 // Returns an error if the connection could not be established properly.
-func (hgcl *hgclient) Connect(hgexe string, reponame string, config []string) error {
+func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) error {
 
 	// for example:
 	// hgcl.hgserver =
@@ -177,7 +199,7 @@ func (hgcl *hgclient) Connect(hgexe string, reponame string, config []string) er
 //
 // In fact it's closing the stdin of the Hg CS that closes the connection,
 // as per the Hg CS documentation.
-func (hgcl *hgclient) Close() error {
+func (hgcl *HgClient) Close() error {
 	if hgcl.hgserver == nil {
 		return nil
 	}
@@ -260,7 +282,7 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 // of the Hg CS at hand. It's also a first proof of a working connection.
 func readHelloMessage() error {
 	s := make([]byte, 5)
-	_, err = HgClient.pout.Read(s)
+	_, err = Hgclient.pout.Read(s)
 	if err != io.EOF && err != nil {
 		return err
 	}
@@ -287,7 +309,7 @@ func readHelloMessage() error {
 			"' for hello message from Hg Command Server")
 	}
 	hello := make([]byte, ln)
-	_, err = HgClient.pout.Read(hello)
+	_, err = Hgclient.pout.Read(hello)
 	if err != io.EOF && err != nil {
 		return err
 	}
@@ -299,13 +321,13 @@ func readHelloMessage() error {
 		log.Fatal("could not detect the 'runcommand' capability")
 	}
 	attr := strings.Split(string(hello), "\n")
-	HgClient.Capabilities = strings.Fields(attr[0])[1:]
-	HgClient.Encoding = strings.Split(attr[1], ": ")[1]
+	Hgclient.Capabilities = strings.Fields(attr[0])[1:]
+	Hgclient.Encoding = strings.Split(attr[1], ": ")[1]
 	return nil
 } // readHelloMessage()
 
 func getHgVersion() error {
-	HgClient.HgVersion, HgClient.HgFullVersion, err = HgClient.Version()
+	Hgclient.HgVersion, Hgclient.HgFullVersion, err = Hgclient.Version()
 	if err != nil {
 		return err
 	}
@@ -316,17 +338,17 @@ func getHgVersion() error {
 // func HgVersion() error {
 // 	var data []byte
 // 	var ret int32
-// 	data, ret, err = HgClient.RunCommand([]string{"version"})
+// 	data, ret, err = Hgclient.RunCommand([]string{"version"})
 // 	if err != nil {
 // 		return err
 // 	}
 // 	if ret != 0 {
 // 		return errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
 // 	}
-// 	HgClient.HgFullVersion = string(data)
-// 	v := strings.Split(HgClient.HgFullVersion, "\n")[0]
+// 	Hgclient.HgFullVersion = string(data)
+// 	v := strings.Split(Hgclient.HgFullVersion, "\n")[0]
 // 	v = v[strings.LastIndex(v, " ")+1 : len(v)-1]
-// 	HgClient.HgVersion = string(v)
+// 	Hgclient.HgVersion = string(v)
 // 	return nil
 // } // HgVersion()
 
@@ -337,7 +359,7 @@ func readFromHg() (string, []byte, error) {
 
 	// get channel and length
 	data := make([]byte, 5)
-	_, err = HgClient.pout.Read(data)
+	_, err = Hgclient.pout.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -358,7 +380,7 @@ func readFromHg() (string, []byte, error) {
 
 	// now get ln bytes of data
 	data = make([]byte, ln)
-	_, err = HgClient.pout.Read(data)
+	_, err = Hgclient.pout.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -405,7 +427,7 @@ func sendToHg(cmd string, args []byte) error {
 
 	// perform the actual send to the Hg CS
 	var i int
-	i, err = HgClient.pin.Write(data)
+	i, err = Hgclient.pin.Write(data)
 	if i != len(data) {
 		return errors.New("writing length of data failed: " +
 			string(err.Error()))
@@ -416,15 +438,15 @@ func sendToHg(cmd string, args []byte) error {
 
 // GetEncoding returns the servers encoding on the result channel.
 // Currently only UTF8 is supported.
-func (hgclient) GetEncoding() (string, error) {
+func (hgcl *HgClient) GetEncoding() (string, error) {
 	var encoding []byte
 	encoding, _, err = runInHg("getencoding", []string{})
 	return string(encoding), err
 }
 
 // RunCommand allows to run a Mercurial command in the Hg Command Server.
-// You can run any command that is available on the Mercurial command line.
-func (hgclient) RunCommand(hgcmd []string) ([]byte, int32, error) {
+// You can run any standard 'hg' command that is available on the command line.
+func (hgcl *HgClient) RunCommand(hgcmd []string) ([]byte, int32, error) {
 	var data []byte
 	var ret int32
 	data, ret, err = runInHg("runcommand", hgcmd)

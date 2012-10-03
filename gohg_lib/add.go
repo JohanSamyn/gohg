@@ -6,7 +6,7 @@ package gohg_lib
 
 import ()
 
-// Add implements the 'hg add' command.
-func (hgcl *hgclient) Add(files []string) error {
+// Add provides the 'hg add' command.
+func (hgcl *HgClient) Add(files []string) error {
 	return nil
 }

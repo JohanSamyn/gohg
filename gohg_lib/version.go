@@ -10,8 +10,8 @@ import (
 	"strings"
 )
 
-// Version implements the 'hg version' command.
-func (hgcl *hgclient) Version() (ver string, fullver string, err error) {
+// Version provides the 'hg version' command.
+func (hgcl *HgClient) Version() (ver string, fullver string, err error) {
 	var data []byte
 	var ret int32
 	data, ret, err = hgcl.RunCommand([]string{"version"})
