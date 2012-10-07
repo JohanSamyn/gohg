@@ -22,7 +22,6 @@ func TestSetup(t *testing.T) {
 
 	var err error
 	Tempdir, err = ioutil.TempDir("", "gohg_test_")
-	fmt.Println(Tempdir)
 
 	// now create an empty Hg repo inthere
 	var cmd *exec.Cmd
