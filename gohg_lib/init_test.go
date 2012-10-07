@@ -11,7 +11,6 @@ import (
 	"testing"
 )
 
-var tempdir = os.TempDir()
 var pathSuccess = "\\gohg-init-success\\"
 var pathFailure = "\\gohg-init-failure\\"
 
@@ -25,7 +24,7 @@ var pathFailure = "\\gohg-init-failure\\"
 
 func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 	defer cleanupSuccess(t)
-	path := tempdir + pathSuccess
+	path := Tempdir + pathSuccess
 	err := os.RemoveAll(path)
 	if err != nil {
 		t.Fatal(err)
@@ -40,7 +39,7 @@ func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 	defer cleanupFailure(t)
 
-	path := tempdir + pathFailure
+	path := Tempdir + pathFailure
 	err := os.RemoveAll(path)
 	if err != nil {
 		t.Fatal(err)
@@ -59,14 +58,14 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 }
 
 func cleanupSuccess(t *testing.T) {
-	err := os.RemoveAll(tempdir + pathSuccess)
+	err := os.RemoveAll(Tempdir + pathSuccess)
 	if err != nil {
 		t.Log(err)
 	}
 }
 
 func cleanupFailure(t *testing.T) {
-	err := os.RemoveAll(tempdir + pathFailure)
+	err := os.RemoveAll(Tempdir + pathFailure)
 	if err != nil {
 		t.Log(err)
 	}

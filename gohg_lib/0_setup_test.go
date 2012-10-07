@@ -6,19 +6,35 @@ package gohg_lib_test
 
 import (
 	. "gohg/gohg_lib"
+	"io/ioutil"
 	"log"
+	"os/exec"
 	"testing"
+
+	"fmt"
 )
 
-// TestSetup makes a connection to the Hg CS once, for all tests to use.
+var Tempdir string
 
 // var Hgclient hgclient
 
-func TestSetup(*testing.T) {
+// TestSetup makes a connection to the Hg CS once, for all tests to use.
+func TestSetup(t *testing.T) {
+
+	var err error
+	Tempdir, err = ioutil.TempDir("", "gohg_test_")
+	fmt.Println(Tempdir)
+
+	// now create an empty Hg repo inthere
+	var cmd *exec.Cmd
+	cmd = exec.Command("M:\\DEV\\hg-stable\\hg", "--cwd", Tempdir, "init")
+	if err = cmd.Run(); err != nil {
+		log.Fatal(err)
+	}
+
 	// Hgclient = newHgClient()
 	if Hgclient.Connected != true {
-		var err error
-		var repo = "."
+		var repo = Tempdir
 		cfg := make([]string, 0)
 		err = Hgclient.Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
 		if err != nil {

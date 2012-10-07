@@ -6,6 +6,7 @@ package gohg_lib_test
 
 import (
 	. "gohg/gohg_lib"
+	"os"
 	"testing"
 )
 
@@ -15,5 +16,9 @@ func TestTearDown(t *testing.T) {
 	err := Hgclient.Close()
 	if err != nil {
 		t.Error("from Close(): " + string(err.Error()))
+	}
+	err = os.RemoveAll(Tempdir)
+	if err != nil {
+		t.Error("TearDown(): " + string(err.Error()))
 	}
 }
