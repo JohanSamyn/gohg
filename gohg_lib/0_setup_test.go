@@ -10,8 +10,6 @@ import (
 	"log"
 	"os/exec"
 	"testing"
-
-	"fmt"
 )
 
 var Tempdir string
@@ -19,6 +17,7 @@ var Tempdir string
 // var Hgclient hgclient
 
 // TestSetup makes a connection to the Hg CS once, for all tests to use.
+
 func TestSetup(t *testing.T) {
 
 	var err error
