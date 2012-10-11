@@ -24,28 +24,6 @@ import (
 	"strings"
 )
 
-// Type hgclient will act as an object (kind of) for working with the Hg CS
-// from any program using this gohg client lib.
-// It will in fact act as a stand-in for the regular 'hg' command.
-// It will get a bunch of fields and methods to make working with it
-// as go-like as possible. It might even get a few channels for communications.
-type hgclient struct {
-	hgserver *exec.Cmd
-	// The in and out pipe ends are to be considered from the point of view
-	// of the Hg Command Server instance.
-	pin  io.WriteCloser
-	pout io.ReadCloser
-	// Connected can be eliminated once hgserver is in use
-	Connected     bool     // already connected to a Hg CS ?
-	HgPath        string   // which hg is used ?
-	Capabilities  []string // as per the hello message
-	Encoding      string   // as per the hello message
-	Repo          string   // the full path to the Hg repo
-	HgVersion     string   // the version number only
-	HgFullVersion string   // the complete version message returned by the Hg CS
-	// config       []string
-}
-
 // Type HgClient will act as an object (kind of) for working with the Hg CS
 // from any program using this gohg client lib.
 // It will in fact act as a stand-in for the regular 'hg' command.
