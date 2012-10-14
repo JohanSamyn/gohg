@@ -9,29 +9,15 @@ package main
 import (
 	. "gohg/gohg_lib"
 	"fmt"
-	// "io/ioutil"
 	"log"
-	// "os/exec"
 )
 
 func main() {
 	fmt.Println("========== Begin of example1 ==========")
 
-	// var Tempdir string
 	var err error
-	// Tempdir, err = ioutil.TempDir("", "gohg_test_")
-
-	// now create an empty Hg repo inthere
-	// var cmd *exec.Cmd
 	hgcmd := "M:\\DEV\\hg-stable\\hg"
-	// repo := Tempdir
-	// cmd = exec.Command(hgcmd, "--cwd", repo, "init")
 	repo := "C:\\DEV\\go\\src\\gohg"
-	// cmd = exec.Command(hgcmd, "--cwd", repo, "init")
-	// if err = cmd.Run(); err != nil {
-	// 	log.Fatal(err)
-	// }
-
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 
