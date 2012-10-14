@@ -75,6 +75,8 @@ func init() {
 	logfile = exedir + string(os.PathSeparator) + "gohg.log"
 } // init()
 
+// NewHgClient creates a new instance of the client object for working with the
+// Hg Command Server.
 func NewHgClient() *HgClient {
 	var hgclient = new(HgClient)
 	return hgclient
@@ -429,6 +431,8 @@ func (hgcl *HgClient) RunCommand(hgcmd []string) ([]byte, int32, error) {
 	return data, ret, err
 }
 
+// runInHg sends a command to the Hg CS (using sendToHg),
+// and fetches the result (using readFromHg).
 func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 
