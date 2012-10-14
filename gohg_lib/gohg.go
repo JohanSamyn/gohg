@@ -267,7 +267,7 @@ func readHelloMessage(hgcl *HgClient) error {
 	}
 	const t1 = "hg se" // hg send: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
-		return errors.New("this version of Mercurial does not support the Command Server" +
+		return errors.New("need at least version 1.9 of Mercurial to use the Command Server" +
 			"\n(type 'hg version' and 'which hg' to verify)")
 	}
 	ch := string(s[0])
