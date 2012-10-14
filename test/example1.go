@@ -27,6 +27,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer hc.Close()
+	defer func() { fmt.Println("========== End of example1 ==========") }()
 
 	var v, fv string
 	if v, fv, err = hc.Version(); err != nil {
@@ -43,6 +44,4 @@ func main() {
 		return
 	}
 	fmt.Printf("[[Summary]]:\n%s", s)
-
-	fmt.Println("========== End of example1 ==========")
 }
