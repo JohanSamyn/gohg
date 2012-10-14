@@ -5,12 +5,11 @@
 package gohg_lib_test
 
 import (
-	. "gohg/gohg_lib"
 	"testing"
 )
 
 func TestHgClient_Version_Minimal(t *testing.T) {
-	ver, _, err := Hgclient.Version()
+	ver, _, err := hct.Version()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -21,11 +20,11 @@ func TestHgClient_Version_Minimal(t *testing.T) {
 }
 
 func TestHgClient_Version_AsConnected(t *testing.T) {
-	ver, _, err := Hgclient.Version()
+	ver, _, err := hct.Version()
 	if err != nil {
 		t.Fatal(err)
 	}
-	if ver != Hgclient.HgVersion {
-		t.Error("HgClient.Version(): expected value " + Hgclient.HgVersion + " but got " + ver)
+	if ver != hct.HgVersion {
+		t.Error("HgClient.Version(): expected value " + hct.HgVersion + " but got " + ver)
 	}
 }

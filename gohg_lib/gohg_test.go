@@ -5,7 +5,6 @@
 package gohg_lib_test
 
 import (
-	. "gohg/gohg_lib"
 	// "fmt"
 	"testing"
 )
@@ -29,7 +28,7 @@ import (
 func TestGetEncoding(t *testing.T) {
 	var err error
 	var encoding string
-	encoding, err = Hgclient.GetEncoding()
+	encoding, err = hct.GetEncoding()
 	if err != nil {
 		t.Error("from GetEncoding : " + string(err.Error()))
 	}
@@ -45,7 +44,7 @@ func TestRunCommand(t *testing.T) {
 	// hgcmd := []string{"log", "-l", "2"}
 	hgcmd := []string{"summary"}
 	// data, ret, err = RunCommand(hgcmd)
-	_, _, err = Hgclient.RunCommand(hgcmd)
+	_, _, err = hct.RunCommand(hgcmd)
 	if err != nil {
 		t.Error("from RunCommand : " + string(err.Error()))
 	}

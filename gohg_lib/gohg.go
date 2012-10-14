@@ -63,8 +63,6 @@ type hgCmd struct {
 var err error
 var logfile string
 
-var Hgclient HgClient
-
 // init takes care of some householding, namely preparing a logfile where
 // all communication between this lib and the Hg CS can be logged.
 func init() {
@@ -157,14 +155,14 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return errors.New("could not start the Hg Command Server: " + err.Error())
 	}
 
-	err = readHelloMessage()
+	err = readHelloMessage(hgcl)
 	if err != nil {
 		return err
 	}
 
 	hgcl.HgPath = hgexe
 
-	err = getHgVersion()
+	err = getHgVersion(hgcl)
 	if err != nil {
 		log.Fatal("from HgVersion() : " + string(err.Error()))
 	}
@@ -258,9 +256,9 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 //
 // It has a fixed format, and contains info about the possibilities
 // of the Hg CS at hand. It's also a first proof of a working connection.
-func readHelloMessage() error {
+func readHelloMessage(hgcl *HgClient) error {
 	s := make([]byte, 5)
-	_, err = Hgclient.pout.Read(s)
+	_, err = hgcl.pout.Read(s)
 	if err != io.EOF && err != nil {
 		return err
 	}
@@ -287,7 +285,7 @@ func readHelloMessage() error {
 			"' for hello message from Hg Command Server")
 	}
 	hello := make([]byte, ln)
-	_, err = Hgclient.pout.Read(hello)
+	_, err = hgcl.pout.Read(hello)
 	if err != io.EOF && err != nil {
 		return err
 	}
@@ -299,13 +297,13 @@ func readHelloMessage() error {
 		log.Fatal("could not detect the 'runcommand' capability")
 	}
 	attr := strings.Split(string(hello), "\n")
-	Hgclient.Capabilities = strings.Fields(attr[0])[1:]
-	Hgclient.Encoding = strings.Split(attr[1], ": ")[1]
+	hgcl.Capabilities = strings.Fields(attr[0])[1:]
+	hgcl.Encoding = strings.Split(attr[1], ": ")[1]
 	return nil
 } // readHelloMessage()
 
-func getHgVersion() error {
-	Hgclient.HgVersion, Hgclient.HgFullVersion, err = Hgclient.Version()
+func getHgVersion(hgcl *HgClient) error {
+	hgcl.HgVersion, hgcl.HgFullVersion, err = hgcl.Version()
 	if err != nil {
 		return err
 	}
@@ -332,12 +330,12 @@ func getHgVersion() error {
 
 // readFromHg returns the channel and all the data read from it.
 // Eventually it returns no (or empty) data but an error.
-func readFromHg() (string, []byte, error) {
+func readFromHg(hgcl *HgClient) (string, []byte, error) {
 	var ch string
 
 	// get channel and length
 	data := make([]byte, 5)
-	_, err = Hgclient.pout.Read(data)
+	_, err = hgcl.pout.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -358,7 +356,7 @@ func readFromHg() (string, []byte, error) {
 
 	// now get ln bytes of data
 	data = make([]byte, ln)
-	_, err = Hgclient.pout.Read(data)
+	_, err = hgcl.pout.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -368,7 +366,7 @@ func readFromHg() (string, []byte, error) {
 
 // sendToHg writes data to the Hg CS,
 // returning an error if something went wrong.
-func sendToHg(cmd string, args []byte) error {
+func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	cmd = strings.TrimRight(cmd, "\n") + "\n"
 	lc := len(cmd)
 	la := len(args)
@@ -405,7 +403,7 @@ func sendToHg(cmd string, args []byte) error {
 
 	// perform the actual send to the Hg CS
 	var i int
-	i, err = Hgclient.pin.Write(data)
+	i, err = hgcl.pin.Write(data)
 	if i != len(data) {
 		return errors.New("writing length of data failed: " +
 			string(err.Error()))
@@ -418,7 +416,7 @@ func sendToHg(cmd string, args []byte) error {
 // Currently only UTF8 is supported.
 func (hgcl *HgClient) GetEncoding() (string, error) {
 	var encoding []byte
-	encoding, _, err = runInHg("getencoding", []string{})
+	encoding, _, err = runInHg(hgcl, "getencoding", []string{})
 	return string(encoding), err
 }
 
@@ -427,14 +425,14 @@ func (hgcl *HgClient) GetEncoding() (string, error) {
 func (hgcl *HgClient) RunCommand(hgcmd []string) ([]byte, int32, error) {
 	var data []byte
 	var ret int32
-	data, ret, err = runInHg("runcommand", hgcmd)
+	data, ret, err = runInHg(hgcl, "runcommand", hgcmd)
 	return data, ret, err
 }
 
-func runInHg(command string, hgcmd []string) ([]byte, int32, error) {
+func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 
-	err = sendToHg(command, args)
+	err = sendToHg(hgcl, command, args)
 	if err != nil {
 		fmt.Println(err)
 		return nil, 0, err
@@ -446,7 +444,7 @@ func runInHg(command string, hgcmd []string) ([]byte, int32, error) {
 	endOfRead := false
 	for endOfRead == false {
 		var ch string
-		ch, data, err = readFromHg()
+		ch, data, err = readFromHg(hgcl)
 		if err != nil || ch == "" {
 			log.Fatal("readFromHg failed: " + string(err.Error()))
 		}

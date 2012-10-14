@@ -5,7 +5,6 @@
 package gohg_lib_test
 
 import (
-	. "gohg/gohg_lib"
 	"errors"
 	"os"
 	"testing"
@@ -30,7 +29,7 @@ func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = Hgclient.Init(path)
+	err = hct.Init(path)
 	if err != nil {
 		t.Error(err)
 	}
@@ -51,7 +50,7 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = Hgclient.Init(path)
+	err = hct.Init(path)
 	if err == nil {
 		t.Error(errors.New("HgClient.Init() did not fail in an existing Hg working copy"))
 	}

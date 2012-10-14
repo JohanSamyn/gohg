@@ -5,7 +5,6 @@
 package gohg_lib_test
 
 import (
-	. "gohg/gohg_lib"
 	"os"
 	"testing"
 )
@@ -13,7 +12,7 @@ import (
 // TestTearDown closes the connection to the Hg CS after all tests.
 
 func TestTearDown(t *testing.T) {
-	err := Hgclient.Close()
+	err := hct.Close()
 	if err != nil {
 		t.Error("from Close(): " + string(err.Error()))
 	}

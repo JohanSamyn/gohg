@@ -14,7 +14,7 @@ import (
 
 var Tempdir string
 
-// var Hgclient hgclient
+var hct HgClient
 
 // TestSetup makes a connection to the Hg CS once, for all tests to use.
 
@@ -30,11 +30,12 @@ func TestSetup(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	// Hgclient = newHgClient()
-	if Hgclient.Connected != true {
+	hct = *(NewHgClient())
+
+	if hct.Connected != true {
 		var repo = Tempdir
 		cfg := make([]string, 0)
-		err = Hgclient.Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
+		err = hct.Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
 		if err != nil {
 			log.Fatal(err)
 		}
