@@ -9,6 +9,10 @@ TODO
 
 #.  Add the other Hg CS channels to readToHg() and sendToHg().
 
+#.  Make sure Init() fails gracefuly when no Hg repo avail, and it 'asks' for
+    the name of a new (= unexisting) repo in it's failure message, which much
+    differ from the repo the Hg CS is associated with (which would fail anyway).
+
 #.  DONE
     Refactor Connect() and Close() into methods of HgServer.
     Or even of HgClient, and eliminate HgServer ?
