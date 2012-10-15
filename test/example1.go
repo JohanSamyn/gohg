@@ -19,6 +19,7 @@ func main() {
 	hgcmd := "M:\\DEV\\hg-stable\\hg"
 	// hgcmd := "hg"
 	repo := "C:\\DEV\\go\\src\\gohg"
+	// repo := "C:\\Programs\\TortoiseHg"
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 

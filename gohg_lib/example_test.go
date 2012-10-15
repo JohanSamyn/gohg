@@ -13,8 +13,7 @@ import (
 
 func ExampleHgClient_Connect() {
 	hc := NewHgClient()
-	var cfg []string
-	if err := hc.Connect("hg", ".", cfg); err != nil {
+	if err := hc.Connect("hg", ".", []string{""}); err != nil {
 		log.Fatal(err)
 	}
 	defer hc.Close()

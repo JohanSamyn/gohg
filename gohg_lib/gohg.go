@@ -19,7 +19,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path"
+	// "path"
 	"path/filepath"
 	"strings"
 )
@@ -33,9 +33,8 @@ type HgClient struct {
 	hgserver *exec.Cmd
 	// The in and out pipe ends are to be considered from the point of view
 	// of the Hg Command Server instance.
-	pin  io.WriteCloser
-	pout io.ReadCloser
-	// Connected can be eliminated once hgserver is in use
+	pin           io.WriteCloser
+	pout          io.ReadCloser
 	Connected     bool     // already connected to a Hg CS ?
 	HgPath        string   // which hg is used ?
 	Capabilities  []string // as per the hello message
@@ -63,17 +62,17 @@ type hgCmd struct {
 var err error
 var logfile string
 
-// init takes care of some householding, namely preparing a logfile where
-// all communication between this lib and the Hg CS can be logged.
-func init() {
-	var exedir string
-	exedir = path.Dir(os.Args[0])
-	exedir, err = filepath.Abs(exedir)
-	if err != nil {
-		log.Fatal("Could not determine path for the gohg.log logfile.")
-	}
-	logfile = exedir + string(os.PathSeparator) + "gohg.log"
-} // init()
+// // init takes care of some householding, namely preparing a logfile where
+// // all communication between this lib and the Hg CS can be logged.
+// func init() {
+// 	var exedir string
+// 	exedir = path.Dir(os.Args[0])
+// 	exedir, err = filepath.Abs(exedir)
+// 	if err != nil {
+// 		log.Fatal("Could not determine path for the gohg.log logfile.")
+// 	}
+// 	logfile = exedir + string(os.PathSeparator) + "gohg.log"
+// } // init()
 
 // NewHgClient creates a new instance of the client object for working with the
 // Hg Command Server.
@@ -113,8 +112,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// Maybe even do this in the init() function ?
 
 	if hgcl.hgserver != nil {
-		return errors.New("A Hg Command Server is already connected to " +
-			hgcl.Repo)
+		return errors.New("Already running a Hg Command Server for " + hgcl.Repo)
 	}
 
 	if hgexe == "" {
@@ -162,6 +160,12 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return err
 	}
 
+	err = validateCapabilities(hgcl)
+	if err != nil {
+		return err
+	}
+
+	hgcl.Connected = true
 	hgcl.HgPath = hgexe
 
 	err = getHgVersion(hgcl)
@@ -179,16 +183,19 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 // as per the Hg CS documentation.
 func (hgcl *HgClient) Close() error {
 	if hgcl.hgserver == nil {
+		log.Println("Trying to close a closed hgserver.")
 		return nil
 	}
 
 	hgcl.pin.Close()
 	hgcl.pout.Close()
+
+	defer func() { hgcl.hgserver = nil }()
+
 	err = hgcl.hgserver.Wait()
 	if err != nil {
 		return err
 	}
-	hgcl.hgserver = nil
 	return nil
 } // Close()
 
@@ -202,7 +209,7 @@ func locateRepository(reponame string) (string, error) {
 	repo, err = filepath.Abs(repo)
 	if err != nil {
 		return "", errors.New(err.Error() +
-			"\ncould not find absolute path for: " + repo)
+			"\ncould not determine absolute path for: " + repo)
 	}
 	repo = filepath.Clean(repo)
 
@@ -213,13 +220,11 @@ func locateRepository(reponame string) (string, error) {
 		if err == nil {
 			break
 		}
-		var dir, file string
-		dir, file = filepath.Split(repo)
-		if dir == "" || file == "" {
-			repo = ""
+		var file string
+		repo, file = filepath.Split(repo)
+		if repo == "" || file == "" {
 			break
 		}
-		repo = dir
 	}
 	if err != nil || repo == "" {
 		return "", nil
@@ -267,10 +272,11 @@ func readHelloMessage(hgcl *HgClient) error {
 	if len(s) == 0 {
 		return errors.New("no hello message data received from Hg Command Server")
 	}
-	const t1 = "hg se" // hg send: "hg serve [OPTION]"
+	const t1 = "hg se" // hg returned: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
-		return errors.New("need at least version 1.9 of Mercurial to use the Command Server" +
-			"\n(type 'hg version' and 'which hg' to verify)")
+		return errors.New(
+			"need at least version 1.9 of Mercurial to use the Command Server" +
+				"\n(type 'hg version' and 'which hg' to verify)")
 	}
 	ch := string(s[0])
 	if ch != "o" {
@@ -280,7 +286,7 @@ func readHelloMessage(hgcl *HgClient) error {
 	var ln uint32
 	ln, err = calcDataLength(s[1:5])
 	if err != nil {
-		fmt.Println("binary.Read failed:", err)
+		fmt.Println("readHelloMessage(): binary.Read failed:", err)
 	}
 	if ln <= 0 {
 		return errors.New("received invalid length '" + string(ln) +
@@ -295,14 +301,25 @@ func readHelloMessage(hgcl *HgClient) error {
 	if string(hello[0:len(t2)]) != t2 {
 		return errors.New("could not determine the capabilities of the Hg Command Server")
 	}
-	if strings.Contains(string(hello), "runcommand") == false {
-		log.Fatal("could not detect the 'runcommand' capability")
-	}
 	attr := strings.Split(string(hello), "\n")
 	hgcl.Capabilities = strings.Fields(attr[0])[1:]
 	hgcl.Encoding = strings.Split(attr[1], ": ")[1]
 	return nil
 } // readHelloMessage()
+
+func validateCapabilities(hgcl *HgClient) error {
+	var ok bool
+	for _, c := range hgcl.Capabilities {
+		if c == "runcommand" {
+			ok = true
+			break
+		}
+	}
+	if ok == false {
+		log.Fatal("could not detect the 'runcommand' capability")
+	}
+	return nil
+}
 
 func getHgVersion(hgcl *HgClient) error {
 	hgcl.HgVersion, hgcl.HgFullVersion, err = hgcl.Version()
@@ -311,24 +328,6 @@ func getHgVersion(hgcl *HgClient) error {
 	}
 	return nil
 }
-
-// // HgVersion should be moved into it's own version.go, as it's a Hg command.
-// func HgVersion() error {
-// 	var data []byte
-// 	var ret int32
-// 	data, ret, err = Hgclient.RunCommand([]string{"version"})
-// 	if err != nil {
-// 		return err
-// 	}
-// 	if ret != 0 {
-// 		return errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
-// 	}
-// 	Hgclient.HgFullVersion = string(data)
-// 	v := strings.Split(Hgclient.HgFullVersion, "\n")[0]
-// 	v = v[strings.LastIndex(v, " ")+1 : len(v)-1]
-// 	Hgclient.HgVersion = string(v)
-// 	return nil
-// } // HgVersion()
 
 // readFromHg returns the channel and all the data read from it.
 // Eventually it returns no (or empty) data but an error.
