@@ -26,6 +26,9 @@ import (
 // }
 
 func TestGetEncoding(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
 	var err error
 	var encoding string
 	encoding, err = hct.GetEncoding()
@@ -38,6 +41,9 @@ func TestGetEncoding(t *testing.T) {
 }
 
 func TestRunCommand(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
 	var err error
 	// var data []byte
 	// var ret int32

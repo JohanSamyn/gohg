@@ -5,39 +5,48 @@
 package gohg_lib_test
 
 import (
-	. "gohg/gohg_lib"
-	"io/ioutil"
-	"log"
-	"os/exec"
-	"testing"
+// . "gohg/gohg_lib"
+// "fmt"
+// "io/ioutil"
+// "log"
+// "os/exec"
+// "testing"
 )
 
-var Tempdir string
+// var Tempdir string
 
-var hct HgClient
+// var hct HgClient
+
+// func init() {
+// 	var err error
+// 	Tempdir, err = ioutil.TempDir("", "gohg_test_")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
 // TestSetup makes a connection to the Hg CS once, for all tests to use.
 
-func TestSetup(t *testing.T) {
+// func TestSetup(t *testing.T) {
 
-	var err error
-	Tempdir, err = ioutil.TempDir("", "gohg_test_")
+// 	var err error
+// 	// Tempdir, err = ioutil.TempDir("", "gohg_test_")
 
-	// now create an empty Hg repo inthere
-	var cmd *exec.Cmd
-	cmd = exec.Command("M:\\DEV\\hg-stable\\hg", "--cwd", Tempdir, "init")
-	if err = cmd.Run(); err != nil {
-		log.Fatal(err)
-	}
+// 	// now create an empty Hg repo inthere
+// 	var cmd *exec.Cmd
+// 	cmd = exec.Command("M:\\DEV\\hg-stable\\hg", "--cwd", Tempdir, "init")
+// 	if err = cmd.Run(); err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	hct = *(NewHgClient())
+// 	hct = *(NewHgClient())
 
-	if hct.Connected != true {
-		var repo = Tempdir
-		cfg := make([]string, 0)
-		err = hct.Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-}
+// 	if hct.Connected != true {
+// 		var repo = Tempdir
+// 		cfg := make([]string, 0)
+// 		err = hct.Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 	}
+// }
