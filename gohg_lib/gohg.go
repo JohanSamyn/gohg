@@ -33,15 +33,14 @@ type HgClient struct {
 	hgserver *exec.Cmd
 	// The in and out pipe ends are to be considered from the point of view
 	// of the Hg Command Server instance.
-	pin           io.WriteCloser
-	pout          io.ReadCloser
-	Connected     bool     // already connected to a Hg CS ?
-	HgPath        string   // which hg is used ?
-	Capabilities  []string // as per the hello message
-	Encoding      string   // as per the hello message
-	Repo          string   // the full path to the Hg repo
-	HgVersion     string   // the version number only
-	HgFullVersion string   // the complete version message returned by the Hg CS
+	pin          io.WriteCloser
+	pout         io.ReadCloser
+	Connected    bool     // already connected to a Hg CS ?
+	HgPath       string   // which hg is used ?
+	Capabilities []string // as per the hello message
+	Encoding     string   // as per the hello message
+	Repo         string   // the full path to the Hg repo
+	HgVersion    string   // the version number only
 	// config       []string
 }
 
@@ -322,7 +321,7 @@ func validateCapabilities(hgcl *HgClient) error {
 }
 
 func getHgVersion(hgcl *HgClient) error {
-	hgcl.HgVersion, hgcl.HgFullVersion, err = hgcl.Version()
+	hgcl.HgVersion, err = hgcl.Version()
 	if err != nil {
 		return err
 	}
@@ -444,8 +443,9 @@ func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, err
 	var data []byte
 	var buf bytes.Buffer
 	var ret int32
-	endOfRead := false
-	for endOfRead == false {
+
+CHANNEL_LOOP:
+	for true {
 		var ch string
 		ch, data, err = readFromHg(hgcl)
 		if err != nil || ch == "" {
@@ -466,14 +466,14 @@ func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, err
 						log.Fatal("binary.read failed: " + string(err.Error()))
 					}
 				}
-				endOfRead = true
+				break CHANNEL_LOOP
 			}
 		case "I":
 		case "L":
 		default:
 			log.Fatal("unexpected channel '" + ch + "' detected")
 		} // switch ch
-	} // for endOfRead == false
+	} // for true
 
 	return []byte(buf.String()), ret, nil
 

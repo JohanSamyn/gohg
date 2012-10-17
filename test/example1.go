@@ -31,12 +31,12 @@ func main() {
 	defer hc.Close()
 	defer func() { fmt.Println("========== End of example1 ==========") }()
 
-	var v, fv string
-	if v, fv, err = hc.Version(); err != nil {
+	var v string
+	if v, err = hc.Version(); err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("[[version]]: %s\n[[fullversion]]:\n%s", v, fv)
+	fmt.Printf("[[version]]: %s\n", v)
 
 	fmt.Println("--------------------")
 

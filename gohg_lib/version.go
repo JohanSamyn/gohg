@@ -11,20 +11,20 @@ import (
 )
 
 // Version provides the 'hg version' command.
-func (hgcl *HgClient) Version() (ver string, fullver string, err error) {
+func (hgcl *HgClient) Version() (ver string, err error) {
 	var data []byte
 	var ret int32
-	data, ret, err = hgcl.RunCommand([]string{"version"})
+	data, ret, err = hgcl.RunCommand([]string{"version", "-q"})
 	if err != nil {
-		return "", "", err
+		return "", err
 	}
 	if ret != 0 {
-		return "", "", errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
+		return "", errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
 	}
-	fullver = string(data)
-	if len(fullver) > 0 {
-		ver = strings.Split(fullver, "\n")[0]
+	ver = strings.Split(string(data), "\n")[0]
+	if len(ver) > 0 {
+		ver = strings.Split(ver, "\n")[0]
 		ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]
 	}
-	return ver, fullver, nil
+	return ver, nil
 }

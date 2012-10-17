@@ -9,7 +9,7 @@ import (
 )
 
 func TestHgClient_Version_Minimal(t *testing.T) {
-	ver, _, err := hct.Version()
+	ver, err := hct.Version()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -20,7 +20,7 @@ func TestHgClient_Version_Minimal(t *testing.T) {
 }
 
 func TestHgClient_Version_AsConnected(t *testing.T) {
-	ver, _, err := hct.Version()
+	ver, err := hct.Version()
 	if err != nil {
 		t.Fatal(err)
 	}
