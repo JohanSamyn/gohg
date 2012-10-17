@@ -22,7 +22,7 @@ var pathFailure = "\\gohg-init-failure\\"
 // Or if the "e" channel returned the right error message.
 
 func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
-	defer cleanupSuccess(t)
+	defer cleanupInitSuccess(t)
 	path := Tempdir + pathSuccess
 	err := os.RemoveAll(path)
 	if err != nil {
@@ -36,7 +36,7 @@ func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 }
 
 func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
-	defer cleanupFailure(t)
+	defer cleanupInitFailure(t)
 
 	path := Tempdir + pathFailure
 	err := os.RemoveAll(path)
@@ -56,14 +56,14 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 	}
 }
 
-func cleanupSuccess(t *testing.T) {
+func cleanupInitSuccess(t *testing.T) {
 	err := os.RemoveAll(Tempdir + pathSuccess)
 	if err != nil {
 		t.Log(err)
 	}
 }
 
-func cleanupFailure(t *testing.T) {
+func cleanupInitFailure(t *testing.T) {
 	err := os.RemoveAll(Tempdir + pathFailure)
 	if err != nil {
 		t.Log(err)
