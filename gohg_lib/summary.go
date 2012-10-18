@@ -13,12 +13,12 @@ import (
 func (hgcl *HgClient) Summary() (string, error) {
 	var data []byte
 	var ret int32
-	data, ret, err = hgcl.RunCommand([]string{"summary"})
+	data, ret, err = hgcl.run([]string{"summary"})
 	if err != nil {
 		return "", err
 	}
 	if ret != 0 {
-		return "", errors.New("RunCommand(\"summary\") returned: " + strconv.Itoa(int(ret)))
+		return "", errors.New("run(\"summary\") returned: " + strconv.Itoa(int(ret)))
 	}
 	return string(data), nil
 }

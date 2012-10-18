@@ -420,9 +420,9 @@ func (hgcl *HgClient) GetEncoding() (string, error) {
 	return string(encoding), err
 }
 
-// RunCommand allows to run a Mercurial command in the Hg Command Server.
-// You can run any standard 'hg' command that is available on the command line.
-func (hgcl *HgClient) RunCommand(hgcmd []string) ([]byte, int32, error) {
+// run allows to run a Mercurial command in the Hg Command Server.
+// You can only run 'hg' commands that are available in this library.
+func (hgcl *HgClient) run(hgcmd []string) ([]byte, int32, error) {
 	var data []byte
 	var ret int32
 	data, ret, err = runInHg(hgcl, "runcommand", hgcmd)

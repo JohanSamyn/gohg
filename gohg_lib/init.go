@@ -25,9 +25,9 @@ func (hgcl *HgClient) Init(path string) error {
 	var ret int32
 
 	hgcmd := []string{"init", fa}
-	data, ret, err = hgcl.RunCommand(hgcmd)
+	data, ret, err = hgcl.run(hgcmd)
 	if err != nil {
-		return errors.New("from RunCommand(): " + string(err.Error()))
+		return errors.New("from run(): " + string(err.Error()))
 	}
 	// Will have to capture the "e" channel to be able to return a useful
 	// error message in case of failure.

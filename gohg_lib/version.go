@@ -14,12 +14,12 @@ import (
 func (hgcl *HgClient) Version() (ver string, err error) {
 	var data []byte
 	var ret int32
-	data, ret, err = hgcl.RunCommand([]string{"version", "-q"})
+	data, ret, err = hgcl.run([]string{"version", "-q"})
 	if err != nil {
 		return "", err
 	}
 	if ret != 0 {
-		return "", errors.New("RunCommand(\"version\") returned: " + strconv.Itoa(int(ret)))
+		return "", errors.New("run(\"version\") returned: " + strconv.Itoa(int(ret)))
 	}
 	ver = strings.Split(string(data), "\n")[0]
 	if len(ver) > 0 {

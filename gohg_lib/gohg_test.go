@@ -40,21 +40,21 @@ func TestGetEncoding(t *testing.T) {
 	}
 }
 
-func TestRunCommand(t *testing.T) {
-	hct := setup(t)
-	defer teardown(t, hct)
+// func TestRun(t *testing.T) {
+// 	hct := setup(t)
+// 	defer teardown(t, hct)
 
-	var err error
-	// var data []byte
-	// var ret int32
-	// hgcmd := []string{"log", "-l", "2"}
-	hgcmd := []string{"summary"}
-	// data, ret, err = RunCommand(hgcmd)
-	_, _, err = hct.RunCommand(hgcmd)
-	if err != nil {
-		t.Error("from RunCommand : " + string(err.Error()))
-	}
-}
+// 	var err error
+// 	// var data []byte
+// 	// var ret int32
+// 	// hgcmd := []string{"log", "-l", "2"}
+// 	hgcmd := []string{"summary"}
+// 	// data, ret, err = run(hgcmd)
+// 	_, _, err = hct.run(hgcmd)
+// 	if err != nil {
+// 		t.Error("from run : " + string(err.Error()))
+// 	}
+// }
 
 // func TestClose(t *testing.T) {
 // 	err := Hgclient.Close()
