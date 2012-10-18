@@ -7,6 +7,7 @@ package gohg_lib_test
 import (
 	. "gohg/gohg_lib"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"testing"
@@ -18,21 +19,24 @@ func setup(t *testing.T) (hct *HgClient) {
 	var err error
 	Tempdir, err = ioutil.TempDir("", "gohg_test_")
 	if err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 
+	// set this var to whatever suits you (default: "hg")
+	hgexe := "M:\\DEV\\hg-stable\\hg"
+
 	var cmd *exec.Cmd
-	cmd = exec.Command("M:\\DEV\\hg-stable\\hg", "--cwd", Tempdir, "init")
+	cmd = exec.Command(hgexe, "--cwd", Tempdir, "init")
 	if err = cmd.Run(); err != nil {
-		t.Fatal(err)
+		log.Fatal(err.Error())
 	}
 	var repo = Tempdir
 
 	hct = NewHgClient()
 	cfg := make([]string, 0)
-	err = hct.Connect("M:\\DEV\\hg-stable\\hg", repo, cfg)
+	err = hct.Connect(hgexe, repo, cfg)
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
 	return hct
 }
@@ -44,6 +48,6 @@ func teardown(t *testing.T, hct *HgClient) {
 	}
 	err = os.RemoveAll(Tempdir)
 	if err != nil {
-		t.Error("TearDown(): " + string(err.Error()))
+		t.Error("teardown(): " + string(err.Error()))
 	}
 }
