@@ -111,7 +111,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// Maybe even do this in the init() function ?
 
 	if hgcl.hgserver != nil {
-		return errors.New("Already running a Hg Command Server for " + hgcl.Repo)
+		return errors.New("Connect(): already running a Hg Command Server for " + hgcl.Repo)
 	}
 
 	if hgexe == "" {
@@ -126,7 +126,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return err
 	}
 	if hgcl.Repo == "" {
-		return errors.New("could not find a Hg repository at: " + reponame)
+		return errors.New("Connect(): could not find a Hg repository at: " + reponame)
 	}
 
 	// Maybe we can also offer the possibility of a config file?
@@ -143,15 +143,15 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.pout, err = hgcl.hgserver.StdoutPipe()
 	if err != nil {
-		return errors.New("could not connect StdoutPipe: " + err.Error())
+		return errors.New("Connect(): could not connect StdoutPipe: " + err.Error())
 	}
 	hgcl.pin, err = hgcl.hgserver.StdinPipe()
 	if err != nil {
-		log.Fatal("could not connect StdinPipe: " + err.Error())
+		log.Fatal("Connect(): could not connect StdinPipe: " + err.Error())
 	}
 
 	if err := hgcl.hgserver.Start(); err != nil {
-		return errors.New("could not start the Hg Command Server: " + err.Error())
+		return errors.New("Connect(): could not start the Hg Command Server: " + err.Error())
 	}
 
 	err = readHelloMessage(hgcl)
@@ -182,7 +182,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 // as per the Hg CS documentation.
 func (hgcl *HgClient) Close() error {
 	if hgcl.hgserver == nil {
-		log.Println("Trying to close a closed hgserver.")
+		log.Println("Close(): Trying to close a closed hgserver.")
 		return nil
 	}
 
@@ -340,18 +340,19 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 		return ch, data, err
 	}
 	if data == nil {
-		return ch, data, errors.New("no data read")
+		return ch, data, errors.New("readFromHg(): no data read")
 	}
 	ch = string(data[0])
 	if ch == "" {
-		return ch, data, errors.New("no channel read")
+		return ch, data, errors.New("readFromHg(): no channel read")
 	}
 
 	// get the uint that the Hg CS sent us as the length value
 	var ln uint32
 	ln, err = calcDataLength(data[1:5])
 	if err != nil {
-		return ch, data, errors.New("binary.Read failed:" + string(err.Error()))
+		return ch, data, errors.New("readFromHg(): binary.Read failed:" +
+			string(err.Error()))
 	}
 
 	// now get ln bytes of data
@@ -370,12 +371,9 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	cmd = strings.TrimRight(cmd, "\n") + "\n"
 	lc := len(cmd)
 	la := len(args)
-	var l int
+	l := lc // in case cmd == "getencoding" f.i.
 	if la > 0 {
-		l = lc + 4 + la
-	} else {
-		// in case cmd == "getencoding" f.i.
-		l = lc
+		l = l + 4 + la
 	}
 	data := make([]byte, l)
 
@@ -388,12 +386,12 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 		wbuf := new(bytes.Buffer)
 		err = binary.Write(wbuf, binary.BigEndian, ln)
 		if err != nil {
-			return errors.New("binary.Write failed: " + string(err.Error()))
+			return errors.New("sendToHg(): binary.Write failed: " + string(err.Error()))
 		}
 		b := make([]byte, 4)
 		_, err = io.ReadFull(wbuf, b)
 		if err != nil {
-			return errors.New("io.ReadFull failed: " + string(err.Error()))
+			return errors.New("sendToHg(): io.ReadFull failed: " + string(err.Error()))
 		}
 		copy(data[lc:lc+4], b)
 
@@ -405,8 +403,7 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	var i int
 	i, err = hgcl.pin.Write(data)
 	if i != len(data) {
-		return errors.New("writing length of data failed: " +
-			string(err.Error()))
+		return errors.New("sendToHg(): writing data failed: " + string(err.Error()))
 	}
 
 	return nil
@@ -449,7 +446,7 @@ CHANNEL_LOOP:
 		var ch string
 		ch, data, err = readFromHg(hgcl)
 		if err != nil || ch == "" {
-			log.Fatal("readFromHg failed: " + string(err.Error()))
+			log.Fatal("runInHg(): readFromHg failed: " + string(err.Error()))
 		}
 		switch ch {
 		case "d":
@@ -463,7 +460,7 @@ CHANNEL_LOOP:
 				} else {
 					ret, err = calcReturncode(data[0:4])
 					if err != nil {
-						log.Fatal("binary.read failed: " + string(err.Error()))
+						log.Fatal("runInHg(): binary.read failed: " + string(err.Error()))
 					}
 				}
 				break CHANNEL_LOOP
@@ -471,7 +468,7 @@ CHANNEL_LOOP:
 		case "I":
 		case "L":
 		default:
-			log.Fatal("unexpected channel '" + ch + "' detected")
+			log.Fatal("runInHg(): unexpected channel '" + ch + "' detected")
 		} // switch ch
 	} // for true
 
