@@ -6,15 +6,27 @@ package gohg_lib
 
 import (
 	"errors"
+	// "log"
 	"strconv"
 	"strings"
 )
 
 // Version provides the 'hg version' command.
-func (hgcl *HgClient) Version() (ver string, err error) {
+func (hgcl *HgClient) Version(args []string) (ver string, err error) {
 	var data []byte
 	var ret int32
-	data, ret, err = hgcl.run([]string{"version", "-q"})
+	cmd_args := []string{"version"}
+	// if args != "" {
+	// log.Println(len(args))
+	if len(args) > 0 {
+		for _, a := range args {
+			if a != "" {
+				cmd_args = append(cmd_args, a)
+			}
+		}
+	}
+	// log.Println(cmd_args)
+	data, ret, err = hgcl.run(cmd_args)
 	if err != nil {
 		return "", err
 	}
@@ -26,5 +38,13 @@ func (hgcl *HgClient) Version() (ver string, err error) {
 		ver = strings.Split(ver, "\n")[0]
 		ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]
 	}
+
+	// This test first disturbed the call to getHgVersion() from Connect()
+	// in gohg.go, because at that moment HgClient.HgVersion is not set yet
+	// (in fact that call is exactly trying to do that).
+	if hgcl.HgVersion != "" && ver != hgcl.HgVersion {
+		return "", errors.New("run(\"version\"): expected '" + hgcl.HgVersion + "' and got '" + ver + "'")
+	}
+
 	return ver, nil
 }

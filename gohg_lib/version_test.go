@@ -12,7 +12,7 @@ func TestHgClient_Version_Minimal(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	ver, err := hct.Version()
+	ver, err := hct.Version([]string{""})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -22,11 +22,51 @@ func TestHgClient_Version_Minimal(t *testing.T) {
 	}
 }
 
+func TestHgClient_Version_Short(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
+	_, err := hct.Version([]string{"-q"})
+	if err != nil {
+		t.Error("HgClient.Version() failed with -q flag")
+	}
+}
+
+func TestHgClient_Version_Verbose(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
+	_, err := hct.Version([]string{"-v"})
+	if err != nil {
+		t.Error("HgClient.Version() failed with -v flag")
+	}
+}
+
+func TestHgClient_Version_WrongFlag_Should_Fail(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
+	_, err := hct.Version([]string{"-wrongflag"})
+	if err == nil {
+		t.Error("HgClient.Version() did not fail with wrong flag")
+	}
+}
+
+func TestHgClient_Version_HelpFlag_Should_Fail(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
+	_, err := hct.Version([]string{"-h"})
+	if err == nil {
+		t.Error("HgClient.Version() did not fail with -h flag")
+	}
+}
+
 func TestHgClient_Version_AsConnected(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	ver, err := hct.Version()
+	ver, err := hct.Version([]string{""})
 	if err != nil {
 		t.Fatal(err)
 	}

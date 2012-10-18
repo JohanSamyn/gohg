@@ -18,7 +18,7 @@ var pathFailure = "\\gohg-init-failure\\"
 //
 // I should test if it returns the right error when I pass it an empty path
 // or "." as the path, or if the path is the same as the repo of the Hg CS.
-// Or if RunCommand() produced an error.
+// Or if run() produced an error.
 // Or if the "e" channel returned the right error message.
 
 func TestHgClient_Init_New_Should_Succeed(t *testing.T) {

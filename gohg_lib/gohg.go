@@ -321,7 +321,7 @@ func validateCapabilities(hgcl *HgClient) error {
 }
 
 func getHgVersion(hgcl *HgClient) error {
-	hgcl.HgVersion, err = hgcl.Version()
+	hgcl.HgVersion, err = hgcl.Version([]string{"-q"})
 	if err != nil {
 		return err
 	}

@@ -10,6 +10,8 @@ import (
 	"strconv"
 )
 
+// TODO	Implement the flags for hg init.
+
 // Init provides the 'hg init' command.
 func (hgcl *HgClient) Init(path string) error {
 	var err error

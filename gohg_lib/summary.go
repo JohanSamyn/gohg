@@ -9,6 +9,9 @@ import (
 	"strconv"
 )
 
+// TODO	Implement the --remote flag.
+//		Beware of the error when no remote repo is known.
+
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary() (string, error) {
 	var data []byte
