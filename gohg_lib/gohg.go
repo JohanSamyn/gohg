@@ -493,7 +493,7 @@ func calcIntFromBytes(s []byte) (int32, error) {
 	return i, err
 }
 
-// GetHgPath returns the reporoot registered in the HgClient struct.
+// GetHgPath returns the path of the Mercurial executable used in the Hg CS.
 func (hgcl *HgClient) GetHgPath() string {
 	return hgcl.hgPath
 }
