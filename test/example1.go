@@ -32,7 +32,7 @@ func main() {
 	defer func() { fmt.Println("========== End of example1 ==========") }()
 
 	var v string
-	if v, err = hc.Version([]string{"-q"}); err != nil {
+	if v, err = hc.Version(); err != nil {
 		fmt.Println(err)
 		return
 	}

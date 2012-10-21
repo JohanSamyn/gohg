@@ -493,28 +493,28 @@ func calcIntFromBytes(s []byte) (int32, error) {
 	return i, err
 }
 
-// GetHgPath returns the path of the Mercurial executable used in the Hg CS.
-func (hgcl *HgClient) GetHgPath() string {
+// HgPath returns the path of the Mercurial executable used in the Hg CS.
+func (hgcl *HgClient) HgPath() string {
 	return hgcl.hgPath
 }
 
-// GetHgVersion returns the Mercurial version of the connected Hg CS.
-func (hgcl *HgClient) GetHgVersion() string {
+// HgVersion returns the Mercurial version of the connected Hg CS.
+func (hgcl *HgClient) HgVersion() string {
 	return hgcl.hgVersion
 }
 
-// GetRepo returns the repo root of the connected Hg CS
-func (hgcl *HgClient) GetRepo() string {
+// Repo returns the repo root of the connected Hg CS
+func (hgcl *HgClient) Repo() string {
 	return hgcl.repo
 }
 
-// GetCapabilities returns the capabilities of the connected Hg CS.
-func (hgcl *HgClient) GetCapabilities() []string {
+// Capabilities returns the capabilities of the connected Hg CS.
+func (hgcl *HgClient) Capabilities() []string {
 	return hgcl.capabilities
 }
 
-// GetEncoding returns the encoding for the connected Hg CS.
-func (hgcl *HgClient) GetEncoding() string {
+// Encoding returns the encoding for the connected Hg CS.
+func (hgcl *HgClient) Encoding() string {
 	return hgcl.encoding
 }
 
