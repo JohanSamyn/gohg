@@ -26,7 +26,7 @@ func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 	defer teardown(t, hct)
 
 	defer cleanupInitSuccess(t)
-	path := Tempdir + pathSuccess
+	path := Testdir + pathSuccess
 	err := os.RemoveAll(path)
 	if err != nil {
 		t.Fatal(err)
@@ -44,7 +44,7 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 
 	defer cleanupInitFailure(t)
 
-	path := Tempdir + pathFailure
+	path := Testdir + pathFailure
 	err := os.RemoveAll(path)
 	if err != nil {
 		t.Fatal(err)
@@ -63,14 +63,14 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 }
 
 func cleanupInitSuccess(t *testing.T) {
-	err := os.RemoveAll(Tempdir + pathSuccess)
+	err := os.RemoveAll(Testdir + pathSuccess)
 	if err != nil {
 		t.Log(err)
 	}
 }
 
 func cleanupInitFailure(t *testing.T) {
-	err := os.RemoveAll(Tempdir + pathFailure)
+	err := os.RemoveAll(Testdir + pathFailure)
 	if err != nil {
 		t.Log(err)
 	}

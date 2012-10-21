@@ -13,24 +13,25 @@ import (
 	"testing"
 )
 
-var Tempdir string
+var Testdir string
 
 func setup(t *testing.T) (hct *HgClient) {
 	var err error
-	Tempdir, err = ioutil.TempDir("", "gohg_test_")
+	Testdir, err = ioutil.TempDir("", "gohg_test_")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	// set this var to whatever suits you (default: "hg")
+	// Set this var to whatever is appropriate for your situation.
+	// You can also change it to test with different versions of Mercurial.
 	hgexe := "M:\\DEV\\hg-stable\\hg"
 
 	var cmd *exec.Cmd
-	cmd = exec.Command(hgexe, "--cwd", Tempdir, "init")
+	cmd = exec.Command(hgexe, "--cwd", Testdir, "init")
 	if err = cmd.Run(); err != nil {
 		log.Fatal(err.Error())
 	}
-	var repo = Tempdir
+	var repo = Testdir
 
 	hct = NewHgClient()
 	cfg := make([]string, 0)
