@@ -498,22 +498,22 @@ func (hgcl *HgClient) GetHgPath() string {
 	return hgcl.hgPath
 }
 
-// GetHgVersion returns the Mercurial version registered in the HgClient struct.
+// GetHgVersion returns the Mercurial version of the connected Hg CS.
 func (hgcl *HgClient) GetHgVersion() string {
 	return hgcl.hgVersion
 }
 
-// GetRepo returns the repo root registered in the HgClient struct.
+// GetRepo returns the repo root of the connected Hg CS
 func (hgcl *HgClient) GetRepo() string {
 	return hgcl.repo
 }
 
-// GetCapabilities returns the capabilities registered in the HgClient struct.
+// GetCapabilities returns the capabilities of the connected Hg CS.
 func (hgcl *HgClient) GetCapabilities() []string {
 	return hgcl.capabilities
 }
 
-// GetEncoding returns the encoding registered in the HgClient struct.
+// GetEncoding returns the encoding for the connected Hg CS.
 func (hgcl *HgClient) GetEncoding() string {
 	return hgcl.encoding
 }
