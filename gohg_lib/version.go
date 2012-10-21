@@ -11,7 +11,7 @@ import (
 )
 
 // Version provides the 'hg version' command.
-func (hgcl *HgClient) Version() (ver string, err error) {
+func (hgcl *HgClient) Version() (string, error) {
 	var data []byte
 	var ret int32
 	data, ret, err = hgcl.run([]string{"-q"})
@@ -21,7 +21,7 @@ func (hgcl *HgClient) Version() (ver string, err error) {
 	if ret != 0 {
 		return "", errors.New("run(\"version\") returned: " + strconv.Itoa(int(ret)))
 	}
-	ver = strings.Split(string(data), "\n")[0]
+	ver := strings.Split(string(data), "\n")[0]
 	ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]
 
 	// This test first disturbed the call to getHgVersion() from Connect()
