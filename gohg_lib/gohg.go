@@ -39,7 +39,7 @@ type HgClient struct {
 	hgPath       string   // which hg is used ?
 	Capabilities []string // as per the hello message
 	Encoding     string   // as per the hello message
-	Repo         string   // the full path to the Hg repo
+	repo         string   // the full path to the Hg repo
 	hgVersion    string   // the version number only
 	// config       []string
 }
@@ -111,7 +111,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// Maybe even do this in the init() function ?
 
 	if hgcl.hgserver != nil {
-		return errors.New("Connect(): already running a Hg Command Server for " + hgcl.Repo)
+		return errors.New("Connect(): already running a Hg Command Server for " + hgcl.repo)
 	}
 
 	if hgexe == "" {
@@ -121,11 +121,11 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	}
 
 	// The Hg Command Server needs a repository.
-	hgcl.Repo, err = locateRepository(reponame)
+	hgcl.repo, err = locateRepository(reponame)
 	if err != nil {
 		return err
 	}
-	if hgcl.Repo == "" {
+	if hgcl.repo == "" {
 		return errors.New("Connect(): could not find a Hg repository at: " + reponame)
 	}
 
@@ -135,11 +135,11 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
 
 	var hgconfig []string
-	hgconfig = composeHgConfig(hgexe, hgcl.Repo, config)
+	hgconfig = composeHgConfig(hgexe, hgcl.repo, config)
 
 	hgcl.hgserver = exec.Command(hgexe)
 	hgcl.hgserver.Args = hgconfig
-	hgcl.hgserver.Dir = hgcl.Repo
+	hgcl.hgserver.Dir = hgcl.repo
 
 	hgcl.pout, err = hgcl.hgserver.StdoutPipe()
 	if err != nil {
@@ -506,4 +506,9 @@ func (hgcl *HgClient) GetHgPath() string {
 // GetHgVersion returns the Mercurial version registered in the HgClient struct.
 func (hgcl *HgClient) GetHgVersion() string {
 	return hgcl.hgVersion
+}
+
+// GetRepo returns the repo root registered in the HgClient struct.
+func (hgcl *HgClient) GetRepo() string {
+	return hgcl.repo
 }

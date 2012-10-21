@@ -23,7 +23,7 @@ func (hgcl *HgClient) Init(path string) error {
 	var fa string
 	fa, err = filepath.Abs(path)
 
-	if path == "" || path == "." || fa == hgcl.Repo {
+	if path == "" || path == "." || fa == hgcl.GetRepo() {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}

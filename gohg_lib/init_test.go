@@ -38,7 +38,7 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	err := hct.Init(hct.Repo)
+	err := hct.Init(hct.GetRepo())
 	if err == nil {
 		t.Error(errors.New("HgClient.Init() did not fail in an existing Hg working copy"))
 	}
