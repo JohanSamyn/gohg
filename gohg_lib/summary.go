@@ -11,6 +11,7 @@ import (
 
 // TODO	Implement the --remote flag.
 //		Beware of the error when no remote repo is known.
+// TODO	Put the results in an appropriate go struct for possible further treatment.
 
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary() (string, error) {
