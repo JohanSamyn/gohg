@@ -6,7 +6,6 @@ package gohg_lib
 
 import (
 	"errors"
-	// "log"
 	"strconv"
 	"strings"
 )
@@ -16,8 +15,6 @@ func (hgcl *HgClient) Version(args []string) (ver string, err error) {
 	var data []byte
 	var ret int32
 	cmd_args := []string{"version"}
-	// if args != "" {
-	// log.Println(len(args))
 	if len(args) > 0 {
 		for _, a := range args {
 			if a != "" {
@@ -25,7 +22,6 @@ func (hgcl *HgClient) Version(args []string) (ver string, err error) {
 			}
 		}
 	}
-	// log.Println(cmd_args)
 	data, ret, err = hgcl.run(cmd_args)
 	if err != nil {
 		return "", err
