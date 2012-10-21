@@ -38,7 +38,7 @@ type HgClient struct {
 	Connected    bool     // already connected to a Hg CS ?
 	hgPath       string   // which hg is used ?
 	capabilities []string // as per the hello message
-	Encoding     string   // as per the hello message
+	encoding     string   // as per the hello message
 	repo         string   // the full path to the Hg repo
 	hgVersion    string   // the version number only
 	// config       []string
@@ -302,7 +302,7 @@ func readHelloMessage(hgcl *HgClient) error {
 	}
 	attr := strings.Split(string(hello), "\n")
 	hgcl.capabilities = strings.Fields(attr[0])[1:]
-	hgcl.Encoding = strings.Split(attr[1], ": ")[1]
+	hgcl.encoding = strings.Split(attr[1], ": ")[1]
 	return nil
 } // readHelloMessage()
 
@@ -409,9 +409,9 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
-// GetEncoding returns the servers encoding on the result channel.
+// GetHgEncoding returns the servers encoding on the result channel.
 // Currently only UTF8 is supported.
-func (hgcl *HgClient) GetEncoding() (string, error) {
+func (hgcl *HgClient) GetHgEncoding() (string, error) {
 	var encoding []byte
 	encoding, _, err = runInHg(hgcl, "getencoding", []string{})
 	return string(encoding), err
@@ -516,4 +516,9 @@ func (hgcl *HgClient) GetRepo() string {
 // GetCapabilities returns the capabilities registered in the HgClient struct.
 func (hgcl *HgClient) GetCapabilities() []string {
 	return hgcl.capabilities
+}
+
+// GetEncoding returns the encoding registered in the HgClient struct.
+func (hgcl *HgClient) GetEncoding() string {
+	return hgcl.encoding
 }
