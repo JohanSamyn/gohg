@@ -37,7 +37,7 @@ type HgClient struct {
 	pout         io.ReadCloser
 	Connected    bool     // already connected to a Hg CS ?
 	hgPath       string   // which hg is used ?
-	Capabilities []string // as per the hello message
+	capabilities []string // as per the hello message
 	Encoding     string   // as per the hello message
 	repo         string   // the full path to the Hg repo
 	hgVersion    string   // the version number only
@@ -301,14 +301,14 @@ func readHelloMessage(hgcl *HgClient) error {
 		return errors.New("could not determine the capabilities of the Hg Command Server")
 	}
 	attr := strings.Split(string(hello), "\n")
-	hgcl.Capabilities = strings.Fields(attr[0])[1:]
+	hgcl.capabilities = strings.Fields(attr[0])[1:]
 	hgcl.Encoding = strings.Split(attr[1], ": ")[1]
 	return nil
 } // readHelloMessage()
 
 func validateCapabilities(hgcl *HgClient) error {
 	var ok bool
-	for _, c := range hgcl.Capabilities {
+	for _, c := range hgcl.capabilities {
 		if c == "runcommand" {
 			ok = true
 			break
@@ -511,4 +511,9 @@ func (hgcl *HgClient) GetHgVersion() string {
 // GetRepo returns the repo root registered in the HgClient struct.
 func (hgcl *HgClient) GetRepo() string {
 	return hgcl.repo
+}
+
+// GetCapabilities returns the capabilities registered in the HgClient struct.
+func (hgcl *HgClient) GetCapabilities() []string {
+	return hgcl.capabilities
 }
