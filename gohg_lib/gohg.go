@@ -35,7 +35,6 @@ type HgClient struct {
 	// of the Hg Command Server instance.
 	pin          io.WriteCloser
 	pout         io.ReadCloser
-	connected    bool     // already connected to a Hg CS ?
 	hgPath       string   // which hg is used ?
 	capabilities []string // as per the hello message
 	encoding     string   // as per the hello message
@@ -164,7 +163,6 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return err
 	}
 
-	hgcl.connected = true
 	hgcl.hgPath = hgexe
 
 	err = getHgVersion(hgcl)
@@ -189,10 +187,7 @@ func (hgcl *HgClient) Close() error {
 	hgcl.pin.Close()
 	hgcl.pout.Close()
 
-	defer func() {
-		hgcl.hgserver = nil
-		hgcl.connected = false
-	}()
+	defer func() { hgcl.hgserver = nil }()
 
 	err = hgcl.hgserver.Wait()
 	if err != nil {
@@ -528,5 +523,5 @@ func (hgcl *HgClient) GetEncoding() string {
 
 // IsConnected tells if there is a connection to a Hg CS.
 func (hgcl *HgClient) IsConnected() bool {
-	return hgcl.hgserver != nil && hgcl.connected
+	return hgcl.hgserver != nil
 }
