@@ -40,10 +40,10 @@ func (hgcl *HgClient) Version(args []string) (ver string, err error) {
 	}
 
 	// This test first disturbed the call to getHgVersion() from Connect()
-	// in gohg.go, because at that moment HgClient.HgVersion is not set yet
+	// in gohg.go, because at that moment HgClient.hgVersion is not set yet
 	// (in fact that call is exactly trying to do that).
-	if hgcl.HgVersion != "" && ver != hgcl.HgVersion {
-		return "", errors.New("run(\"version\"): expected '" + hgcl.HgVersion + "' and got '" + ver + "'")
+	if hgcl.hgVersion != "" && ver != hgcl.hgVersion {
+		return "", errors.New("run(\"version\"): expected '" + hgcl.hgVersion + "' and got '" + ver + "'")
 	}
 
 	return ver, nil

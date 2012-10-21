@@ -40,7 +40,7 @@ type HgClient struct {
 	Capabilities []string // as per the hello message
 	Encoding     string   // as per the hello message
 	Repo         string   // the full path to the Hg repo
-	HgVersion    string   // the version number only
+	hgVersion    string   // the version number only
 	// config       []string
 }
 
@@ -169,7 +169,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	err = getHgVersion(hgcl)
 	if err != nil {
-		log.Fatal("from HgVersion() : " + string(err.Error()))
+		log.Fatal("from getHgVersion() : " + string(err.Error()))
 	}
 
 	return nil
@@ -321,7 +321,7 @@ func validateCapabilities(hgcl *HgClient) error {
 }
 
 func getHgVersion(hgcl *HgClient) error {
-	hgcl.HgVersion, err = hgcl.Version([]string{"-q"})
+	hgcl.hgVersion, err = hgcl.Version([]string{"-q"})
 	if err != nil {
 		return err
 	}
@@ -498,6 +498,12 @@ func calcIntFromBytes(s []byte) (int32, error) {
 	return i, err
 }
 
+// GetHgPath returns the reporoot registered in the HgClient struct.
 func (hgcl *HgClient) GetHgPath() string {
 	return hgcl.hgPath
+}
+
+// GetHgVersion returns the Mercurial version registered in the HgClient struct.
+func (hgcl *HgClient) GetHgVersion() string {
+	return hgcl.hgVersion
 }
