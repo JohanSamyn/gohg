@@ -47,7 +47,7 @@ func teardown(t *testing.T, hct *HgClient) {
 	if err != nil {
 		t.Error("from Close(): " + string(err.Error()))
 	}
-	err = os.RemoveAll(Tempdir)
+	err = os.RemoveAll(Testdir)
 	if err != nil {
 		t.Error("teardown(): " + string(err.Error()))
 	}
