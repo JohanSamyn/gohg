@@ -36,7 +36,7 @@ type HgClient struct {
 	pin          io.WriteCloser
 	pout         io.ReadCloser
 	Connected    bool     // already connected to a Hg CS ?
-	HgPath       string   // which hg is used ?
+	hgPath       string   // which hg is used ?
 	Capabilities []string // as per the hello message
 	Encoding     string   // as per the hello message
 	Repo         string   // the full path to the Hg repo
@@ -165,7 +165,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	}
 
 	hgcl.Connected = true
-	hgcl.HgPath = hgexe
+	hgcl.hgPath = hgexe
 
 	err = getHgVersion(hgcl)
 	if err != nil {
@@ -496,4 +496,8 @@ func calcIntFromBytes(s []byte) (int32, error) {
 	buf := bytes.NewBuffer(s[0:4])
 	err := binary.Read(buf, binary.BigEndian, &i)
 	return i, err
+}
+
+func (hgcl *HgClient) GetHgPath() string {
+	return hgcl.hgPath
 }
