@@ -24,16 +24,13 @@ import (
 	"strings"
 )
 
-// Type HgClient will act as an object (kind of) for working with the Hg CS
-// from any program using this gohg client lib.
-// It will in fact act as a stand-in for the regular 'hg' command.
-// It will get a bunch of fields and methods to make working with it
-// as go-like as possible. It might even get a few channels for communications.
+// Type HgClient will act as the entrypoint through which all interaction
+// with the Mercurial Command Server will take place.
 type HgClient struct {
 	hgserver *exec.Cmd
-	// The in and out pipe ends are to be considered from the point of view
-	// of the Hg Command Server instance.
-	pin          io.WriteCloser
+	// pin: the pipe that gets commands into the Hg CS
+	pin io.WriteCloser
+	// pout: the pipe that brings data out of the Hg CS
 	pout         io.ReadCloser
 	hgPath       string   // which hg is used ?
 	capabilities []string // as per the hello message
