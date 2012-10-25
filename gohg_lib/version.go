@@ -14,7 +14,7 @@ import (
 func (hgcl *HgClient) Version() (string, error) {
 	var data []byte
 	var ret int32
-	data, ret, err = hgcl.run([]string{"-q"})
+	data, ret, err = hgcl.run([]string{"version", "-q"})
 	if err != nil {
 		return "", err
 	}
