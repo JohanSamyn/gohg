@@ -19,7 +19,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	// "path"
 	"path/filepath"
 	"strings"
 )
@@ -56,18 +55,6 @@ type hgCmd struct {
 
 var err error
 var logfile string
-
-// // init takes care of some householding, namely preparing a logfile where
-// // all communication between this lib and the Hg CS can be logged.
-// func init() {
-// 	var exedir string
-// 	exedir = path.Dir(os.Args[0])
-// 	exedir, err = filepath.Abs(exedir)
-// 	if err != nil {
-// 		log.Fatal("Could not determine path for the gohg.log logfile.")
-// 	}
-// 	logfile = exedir + string(os.PathSeparator) + "gohg.log"
-// } // init()
 
 // NewHgClient creates a new instance of the client object for working with the
 // Hg Command Server.
