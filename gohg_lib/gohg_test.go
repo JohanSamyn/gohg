@@ -25,18 +25,18 @@ import (
 // 	}
 // }
 
-func TestGetHgEncoding(t *testing.T) {
+func TestHgEncoding(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
 	var err error
 	var encoding string
-	encoding, err = hct.GetHgEncoding()
+	encoding, err = hct.HgEncoding()
 	if err != nil {
-		t.Error("from GetHgEncoding : " + string(err.Error()))
+		t.Error("from HgEncoding : " + string(err.Error()))
 	}
 	if encoding == "" {
-		t.Error("GetHgEncoding did not return a valid encoding")
+		t.Error("HgEncoding did not return a valid encoding")
 	}
 }
 

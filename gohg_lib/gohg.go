@@ -149,9 +149,9 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.hgPath = hgexe
 
-	err = getHgVersion(hgcl)
+	err = HgVersion(hgcl)
 	if err != nil {
-		log.Fatal("from getHgVersion() : " + string(err.Error()))
+		log.Fatal("from HgVersion() : " + string(err.Error()))
 	}
 
 	return nil
@@ -302,7 +302,7 @@ func validateCapabilities(hgcl *HgClient) error {
 	return nil
 }
 
-func getHgVersion(hgcl *HgClient) error {
+func HgVersion(hgcl *HgClient) error {
 	hgcl.hgVersion, err = hgcl.Version()
 	if err != nil {
 		return err
@@ -391,9 +391,9 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
-// GetHgEncoding returns the servers encoding on the result channel.
+// HgEncoding returns the servers encoding on the result channel.
 // Currently only UTF8 is supported.
-func (hgcl *HgClient) GetHgEncoding() (string, error) {
+func (hgcl *HgClient) HgEncoding() (string, error) {
 	var encoding []byte
 	encoding, _, err = runInHg(hgcl, "getencoding", []string{})
 	return string(encoding), err
