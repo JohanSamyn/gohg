@@ -12,15 +12,15 @@ func TestHgClient_Summary(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	var summary string = "parent: -1:000000000000 tip (empty repository)\n" +
+	var expected string = "parent: -1:000000000000 tip (empty repository)\n" +
 		"branch: default\n" +
 		"commit: (clean)\n" +
 		"update: (current)\n"
-	data, err := hct.Summary()
+	got, err := hct.Summary()
 	if err != nil {
 		t.Error(err)
 	}
-	if data != summary {
-		t.Fatalf("Test Summary: expected:\n%s and got:\n%s", summary, data)
+	if got != expected {
+		t.Fatalf("Test Summary: expected:\n%s and got:\n%s", expected, got)
 	}
 }
