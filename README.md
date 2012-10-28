@@ -22,6 +22,7 @@ None so far.
 
 At the commandline type:
 
+    :::bash
     go get bitbucket.org/gohg/gohg
 
 ## Example usage
