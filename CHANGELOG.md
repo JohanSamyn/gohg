@@ -1,13 +1,6 @@
-Changelog
-=========
+# Changelog
 
-201y-mm-dd v0.2
----------------
-
-* ???
-
-201y-mm-dd v0.1
----------------
+## 201y-mm-dd v0.1
 
 * Provides the HgClient type for working with the Mercurial Command Server.
    - An instance of HgClient can connect to one Hg CS, and so work with one repo.

@@ -1,7 +1,6 @@
-Contributors
-------------
+# Contributors
 
-**Notice:**
+__Notice:__
 
 *This is the official list of people who can contribute (and typically have
 contributed) code to the 'gohg' repository.*
@@ -16,16 +15,16 @@ the AUTHORS.rst, because the organization holds the copyright.*
 
 *Please keep each list sorted.*
 
-----------------------------------------------------------------------
+---
 
-**Initial author(s):**
-
-Johan Samyn <johan.samyn@gmail.com>
-
-**Maintainer(s):**
+__Initial author(s):__
 
 Johan Samyn <johan.samyn@gmail.com>
 
-**Other contributors:**
+__Maintainer(s):__
+
+Johan Samyn <johan.samyn@gmail.com>
+
+__Other contributors:__
 
 (none so far)
