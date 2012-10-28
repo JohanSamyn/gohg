@@ -97,10 +97,11 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return errors.New("Connect(): already running a Hg Command Server for " + hgcl.repo)
 	}
 
-	if hgexe == "" {
+	hgcl.hgPath = hgexe
+	if hgcl.hgPath == "" {
 		// Let the OS determine what Mercurial to run
 		// for this machine/user combination.
-		hgexe = "hg"
+		hgcl.hgPath = "hg"
 	}
 
 	// The Hg Command Server needs a repository.
@@ -111,11 +112,6 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	if hgcl.repo == "" {
 		return errors.New("Connect(): could not find a Hg repository at: " + reponame)
 	}
-
-	// Maybe we can also offer the possibility of a config file?
-	// f.i.: a file gohg.cfg in the same folder as the gohg.exe,
-	// and a section per repo, and one "general" section.
-	// Or maybe just a [gohg] section in one of the 'normal' Hg config files ?
 
 	var hgconfig []string
 	hgconfig = composeHgConfig(hgexe, hgcl.repo, config)
@@ -146,8 +142,6 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	if err != nil {
 		return err
 	}
-
-	hgcl.hgPath = hgexe
 
 	err = HgVersion(hgcl)
 	if err != nil {
@@ -256,8 +250,8 @@ func readHelloMessage(hgcl *HgClient) error {
 	const t1 = "hg se" // hg returned: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
 		log.Fatal(errors.New(
-			"need at least version 1.9 of Mercurial to use the Command Server\n" +
-				"(type 'hg version' and 'which hg' to verify)"))
+			"Need at least version 1.9 of Mercurial to use the Command Server." +
+				" Used hgexe: '" + hgcl.HgPath() + "'\n"))
 	}
 	ch := string(s[0])
 	if ch != "o" {
