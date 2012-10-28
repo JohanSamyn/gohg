@@ -21,12 +21,11 @@ None so far.
 ## Installation
 
 At the commandline type:
-  :::bash
+
     go get bitbucket.org/gohg/gohg
 
 ## Example usage
 
-  :::go
     package main
 
     import (
@@ -51,5 +50,5 @@ At the commandline type:
             log.Println(err)
             return
         }
-        fmt.Printf("[[Summary]]:\n%s", s)
+        fmt.Printf("[[Summary]]:\\n%s", s)
     }
