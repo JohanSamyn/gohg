@@ -3,9 +3,11 @@ TODO
 
 (in no particular order, and order can change anytime)
 
-1.  ADD TESTS !!! (good for learning to use the testing package too)
+1.  DONE
+    ADD TESTS !!! (good for learning to use the testing package too)
 
-#.  Use a dedicated repo for the tests.
+#.  DONE
+    Use a dedicated repo for the tests.
 
 #.  Add the other Hg CS channels to readToHg() and sendToHg().
 
