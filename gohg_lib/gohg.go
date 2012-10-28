@@ -82,11 +82,11 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	// for example:
 	// hgcl.hgserver =
-	//		exec.Command("M:\\DEV\\hg-stable\\hg",	// the Hg command
-	// 		"-R", "C:\\DEV\\go\\src\\golout\\",		// the repo
-	// 		"--config", "ui.interactive=True",		// mandatory settings
-	// 		"--config", "extensions.color=!",		// more settings (for Windows)
-	// 		"serve", "--cmdserver", "pipe")			// start the Command Server
+	//		exec.Command("M:/DEV/hg-stable/hg",	// the Hg command
+	// 		"-R", "C:/DEV/go/src/golout/",		// the repo
+	// 		"--config", "ui.interactive=True",	// mandatory settings
+	// 		"--config", "extensions.color=!",	// more settings (for Windows)
+	// 		"serve", "--cmdserver", "pipe")		// start the Command Server
 
 	// Maybe accept a channel as an extra argument for sending the logging to ?
 	// And if it's nil, log into a textfile in the folder of this lib.

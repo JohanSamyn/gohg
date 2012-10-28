@@ -16,10 +16,10 @@ func main() {
 	fmt.Println("========== Begin of example1 ==========")
 
 	var err error
-	hgexe := "M:\\DEV\\hg-stable\\hg"
+	hgexe := "M:/DEV/hg-stable/hg"
 	// hgexe := "hg"
-	repo := "C:\\DEV\\go\\src\\gohg"
-	// repo := "C:\\Programs\\TortoiseHg"
+	repo := "C:/DEV/go/src/gohg"
+	// repo := "C:/Programs/TortoiseHg"
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 
@@ -33,8 +33,9 @@ func main() {
 
 	var v string
 	if v, err = hc.Version(); err != nil {
-		fmt.Println(err)
-		return
+		// fmt.Println(err)
+		// return
+		log.Println(err)
 	}
 	fmt.Printf("[[version]]: %s\n", v)
 
