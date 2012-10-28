@@ -16,8 +16,8 @@ func main() {
 	fmt.Println("========== Begin of example1 ==========")
 
 	var err error
-	hgcmd := "M:\\DEV\\hg-stable\\hg"
-	// hgcmd := "hg"
+	hgexe := "M:\\DEV\\hg-stable\\hg"
+	// hgexe := "hg"
 	repo := "C:\\DEV\\go\\src\\gohg"
 	// repo := "C:\\Programs\\TortoiseHg"
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
@@ -25,7 +25,7 @@ func main() {
 
 	hc := NewHgClient()
 	var cfg []string
-	if err = hc.Connect(hgcmd, repo, cfg); err != nil {
+	if err = hc.Connect(hgexe, repo, cfg); err != nil {
 		log.Fatal(err)
 	}
 	defer hc.Close()
