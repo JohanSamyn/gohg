@@ -1,5 +1,6 @@
+========================================
 gohg - a Go client library for Mercurial
-****************************************
+========================================
 
 This project aims at creating a Go client library for the Mercurial dvcs,
 using it's Command Server for better performance. The Command Server is
