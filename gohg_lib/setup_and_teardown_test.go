@@ -24,6 +24,7 @@ func setup(t *testing.T) (hct *HgClient) {
 	// Set this var to whatever is appropriate for your situation.
 	// You can also change it to test with different versions of Mercurial.
 	hgexe := "M:\\DEV\\hg-stable\\hg"
+	// hgexe := "hg"
 
 	var cmd *exec.Cmd
 	cmd = exec.Command(hgexe, "--cwd", testdir, "init")
