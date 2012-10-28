@@ -9,7 +9,7 @@ contributed) code to the 'gohg' repository.*
 For example, the employees of an organization are listed here but not in
 the AUTHORS.md, because the organization holds the copyright.*
 
-*Names should be added to this file as:*
+*Names should be added to this file as:*  
 
         Name <email address>
 
