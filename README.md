@@ -26,6 +26,7 @@ At the commandline type:
 
 ## Example usage
 
+    :::go
     package main
 
     import (
