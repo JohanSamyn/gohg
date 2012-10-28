@@ -4,11 +4,7 @@ Changelog
 201y-mm-dd v0.2
 ---------------
 
-* Provides the HgClient type for working with the Mercurial Command Server.
-   - An instance of HgClient can connect to one Hg CS, and so work with one repo.
-   - You can create as many HgClient instances as you want, to work with
-     multiple repos.
-* The default Hg executable is 'hg'.
+* ???
 
 201y-mm-dd v0.1
 ---------------
