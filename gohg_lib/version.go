@@ -20,7 +20,7 @@ func (hgcl *HgClient) Version() (string, error) {
 			return "", err
 		}
 		if ret != 0 {
-			return "", errors.New("run(\"version\") returned: " + strconv.Itoa(int(ret)))
+			return "", errors.New("Mercurial returned: " + strconv.Itoa(int(ret)))
 		}
 		ver := strings.Split(string(data), "\n")[0]
 		ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]

@@ -9,6 +9,10 @@ import (
 )
 
 func TestHgClient_Version_Minimal(t *testing.T) {
+
+	// This a bit silly, as the setup function will already have failed
+	// if a Hg version prior to 1.9 is used.
+
 	hct := setup(t)
 	defer teardown(t, hct)
 
@@ -33,6 +37,10 @@ func TestHgClient_Version_Short(t *testing.T) {
 }
 
 func TestHgClient_Version_AsConnected(t *testing.T) {
+
+	// This is also a bit silly, as both version strings are obtained
+	// with the same code.
+
 	hct := setup(t)
 	defer teardown(t, hct)
 
