@@ -143,7 +143,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return err
 	}
 
-	err = HgVersion(hgcl)
+	hgcl.hgVersion, err = hgcl.Version()
 	if err != nil {
 		log.Fatal("from HgVersion() : " + string(err.Error()))
 	}
@@ -292,14 +292,6 @@ func validateCapabilities(hgcl *HgClient) error {
 	}
 	if ok == false {
 		log.Fatal("could not detect the 'runcommand' capability")
-	}
-	return nil
-}
-
-func HgVersion(hgcl *HgClient) error {
-	hgcl.hgVersion, err = hgcl.Version()
-	if err != nil {
-		return err
 	}
 	return nil
 }
