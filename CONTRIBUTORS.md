@@ -11,7 +11,7 @@ the AUTHORS.md, because the organization holds the copyright.*
 
 *Names should be added to this file as:*  
 
-        Name <email address>
+  `Name <email address>`
 
 *Please keep each list sorted.*
 
