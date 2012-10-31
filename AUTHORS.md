@@ -9,10 +9,11 @@ See the latter for an explanation.*
 
 *Names should be added to this file as:*  
 
-        Name or Organization <email address>
+        `Name  <email address>`or `Organization`
 
-*The email address is not required for organizations.
-Please keep the list sorted.*
+*The email address is not required for organizations.*
+
+*Please keep the list sorted.*
 
 ---
 
