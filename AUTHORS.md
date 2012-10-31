@@ -9,7 +9,7 @@ See the latter for an explanation.*
 
 *Names should be added to this file as:*  
 
-        `Name  <email address>` or `Organization`
+  `Name  <email address>` or `Organization`
 
 *The email address is not required for organizations.*
 
