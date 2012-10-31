@@ -18,6 +18,7 @@ import (
 // the (current) Hg CS to work on, as the Hg CS requires an existing repo.
 // But Init() can be used to create any new repo outside the one the Hg CS is
 // running for.
+// func (hgcl *HgClient) Init(path string, args []string) error {
 func (hgcl *HgClient) Init(path string) error {
 	var err error
 	var fa string
