@@ -6,6 +6,7 @@ package gohg_lib
 
 import (
 	"errors"
+	"fmt"
 	"path/filepath"
 	"strconv"
 )
@@ -35,13 +36,13 @@ func (hgcl *HgClient) Init(path string) error {
 	hgcmd := []string{"init", fa}
 	data, ret, err = hgcl.run(hgcmd)
 	if err != nil {
-		return errors.New("from run(): " + string(err.Error()))
+		return fmt.Errorf("from run(): %s", string(err.Error()))
 	}
 	// Will have to capture the "e" channel to be able to return a useful
 	// error message in case of failure.
 	if ret != 0 {
-		return errors.New("HgClient.Init():\npath -> " + fa + "\ndata ->\n" +
-			string(data) + "\nret -> " + strconv.Itoa(int(ret)))
+		return fmt.Errorf("HgClient.Init():\npath -> %s\ndata ->\n%s\nret -> %s",
+			fa, string(data), strconv.Itoa(int(ret)))
 	}
 
 	return nil

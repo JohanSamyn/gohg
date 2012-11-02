@@ -33,7 +33,7 @@ func TestHgEncoding(t *testing.T) {
 	var encoding string
 	encoding, err = hct.HgEncoding()
 	if err != nil {
-		t.Error("from HgEncoding : " + string(err.Error()))
+		t.Errorf("from HgEncoding : %s", string(err.Error()))
 	}
 	if encoding == "" {
 		t.Error("HgEncoding did not return a valid encoding")
@@ -52,13 +52,13 @@ func TestHgEncoding(t *testing.T) {
 // 	// data, ret, err = run(hgcmd)
 // 	_, _, err = hct.run(hgcmd)
 // 	if err != nil {
-// 		t.Error("from run : " + string(err.Error()))
+// 		t.Errorf("from run : %s", string(err.Error()))
 // 	}
 // }
 
 // func TestClose(t *testing.T) {
 // 	err := Hgclient.Close()
 // 	if err != nil {
-// 		t.Error("from Close(): " + string(err.Error()))
+// 		t.Errorf("from Close(): %s", string(err.Error()))
 // 	}
 // }

@@ -94,7 +94,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// Maybe even do this in the init() function ?
 
 	if hgcl.hgserver != nil {
-		return errors.New("Connect(): already running a Hg Command Server for " + hgcl.repo)
+		return fmt.Errorf("Connect(): already running a Hg Command Server for %s", hgcl.repo)
 	}
 
 	hgcl.hgPath = hgexe
@@ -110,7 +110,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return err
 	}
 	if hgcl.repo == "" {
-		return errors.New("Connect(): could not find a Hg repository at: " + reponame)
+		return fmt.Errorf("Connect(): could not find a Hg repository at: %s", reponame)
 	}
 
 	var hgconfig []string
@@ -122,15 +122,15 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.pout, err = hgcl.hgserver.StdoutPipe()
 	if err != nil {
-		return errors.New("Connect(): could not connect StdoutPipe: " + err.Error())
+		return fmt.Errorf("Connect(): could not connect StdoutPipe: %s", err.Error())
 	}
 	hgcl.pin, err = hgcl.hgserver.StdinPipe()
 	if err != nil {
-		log.Fatal("Connect(): could not connect StdinPipe: " + err.Error())
+		log.Fatalf("Connect(): could not connect StdinPipe: %s", err.Error())
 	}
 
 	if err := hgcl.hgserver.Start(); err != nil {
-		return errors.New("Connect(): could not start the Hg Command Server: " + err.Error())
+		return fmt.Errorf("Connect(): could not start the Hg Command Server: %s", err.Error())
 	}
 
 	err = readHelloMessage(hgcl)
@@ -145,7 +145,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.hgVersion, err = hgcl.Version()
 	if err != nil {
-		log.Fatal("from HgVersion() : " + string(err.Error()))
+		log.Fatalf("from HgVersion() : %s", string(err.Error()))
 	}
 
 	return nil
@@ -183,8 +183,8 @@ func locateRepository(reponame string) (string, error) {
 	// first make a correct path from repo
 	repo, err = filepath.Abs(repo)
 	if err != nil {
-		return "", errors.New(err.Error() +
-			"\ncould not determine absolute path for: " + repo)
+		return "", fmt.Errorf("%s\ncould not determine absolute path for: %s",
+			err.Error(), repo)
 	}
 	repo = filepath.Clean(repo)
 
@@ -249,23 +249,23 @@ func readHelloMessage(hgcl *HgClient) error {
 	}
 	const t1 = "hg se" // hg returned: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
-		log.Fatal(errors.New(
-			"Need at least version 1.9 of Mercurial to use the Command Server." +
-				" Used hgexe: '" + hgcl.HgPath() + "'\n"))
+		log.Fatalf("Need at least version 1.9 of Mercurial to use the Command Server. Used hgexe: '%s'\n",
+			hgcl.HgPath())
+		// log.Fatal(errors.New(
+		// 	"Need at least version 1.9 of Mercurial to use the Command Server." +
+		// 		" Used hgexe: '" + hgcl.HgPath() + "'\n"))
 	}
 	ch := string(s[0])
 	if ch != "o" {
-		return errors.New("received unexpected channel '" + ch +
-			"' for hello message from Hg Command Server")
+		return fmt.Errorf("received unexpected channel '%s' for hello message from Hg Command Server", ch)
 	}
 	var ln uint32
 	ln, err = calcDataLength(s[1:5])
 	if err != nil {
-		fmt.Println("readHelloMessage(): binary.Read failed:", err)
+		fmt.Errorf("readHelloMessage(): binary.Read failed: %s", err)
 	}
 	if ln <= 0 {
-		return errors.New("received invalid length '" + string(ln) +
-			"' for hello message from Hg Command Server")
+		return fmt.Errorf("received invalid length '%s' for hello message from Hg Command Server", string(ln))
 	}
 	hello := make([]byte, ln)
 	_, err = hgcl.pout.Read(hello)
@@ -319,7 +319,7 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 	var ln uint32
 	ln, err = calcDataLength(data[1:5])
 	if err != nil {
-		return ch, data, errors.New("readFromHg(): binary.Read failed:" +
+		return ch, data, fmt.Errorf("readFromHg(): binary.Read failed: %s",
 			string(err.Error()))
 	}
 
@@ -354,12 +354,12 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 		wbuf := new(bytes.Buffer)
 		err = binary.Write(wbuf, binary.BigEndian, ln)
 		if err != nil {
-			return errors.New("sendToHg(): binary.Write failed: " + string(err.Error()))
+			return fmt.Errorf("sendToHg(): binary.Write failed: %s", string(err.Error()))
 		}
 		b := make([]byte, 4)
 		_, err = io.ReadFull(wbuf, b)
 		if err != nil {
-			return errors.New("sendToHg(): io.ReadFull failed: " + string(err.Error()))
+			return fmt.Errorf("sendToHg(): io.ReadFull failed: %s", string(err.Error()))
 		}
 		copy(data[lc:lc+4], b)
 
@@ -414,7 +414,7 @@ CHANNEL_LOOP:
 		var ch string
 		ch, data, err = readFromHg(hgcl)
 		if err != nil || ch == "" {
-			log.Fatal("runInHg(): readFromHg failed: " + string(err.Error()))
+			log.Fatalf("runInHg(): readFromHg failed: %s", string(err.Error()))
 		}
 		switch ch {
 		case "d":
@@ -428,7 +428,7 @@ CHANNEL_LOOP:
 				} else {
 					ret, err = calcReturncode(data[0:4])
 					if err != nil {
-						log.Fatal("runInHg(): binary.read failed: " + string(err.Error()))
+						log.Fatalf("runInHg(): binary.read failed: %s", string(err.Error()))
 					}
 				}
 				break CHANNEL_LOOP
@@ -436,7 +436,7 @@ CHANNEL_LOOP:
 		case "I":
 		case "L":
 		default:
-			log.Fatal("runInHg(): unexpected channel '" + ch + "' detected")
+			log.Fatalf("runInHg(): unexpected channel '%s' detected", ch)
 		} // switch ch
 	} // for true
 

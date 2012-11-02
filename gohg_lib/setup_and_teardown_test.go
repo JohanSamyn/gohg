@@ -46,10 +46,10 @@ func setup(t *testing.T) (hct *HgClient) {
 func teardown(t *testing.T, hct *HgClient) {
 	err := hct.Close()
 	if err != nil {
-		t.Error("from Close(): " + string(err.Error()))
+		t.Errorf("from Close(): %s", string(err.Error()))
 	}
 	err = os.RemoveAll(testdir)
 	if err != nil {
-		t.Error("teardown(): " + string(err.Error()))
+		t.Errorf("teardown(): %s", string(err.Error()))
 	}
 }
