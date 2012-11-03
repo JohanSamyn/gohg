@@ -122,15 +122,15 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.pout, err = hgcl.hgserver.StdoutPipe()
 	if err != nil {
-		return fmt.Errorf("Connect(): could not connect StdoutPipe: %s", err.Error())
+		return fmt.Errorf("Connect(): could not connect StdoutPipe: %s", err)
 	}
 	hgcl.pin, err = hgcl.hgserver.StdinPipe()
 	if err != nil {
-		log.Fatalf("Connect(): could not connect StdinPipe: %s", err.Error())
+		log.Fatalf("Connect(): could not connect StdinPipe: %s", err)
 	}
 
 	if err := hgcl.hgserver.Start(); err != nil {
-		return fmt.Errorf("Connect(): could not start the Hg Command Server: %s", err.Error())
+		return fmt.Errorf("Connect(): could not start the Hg Command Server: %s", err)
 	}
 
 	err = readHelloMessage(hgcl)
@@ -145,7 +145,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.hgVersion, err = hgcl.Version()
 	if err != nil {
-		log.Fatalf("from HgVersion() : %s", string(err.Error()))
+		log.Fatalf("from HgVersion() : %s", err)
 	}
 
 	return nil
@@ -214,12 +214,19 @@ func locateRepository(reponame string) (string, error) {
 func composeHgConfig(hgcmd string, repo string, config []string) []string {
 	var hgconfig []string
 
+	// Zoek uit hoe de inhoud van parameter config kan toegevoegd worden zonder in conflict
+	// te komen met de vaste config elementen.
+
 	// if len(config) > 0 {
 	// 	var cfg string
 	// 	for i := 0; i < range(config) {
 	// 		cfg = cfg + "," + config[i]
 	// 	}
 	// 	cmd = cmd + "," + cfg
+	// }
+
+	// if len(config) > 0 {
+	// 	hgconfig = append(hgconfig, config...)
 	// }
 
 	hgconfig = append(hgconfig, hgcmd,
@@ -249,15 +256,13 @@ func readHelloMessage(hgcl *HgClient) error {
 	}
 	const t1 = "hg se" // hg returned: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
-		log.Fatalf("Need at least version 1.9 of Mercurial to use the Command Server. Used hgexe: '%s'\n",
-			hgcl.HgPath())
-		// log.Fatal(errors.New(
-		// 	"Need at least version 1.9 of Mercurial to use the Command Server." +
-		// 		" Used hgexe: '" + hgcl.HgPath() + "'\n"))
+		log.Fatalf("Need at least version 1.9 of Mercurial to use the Command Server.\n"+
+			"Used hgexe: '%s'\n", hgcl.HgPath())
 	}
 	ch := string(s[0])
 	if ch != "o" {
-		return fmt.Errorf("received unexpected channel '%s' for hello message from Hg Command Server", ch)
+		return fmt.Errorf("received unexpected channel '%s' for hello message from Hg Command Server",
+			ch)
 	}
 	var ln uint32
 	ln, err = calcDataLength(s[1:5])
@@ -265,7 +270,8 @@ func readHelloMessage(hgcl *HgClient) error {
 		fmt.Errorf("readHelloMessage(): binary.Read failed: %s", err)
 	}
 	if ln <= 0 {
-		return fmt.Errorf("received invalid length '%s' for hello message from Hg Command Server", string(ln))
+		return fmt.Errorf("received invalid length '%s' for hello message from Hg Command Server",
+			string(ln))
 	}
 	hello := make([]byte, ln)
 	_, err = hgcl.pout.Read(hello)
@@ -319,8 +325,7 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 	var ln uint32
 	ln, err = calcDataLength(data[1:5])
 	if err != nil {
-		return ch, data, fmt.Errorf("readFromHg(): binary.Read failed: %s",
-			string(err.Error()))
+		return ch, data, fmt.Errorf("readFromHg(): binary.Read failed: %s", err)
 	}
 
 	// now get ln bytes of data
@@ -336,10 +341,12 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 // sendToHg writes data to the Hg CS,
 // returning an error if something went wrong.
 func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
+
+	// cmd: can only be 'runcommand' or 'getencoding' for now
 	cmd = strings.TrimRight(cmd, "\n") + "\n"
 	lc := len(cmd)
 	la := len(args)
-	l := lc // in case cmd == "getencoding" f.i.
+	l := lc
 	if la > 0 {
 		l = l + 4 + la
 	}
@@ -354,24 +361,24 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 		wbuf := new(bytes.Buffer)
 		err = binary.Write(wbuf, binary.BigEndian, ln)
 		if err != nil {
-			return fmt.Errorf("sendToHg(): binary.Write failed: %s", string(err.Error()))
+			return fmt.Errorf("sendToHg(): binary.Write failed: %s", err)
 		}
 		b := make([]byte, 4)
 		_, err = io.ReadFull(wbuf, b)
 		if err != nil {
-			return fmt.Errorf("sendToHg(): io.ReadFull failed: %s", string(err.Error()))
+			return fmt.Errorf("sendToHg(): io.ReadFull failed: %s", err)
 		}
 		copy(data[lc:lc+4], b)
 
 		// send the command arguments
-		copy(data[lc+4:lc+4+la], args)
+		copy(data[lc+4:], args)
 	}
 
 	// perform the actual send to the Hg CS
 	var i int
 	i, err = hgcl.pin.Write(data)
 	if i != len(data) {
-		return errors.New("sendToHg(): writing data failed: " + string(err.Error()))
+		return fmt.Errorf("sendToHg(): writing data failed: %s", err)
 	}
 
 	return nil
@@ -414,7 +421,7 @@ CHANNEL_LOOP:
 		var ch string
 		ch, data, err = readFromHg(hgcl)
 		if err != nil || ch == "" {
-			log.Fatalf("runInHg(): readFromHg failed: %s", string(err.Error()))
+			log.Fatalf("runInHg(): readFromHg failed: %s", err)
 		}
 		switch ch {
 		case "d":
@@ -428,7 +435,7 @@ CHANNEL_LOOP:
 				} else {
 					ret, err = calcReturncode(data[0:4])
 					if err != nil {
-						log.Fatalf("runInHg(): binary.read failed: %s", string(err.Error()))
+						log.Fatalf("runInHg(): binary.read failed: %s", err)
 					}
 				}
 				break CHANNEL_LOOP
