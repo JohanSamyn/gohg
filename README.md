@@ -30,7 +30,7 @@ At the commandline type:
     package main
 
     import (
-        . "gohg/gohg_lib"
+        "gohg/gohg_lib"
         "fmt"
         "log"
     )
@@ -40,7 +40,7 @@ At the commandline type:
         hgexe := "hg"
         repo := ""
         var cfg []string
-        hc := NewHgClient()
+        hc := gohg_lib.NewHgClient()
         if err = hc.Connect(hgexe, repo, cfg); err != nil {
             log.Fatal(err)
         }
