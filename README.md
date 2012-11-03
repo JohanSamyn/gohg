@@ -1,8 +1,10 @@
 # gohg - a Go client library for Mercurial
 
-This project aims at creating a Go client library for the Mercurial dvcs,
-using it's Command Server for better performance. The Command Server is
-available as of Mercurial version 1.9.
+This project aims at creating a Go client library for the
+[Mercurial DCVS](http://mercurial.selenic.com), using it's
+[Command Server](http://mercurial.selenic.com/wiki/CommandServer)
+for better performance. The Command Server is available as of Mercurial
+version 1.9.
 
 It's second purpose - by no means less then the first one - is to have a real
 project for working with the Go language, which really appeals to me.
