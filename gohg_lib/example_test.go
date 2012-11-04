@@ -7,7 +7,7 @@
 package gohg_lib_test
 
 import (
-	. "gohg/gohg_lib"
+	. "bitbucket.org/gohg/gohg/gohg_lib"
 	"log"
 )
 

@@ -7,7 +7,7 @@
 package main
 
 import (
-	. "gohg/gohg_lib"
+	. "bitbucket.org/gohg/gohg/gohg_lib"
 	"fmt"
 	"log"
 )
@@ -18,7 +18,7 @@ func main() {
 	var err error
 	hgexe := "M:/DEV/hg-stable/hg"
 	// hgexe := "hg"
-	repo := "C:/DEV/go/src/gohg"
+	repo := "C:/DEV/go/src/bitbucket.org/gohg/gohg"
 	// repo := "C:/Programs/TortoiseHg"
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
