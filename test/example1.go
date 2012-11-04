@@ -7,7 +7,7 @@
 package main
 
 import (
-	. "bitbucket.org/gohg/gohg/gohg_lib"
+	"bitbucket.org/gohg/gohg/gohg_lib"
 	"fmt"
 	"log"
 )
@@ -23,7 +23,7 @@ func main() {
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 
-	hc := NewHgClient()
+	hc := gohg_lib.NewHgClient()
 	var cfg []string
 	if err = hc.Connect(hgexe, repo, cfg); err != nil {
 		log.Fatal(err)

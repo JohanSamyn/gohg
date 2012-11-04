@@ -5,7 +5,7 @@
 package gohg_lib_test
 
 import (
-	. "bitbucket.org/gohg/gohg/gohg_lib"
+	"bitbucket.org/gohg/gohg/gohg_lib"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -14,7 +14,7 @@ import (
 
 var testdir string
 
-func setup(t *testing.T) (hct *HgClient) {
+func setup(t *testing.T) (hct *gohg_lib.HgClient) {
 	var err error
 	testdir, err = ioutil.TempDir("", "gohg_test_")
 	if err != nil {
@@ -34,7 +34,7 @@ func setup(t *testing.T) (hct *HgClient) {
 
 	repo := testdir
 
-	hct = NewHgClient()
+	hct = gohg_lib.NewHgClient()
 	cfg := make([]string, 0)
 	err = hct.Connect(hgexe, repo, cfg)
 	if err != nil {
@@ -43,7 +43,7 @@ func setup(t *testing.T) (hct *HgClient) {
 	return hct
 }
 
-func teardown(t *testing.T, hct *HgClient) {
+func teardown(t *testing.T, hct *gohg_lib.HgClient) {
 	err := hct.Close()
 	if err != nil {
 		t.Errorf("from Close(): %s", string(err.Error()))

@@ -7,12 +7,12 @@
 package gohg_lib_test
 
 import (
-	. "bitbucket.org/gohg/gohg/gohg_lib"
+	"bitbucket.org/gohg/gohg/gohg_lib"
 	"log"
 )
 
 func ExampleHgClient_Connect() {
-	hc := NewHgClient()
+	hc := gohg_lib.NewHgClient()
 	if err := hc.Connect("hg", ".", []string{""}); err != nil {
 		log.Fatal(err)
 	}
