@@ -17,6 +17,7 @@ import (
 func (hgcl *HgClient) Summary() (string, error) {
 	var data []byte
 	var ret int32
+	var err error
 	data, ret, err = hgcl.run([]string{"summary"})
 	if err != nil {
 		return "", err

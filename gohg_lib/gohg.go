@@ -53,9 +53,6 @@ type hgCmd struct {
 	Args string
 }
 
-var err error
-var logfile string
-
 // NewHgClient creates a new instance of the client object for working with the
 // Hg Command Server.
 func NewHgClient() *HgClient {
@@ -105,6 +102,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	}
 
 	// The Hg Command Server needs a repository.
+	var err error
 	hgcl.repo, err = locateRepository(reponame)
 	if err != nil {
 		return err
@@ -167,7 +165,7 @@ func (hgcl *HgClient) Close() error {
 
 	defer func() { hgcl.hgserver = nil }()
 
-	err = hgcl.hgserver.Wait()
+	err := hgcl.hgserver.Wait()
 	if err != nil {
 		return err
 	}
@@ -181,6 +179,7 @@ func locateRepository(reponame string) (string, error) {
 	sep := string(os.PathSeparator)
 
 	// first make a correct path from repo
+	var err error
 	repo, err = filepath.Abs(repo)
 	if err != nil {
 		return "", fmt.Errorf("%s\ncould not determine absolute path for: %s",
@@ -246,6 +245,7 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 // It has a fixed format, and contains info about the possibilities
 // of the Hg CS at hand. It's also a first proof of a working connection.
 func readHelloMessage(hgcl *HgClient) error {
+	var err error
 	s := make([]byte, 5)
 	_, err = hgcl.pout.Read(s)
 	if err != io.EOF && err != nil {
@@ -305,6 +305,7 @@ func validateCapabilities(hgcl *HgClient) error {
 // readFromHg returns the channel and all the data read from it.
 // Eventually it returns no (or empty) data but an error.
 func readFromHg(hgcl *HgClient) (string, []byte, error) {
+	var err error
 	var ch string
 
 	// get channel and length
@@ -341,6 +342,7 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 // sendToHg writes data to the Hg CS,
 // returning an error if something went wrong.
 func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
+	var err error
 
 	// cmd: can only be 'runcommand' or 'getencoding' for now
 	cmd = strings.TrimRight(cmd, "\n") + "\n"
@@ -387,6 +389,7 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 // HgEncoding returns the servers encoding on the result channel.
 // Currently only UTF8 is supported.
 func (hgcl *HgClient) HgEncoding() (string, error) {
+	var err error
 	var encoding []byte
 	encoding, _, err = runInHg(hgcl, "getencoding", []string{})
 	return string(encoding), err
@@ -395,6 +398,7 @@ func (hgcl *HgClient) HgEncoding() (string, error) {
 // run allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
 func (hgcl *HgClient) run(hgcmd []string) ([]byte, int32, error) {
+	var err error
 	var data []byte
 	var ret int32
 	data, ret, err = runInHg(hgcl, "runcommand", hgcmd)
@@ -406,7 +410,7 @@ func (hgcl *HgClient) run(hgcmd []string) ([]byte, int32, error) {
 func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 
-	err = sendToHg(hgcl, command, args)
+	err := sendToHg(hgcl, command, args)
 	if err != nil {
 		fmt.Println(err)
 		return nil, 0, err
@@ -453,6 +457,7 @@ CHANNEL_LOOP:
 
 // calcDataLength converts a 4-byte slice into an unsigned int
 func calcDataLength(s []byte) (uint32, error) {
+	var err error
 	var ln int32
 	ln, err = calcIntFromBytes(s)
 	return uint32(ln), err
@@ -460,6 +465,7 @@ func calcDataLength(s []byte) (uint32, error) {
 
 // calcReturncode converts a 4-byte slice into a signed int
 func calcReturncode(s []byte) (int32, error) {
+	var err error
 	var rc int32
 	rc, err = calcIntFromBytes(s)
 	return rc, err
