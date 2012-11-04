@@ -12,21 +12,21 @@ project for working with the Go language, which really appeals to me.
 So don't expect anything to be ready quickly, cause this will be a learning
 process.
 
-## Compatibility
+### Compatibility
 
 The gohg library is developed with the Go1 releases.
 
-## Dependencies
+### Dependencies
 
 None so far.
 
-## Installation
+### Installation
 
 At the commandline type:
 
     go get bitbucket.org/gohg/gohg
 
-## Example usage
+### Example
 
     :::go
     package main
