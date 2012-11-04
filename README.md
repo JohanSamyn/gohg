@@ -32,7 +32,7 @@ At the commandline type:
     package main
 
     import (
-        "gohg/gohg_lib"
+        "bitbucket.org/gohg/gohg/gohg_lib"
         "fmt"
         "log"
     )
@@ -53,5 +53,5 @@ At the commandline type:
             log.Println(err)
             return
         }
-        fmt.Printf("[[Summary]]:\\n%s", s)
+        fmt.Printf("[[Summary]]:\n%s", s)
     }
