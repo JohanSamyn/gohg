@@ -64,15 +64,16 @@ func NewHgClient() *HgClient {
 //
 // Arguments:
 //	hgexe
-//		The command to run mercurial. Optional. The 'hg' command will be used
-//		when not provided. This allows to run a specific version of Mercurial.
+//		The command to run Mercurial. Optional.
+//		The 'hg' command will be used when not provided.
+//		This allows to run a specific version of Mercurial.
 //	reponame
 //		The folder of the Hg repository to work on. Optional.
 //		When blanc the folder where the program is run is used
 //		(see function locateRepository()).
 //	config
 //		Configuration settings that will be added to the necessary
-//		fixed settings (see composeHgConfig() for more).
+//		fixed settings (see composeHgConfig() for more). Optional.
 //
 // Returns an error if the connection could not be established properly.
 func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) error {
@@ -419,6 +420,8 @@ func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, err
 	var data []byte
 	var buf bytes.Buffer
 	var ret int32
+	// hgerr: for use with the 'e' channel
+	// hgerr := errors.New("")
 
 CHANNEL_LOOP:
 	for true {
