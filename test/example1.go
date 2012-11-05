@@ -18,8 +18,8 @@ func main() {
 	var err error
 	hgexe := "M:/DEV/hg-stable/hg"
 	// hgexe := "hg"
-	repo := "C:/DEV/go/src/bitbucket.org/gohg/gohg"
-	// repo := "C:/Programs/TortoiseHg"
+	// repo := "C:/DEV/go/src/bitbucket.org/gohg/gohg"
+	repo := "C:/DEV/thg-qt-work"
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 
@@ -46,5 +46,6 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	// use 'go run example1.go | less' (or more) to view big results (such as a full log)
 	fmt.Printf("[[Summary]]:\n%s", s)
 }
