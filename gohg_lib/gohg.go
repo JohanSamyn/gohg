@@ -417,7 +417,6 @@ func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, err
 		return nil, 0, err
 	}
 
-	var data []byte
 	var buf bytes.Buffer
 	var ret int32
 	// hgerr: for use with the 'e' channel
@@ -426,6 +425,7 @@ func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, err
 CHANNEL_LOOP:
 	for true {
 		var ch string
+		var data []byte
 		ch, data, err = readFromHg(hgcl)
 		if err != nil || ch == "" {
 			log.Fatalf("runInHg(): readFromHg failed: %s", err)
@@ -434,11 +434,11 @@ CHANNEL_LOOP:
 		case "d":
 		case "e":
 		case "o":
-			buf.WriteString(string(data))
+			buf.Write(data)
 		case "r":
 			{
 				if command == "getencoding" {
-					buf.WriteString(string(data))
+					buf.Write(data)
 				} else {
 					ret, err = calcReturncode(data[0:4])
 					if err != nil {
@@ -454,7 +454,7 @@ CHANNEL_LOOP:
 		} // switch ch
 	} // for true
 
-	return []byte(buf.String()), ret, nil
+	return buf.Bytes(), ret, nil
 
 } // runInHg()
 
