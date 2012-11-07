@@ -474,7 +474,7 @@ func calcReturncode(s []byte) (int32, error) {
 	return rc, err
 }
 
-// calcIntFromBytes performs the real conversion
+// calcIntFromBytes performs the real conversion of a 4-byte-slice into an int
 func calcIntFromBytes(s []byte) (int32, error) {
 	var i int32
 	buf := bytes.NewBuffer(s[0:4])
