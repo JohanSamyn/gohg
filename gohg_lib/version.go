@@ -5,29 +5,24 @@
 package gohg_lib
 
 import (
-	"errors"
-	"strconv"
+	"fmt"
 	"strings"
 )
 
 // Version provides the 'hg version' command.
 func (hgcl *HgClient) Version() (string, error) {
 	if hgcl.hgVersion == "" {
-		var data []byte
-		var ret int32
-		var err error
-		data, ret, err = hgcl.run([]string{"version", "-q"})
+		data, hgerr, ret, err := hgcl.run([]string{"version", "-q"})
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("from hgcl.run(): %s", err)
 		}
-		if ret != 0 {
-			return "", errors.New("Mercurial returned: " + strconv.Itoa(int(ret)))
+		if ret != 0 || hgerr != nil {
+			return "", fmt.Errorf("Version(): returncode=%d\nhgerr: %s\n", ret, string(hgerr))
 		}
 		ver := strings.Split(string(data), "\n")[0]
 		ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]
 
 		hgcl.hgVersion = ver
 	}
-
 	return hgcl.hgVersion, nil
 }

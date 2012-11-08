@@ -392,35 +392,35 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 func (hgcl *HgClient) HgEncoding() (string, error) {
 	var err error
 	var encoding []byte
-	encoding, _, err = runInHg(hgcl, "getencoding", []string{})
+	encoding, _, _, err = runInHg(hgcl, "getencoding", []string{})
 	return string(encoding), err
 }
 
 // run allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
-func (hgcl *HgClient) run(hgcmd []string) ([]byte, int32, error) {
+func (hgcl *HgClient) run(hgcmd []string) ([]byte, []byte, int32, error) {
 	var err error
 	var data []byte
+	var hgerr []byte
 	var ret int32
-	data, ret, err = runInHg(hgcl, "runcommand", hgcmd)
-	return data, ret, err
+	data, hgerr, ret, err = runInHg(hgcl, "runcommand", hgcmd)
+	return data, hgerr, ret, err
 }
 
 // runInHg sends a command to the Hg CS (using sendToHg),
 // and fetches the result (using readFromHg).
-func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, int32, error) {
+func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, []byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 
 	err := sendToHg(hgcl, command, args)
 	if err != nil {
 		fmt.Println(err)
-		return nil, 0, err
+		return nil, nil, 0, err
 	}
 
 	var buf bytes.Buffer
+	var errbuf bytes.Buffer
 	var ret int32
-	// hgerr: for use with the 'e' channel
-	// hgerr := errors.New("")
 
 CHANNEL_LOOP:
 	for true {
@@ -433,6 +433,7 @@ CHANNEL_LOOP:
 		switch ch {
 		case "d":
 		case "e":
+			errbuf.Write(data)
 		case "o":
 			buf.Write(data)
 		case "r":
@@ -454,7 +455,7 @@ CHANNEL_LOOP:
 		} // switch ch
 	} // for true
 
-	return buf.Bytes(), ret, nil
+	return buf.Bytes(), errbuf.Bytes(), ret, nil
 
 } // runInHg()
 

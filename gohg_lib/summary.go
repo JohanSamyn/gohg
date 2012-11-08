@@ -5,8 +5,7 @@
 package gohg_lib
 
 import (
-	"errors"
-	"strconv"
+	"fmt"
 )
 
 // TODO	Implement the --remote flag.
@@ -15,15 +14,12 @@ import (
 
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary() (string, error) {
-	var data []byte
-	var ret int32
-	var err error
-	data, ret, err = hgcl.run([]string{"summary"})
+	data, hgerr, ret, err := hgcl.run([]string{"summary"})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("from hgcl.run(): %s", err)
 	}
-	if ret != 0 {
-		return "", errors.New("run(\"summary\") returned: " + strconv.Itoa(int(ret)))
+	if ret != 0 || hgerr != nil {
+		return "", fmt.Errorf("Summary(): returncode=%d\nhgerr:\n%s\n", ret, string(hgerr))
 	}
 	return string(data), nil
 }

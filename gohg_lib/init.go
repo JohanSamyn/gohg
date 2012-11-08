@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"strconv"
 )
 
 // TODO	Implement the flags for hg init.
@@ -21,29 +20,25 @@ import (
 // running for.
 // func (hgcl *HgClient) Init(path string, args []string) error {
 func (hgcl *HgClient) Init(path string) error {
-	var err error
+	var err1 error
 	var fa string
-	fa, err = filepath.Abs(path)
-
+	fa, err1 = filepath.Abs(path)
+	if err1 != nil {
+		return fmt.Errorf("Init() -> filepath.Abs(): %s", err1)
+	}
 	if path == "" || path == "." || fa == hgcl.Repo() {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}
 
-	var data []byte
-	var ret int32
-
 	hgcmd := []string{"init", fa}
-	data, ret, err = hgcl.run(hgcmd)
+	data, hgerr, ret, err := hgcl.run(hgcmd)
 	if err != nil {
-		return fmt.Errorf("from run(): %s", string(err.Error()))
+		return fmt.Errorf("from hgcl.run(): %s", err)
 	}
-	// Will have to capture the "e" channel to be able to return a useful
-	// error message in case of failure.
-	if ret != 0 {
-		return fmt.Errorf("HgClient.Init():\npath -> %s\ndata ->\n%s\nret -> %s",
-			fa, string(data), strconv.Itoa(int(ret)))
+	if ret != 0 || hgerr != nil {
+		return fmt.Errorf("Init():\npath=%s\ndata:\n%s\nreturncode=%d\nhgerr:\n%s\n",
+			fa, string(data), ret, string(hgerr))
 	}
-
 	return nil
 }
