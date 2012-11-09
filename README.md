@@ -14,7 +14,7 @@ process.
 
 ### Compatibility
 
-The gohg library is developed with the Go1 releases.
+The gohg library is developed with the Go1 releases, on Windows 7.
 
 ### Dependencies
 
