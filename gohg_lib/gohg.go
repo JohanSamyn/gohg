@@ -389,22 +389,18 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 
 // HgEncoding returns the servers encoding on the result channel.
 // Currently only UTF8 is supported.
-func (hgcl *HgClient) HgEncoding() (string, error) {
-	var err error
-	var encoding []byte
-	encoding, _, _, err = runInHg(hgcl, "getencoding", []string{})
-	return string(encoding), err
+func (hgcl *HgClient) HgEncoding() (encoding string, err error) {
+	var enc []byte
+	enc, _, _, err = runInHg(hgcl, "getencoding", []string{})
+	encoding = string(enc)
+	return
 }
 
 // run allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
-func (hgcl *HgClient) run(hgcmd []string) ([]byte, []byte, int32, error) {
-	var err error
-	var data []byte
-	var hgerr []byte
-	var ret int32
+func (hgcl *HgClient) run(hgcmd []string) (data []byte, hgerr []byte, ret int32, err error) {
 	data, hgerr, ret, err = runInHg(hgcl, "runcommand", hgcmd)
-	return data, hgerr, ret, err
+	return
 }
 
 // runInHg sends a command to the Hg CS (using sendToHg),
@@ -460,27 +456,23 @@ CHANNEL_LOOP:
 } // runInHg()
 
 // calcDataLength converts a 4-byte slice into an unsigned int
-func calcDataLength(s []byte) (uint32, error) {
-	var err error
-	var ln int32
-	ln, err = calcIntFromBytes(s)
-	return uint32(ln), err
+func calcDataLength(s []byte) (ln uint32, err error) {
+	var i int32
+	i, err = calcIntFromBytes(s)
+	ln = uint32(i)
+	return
 }
 
 // calcReturncode converts a 4-byte slice into a signed int
-func calcReturncode(s []byte) (int32, error) {
-	var err error
-	var rc int32
+func calcReturncode(s []byte) (rc int32, err error) {
 	rc, err = calcIntFromBytes(s)
-	return rc, err
+	return
 }
 
 // calcIntFromBytes performs the real conversion of a 4-byte-slice into an int
-func calcIntFromBytes(s []byte) (int32, error) {
-	var i int32
-	buf := bytes.NewBuffer(s[0:4])
-	err := binary.Read(buf, binary.BigEndian, &i)
-	return i, err
+func calcIntFromBytes(s []byte) (i int32, err error) {
+	err = binary.Read(bytes.NewBuffer(s[0:4]), binary.BigEndian, &i)
+	return
 }
 
 // HgPath returns the path of the Mercurial executable used in the Hg CS.
