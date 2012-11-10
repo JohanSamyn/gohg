@@ -48,4 +48,8 @@ func main() {
 	}
 	// use 'go run example1.go | less' (or more) to view big results (such as a full log)
 	fmt.Printf("[[Summary]]:\n%s", s)
+
+	// give time to see the Hg CS session live and die from Process Explorer
+	// fmt.Print("waiting...")
+	// time.Sleep(3 * time.Second)
 }
