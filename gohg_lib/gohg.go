@@ -493,7 +493,7 @@ func (hgcl *HgClient) HgVersion() string {
 	return hgcl.hgVersion
 }
 
-// Repo returns the repo root of the connected Hg CS
+// Repo returns the root of the repository the connected Hg CS is working on.
 func (hgcl *HgClient) Repo() string {
 	return hgcl.repo
 }
