@@ -14,7 +14,10 @@ process.
 
 ### Compatibility
 
-The gohg library is developed with the Go1 releases, on Windows 7.
+The gohg library is developed with Go1 on Windows 7.
+It is also tested on Ubuntu 12.04 with Go1.
+Go1 is being updated to the latest release shortly after it's appearance
+on both platforms.
 
 ### Dependencies
 
