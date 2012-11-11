@@ -13,19 +13,13 @@ import (
 )
 
 var testdir string
-var hgexe string
-
-func init() {
-	// read the appropriate data from the gohg.ini file
-
-	// Set var hgexe to whatever is appropriate for your situation.
-	// You can also change it to test with different versions of Mercurial.
-	// hgexe = "hg"
-	hgexe = "M:/DEV/hg-stable/hg"
-	// hgexe = "M:/DEV/hg-default/hg"
-}
 
 func setup(t *testing.T) (hct *gohg_lib.HgClient) {
+	// Set var hgexe to whatever is appropriate for your situation.
+	// You can also change it to test with different versions of Mercurial.
+	// hgexe := "M:/DEV/hg-stable/hg"
+	hgexe := "hg"
+
 	var err error
 	testdir, err = ioutil.TempDir("", "gohg_test_")
 	if err != nil {
