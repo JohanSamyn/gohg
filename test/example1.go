@@ -12,14 +12,22 @@ import (
 	"log"
 )
 
+var hgexe string
+var repo string
+
+func init() {
+	// Read the gohg.ini file to determine hgexe and repo
+	// or set them here manually.
+	// hgexe = "M:/DEV/hg-stable/hg"
+	// hgexe := "hg"
+	// repo := "C:/DEV/go/src/bitbucket.org/gohg/gohg"
+	// repo = "C:/DEV/thg-qt-work"
+}
+
 func main() {
 	fmt.Println("========== Begin of example1 ==========")
 
 	var err error
-	hgexe := "M:/DEV/hg-stable/hg"
-	// hgexe := "hg"
-	// repo := "C:/DEV/go/src/bitbucket.org/gohg/gohg"
-	repo := "C:/DEV/thg-qt-work"
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 
