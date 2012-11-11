@@ -17,4 +17,5 @@ func ExampleHgClient_Connect() {
 		log.Fatal(err)
 	}
 	defer hc.Close()
+	// Call some useful methods on hc here.
 }

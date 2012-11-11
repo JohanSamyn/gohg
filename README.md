@@ -9,25 +9,24 @@ version 1.9.
 It's second purpose - by no means less then the first one - is to have a real
 project for working with the Go language, which really appeals to me.
 
-So don't expect anything to be ready quickly, cause this will be a learning
-process.
+So don't expect anything to be ready quickly, as this will be a learning process.
 
 ### Compatibility
 
 The gohg library is developed with Go1 on Windows 7.
 It is also tested on Ubuntu 12.04 with Go1.
-Go1 is being updated to the latest release shortly after it's appearance
+Go1 is being updated to the latest release shortly after it's appearance,
 on both platforms.
 
 ### Dependencies
 
-Only Go and it's standard library.
+Only Go and it's standard library; at least for now.
 
 ### Installation
 
 At the commandline type:
 
-    go get bitbucket.org/gohg/gohg
+    go get bitbucket.org/gohg/gohg/gohg_lib
 
 ### Example
 
@@ -45,7 +44,7 @@ Run this program in a folder that contains a Hg repo.
     func main() {
         var err error
         hgexe := "hg"
-        repo := ""
+        repo := "/path/to/hgrepo"
         var cfg []string
         hc := gohg_lib.NewHgClient()
         if err = hc.Connect(hgexe, repo, cfg); err != nil {
@@ -58,5 +57,5 @@ Run this program in a folder that contains a Hg repo.
             log.Println(err)
             return
         }
-        fmt.Printf("[[Summary]]:\n%s", s)
+        fmt.Printf("[[Summary for repo %s]]:\n%s", repo, s)
     }
