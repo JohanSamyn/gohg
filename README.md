@@ -21,7 +21,7 @@ on both platforms.
 
 ### Dependencies
 
-None so far.
+Only Go and it's standard library.
 
 ### Installation
 
