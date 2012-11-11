@@ -30,8 +30,6 @@ At the commandline type:
 
 ### Example
 
-Run this program in a folder that contains a Hg repo.
-
     :::go
     package main
 
