@@ -97,8 +97,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.hgPath = hgexe
 	if hgcl.hgPath == "" {
-		// Let the OS determine what Mercurial to run
-		// for this machine/user combination.
+		// Let the OS determine what Mercurial to run for this machine/user combination.
 		// hgcl.hgPath = "hg"
 		hgcl.hgPath = "M:/DEV/hg-stable/hg"
 	}
@@ -114,7 +113,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	}
 
 	var hgconfig []string
-	hgconfig = composeHgConfig(hgexe, hgcl.repo, config)
+	hgconfig = composeHgConfig(hgcl.hgPath, hgcl.repo, config)
 
 	hgcl.hgserver = exec.Command(hgcl.hgPath)
 	hgcl.hgserver.Args = hgconfig
@@ -196,7 +195,7 @@ func locateRepository(reponame string) (string, error) {
 	// up the path, in case we're deeper in it's working copy.
 	for {
 		_, err = os.Stat(repo + sep + ".hg")
-		if err == nil {
+		if err == nil && os.IsExist(err) == false {
 			break
 		}
 		var file string
