@@ -16,10 +16,10 @@ func main() {
 	// Set var hgexe to whatever is appropriate for your situation.
 	// You can also change it to test with different versions of Mercurial.
 	// hgexe := "M:/DEV/hg-stable/hg"
-	hgexe = "hg"
+	hgexe := "hg"
 	// repo := "C:/DEV/thg-qt-work"
 	// repo = "C:/DEV/go/src/bitbucket.org/gohg/gohg"
-	repo = "."
+	repo := "."
 
 	fmt.Println("========== Begin of example1 ==========")
 
