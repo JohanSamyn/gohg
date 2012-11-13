@@ -54,8 +54,7 @@ type hgCmd struct {
 // NewHgClient creates a new instance of the client object for working with the
 // Hg Command Server.
 func NewHgClient() *HgClient {
-	var hgclient = new(HgClient)
-	return hgclient
+	return new(HgClient)
 }
 
 // Connect establishes the connection with the Mercurial Command Server.
