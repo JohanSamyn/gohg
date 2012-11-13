@@ -15,13 +15,12 @@ goinstall.log
 gohg.sublime-workspace
 test/t.cmd
 pyhglib.py*
+commit-steps.txt
+test/log.txt
+readme-test.go
 
 syntax:regexp
 ^bin/
 ^pkg/
 ^src/cmd/(.*)/6?\1$
 ^.*/core.[0-9]*$
-syntax: glob
-commit-steps.txt
-test/log.txt
-readme-test.go
