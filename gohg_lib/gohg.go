@@ -26,16 +26,14 @@ import (
 // Type HgClient will act as the entrypoint through which all interaction
 // with the Mercurial Command Server will take place.
 type HgClient struct {
-	hgserver *exec.Cmd
-	// pin: the pipe that gets commands into the Hg CS
-	pin io.WriteCloser
-	// pout: the pipe that brings data out of the Hg CS
-	pout         io.ReadCloser
-	hgPath       string   // which hg is used ?
-	capabilities []string // as per the hello message
-	encoding     string   // as per the hello message
-	repo         string   // the full path to the Hg repo
-	hgVersion    string   // the version number only
+	hgServer     *exec.Cmd
+	pipeIn       io.WriteCloser // the pipe that gets commands into the Hg CS
+	pipeOut      io.ReadCloser  // the pipe that brings data out of the Hg CS
+	hgExe        string         // which hg is used ?
+	capabilities []string       // as per the hello message
+	encoding     string         // as per the hello message
+	repoRoot     string         // the full path to the Hg repo
+	hgVersion    string         // the version number only
 	// config       []string
 }
 
@@ -79,7 +77,7 @@ func NewHgClient() *HgClient {
 func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) error {
 
 	// for example:
-	// hgcl.hgserver =
+	// hgcl.hgServer =
 	//		exec.Command("M:/DEV/hg-stable/hg",	// the Hg command
 	// 		"-R", "C:/DEV/go/src/golout/",		// the repo
 	// 		"--config", "ui.interactive=True",	// mandatory settings
@@ -91,44 +89,44 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// Also do not override that logfile every launch.
 	// Maybe even do this in the init() function ?
 
-	if hgcl.hgserver != nil {
-		return fmt.Errorf("Connect(): already running a Hg Command Server for %s", hgcl.repo)
+	if hgcl.hgServer != nil {
+		return fmt.Errorf("Connect(): already running a Hg Command Server for %s", hgcl.repoRoot)
 	}
 
-	hgcl.hgPath = hgexe
-	if hgcl.hgPath == "" {
+	hgcl.hgExe = hgexe
+	if hgcl.hgExe == "" {
 		// Let the OS determine what Mercurial to run for this machine/user combination.
-		// hgcl.hgPath = "hg"
-		hgcl.hgPath = "M:/DEV/hg-stable/hg"
+		// hgcl.hgExe = "hg"
+		hgcl.hgExe = "M:/DEV/hg-stable/hg"
 	}
 
 	// The Hg Command Server needs a repository.
 	var err error
-	hgcl.repo, err = locateRepository(reponame)
+	hgcl.repoRoot, err = locateRepository(reponame)
 	if err != nil {
 		return err
 	}
-	if hgcl.repo == "" {
+	if hgcl.repoRoot == "" {
 		return fmt.Errorf("Connect(): could not find a Hg repository at: %s", reponame)
 	}
 
 	var hgconfig []string
-	hgconfig = composeHgConfig(hgcl.hgPath, hgcl.repo, config)
+	hgconfig = composeHgConfig(hgcl.hgExe, hgcl.repoRoot, config)
 
-	hgcl.hgserver = exec.Command(hgcl.hgPath)
-	hgcl.hgserver.Args = hgconfig
-	hgcl.hgserver.Dir = hgcl.repo
+	hgcl.hgServer = exec.Command(hgcl.hgExe)
+	hgcl.hgServer.Args = hgconfig
+	hgcl.hgServer.Dir = hgcl.repoRoot
 
-	hgcl.pout, err = hgcl.hgserver.StdoutPipe()
+	hgcl.pipeOut, err = hgcl.hgServer.StdoutPipe()
 	if err != nil {
 		return fmt.Errorf("Connect(): could not connect StdoutPipe: %s", err)
 	}
-	hgcl.pin, err = hgcl.hgserver.StdinPipe()
+	hgcl.pipeIn, err = hgcl.hgServer.StdinPipe()
 	if err != nil {
 		log.Fatalf("Connect(): could not connect StdinPipe: %s", err)
 	}
 
-	if err := hgcl.hgserver.Start(); err != nil {
+	if err := hgcl.hgServer.Start(); err != nil {
 		return fmt.Errorf("Connect(): could not start the Hg Command Server: %s", err)
 	}
 
@@ -156,17 +154,17 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 // In fact it's closing the stdin of the Hg CS that closes the connection,
 // as per the Hg CS documentation.
 func (hgcl *HgClient) Close() error {
-	if hgcl.hgserver == nil {
-		log.Println("Close(): Trying to close a closed hgserver.")
+	if hgcl.hgServer == nil {
+		log.Println("Close(): Trying to close a closed hgServer.")
 		return nil
 	}
 
-	hgcl.pin.Close()
-	hgcl.pout.Close()
+	hgcl.pipeIn.Close()
+	hgcl.pipeOut.Close()
 
-	defer func() { hgcl.hgserver = nil }()
+	defer func() { hgcl.hgServer = nil }()
 
-	err := hgcl.hgserver.Wait()
+	err := hgcl.hgServer.Wait()
 	if err != nil {
 		return err
 	}
@@ -251,7 +249,7 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 func readHelloMessage(hgcl *HgClient) error {
 	var err error
 	s := make([]byte, 5)
-	_, err = hgcl.pout.Read(s)
+	_, err = hgcl.pipeOut.Read(s)
 	if err != io.EOF && err != nil {
 		return err
 	}
@@ -261,7 +259,7 @@ func readHelloMessage(hgcl *HgClient) error {
 	const t1 = "hg se" // hg returned: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
 		log.Fatalf("Need at least version 1.9 of Mercurial to use the Command Server.\n"+
-			"Used hgexe: '%s'\n", hgcl.HgPath())
+			"Used hgexe: '%s'\n", hgcl.HgExe())
 	}
 	ch := string(s[0])
 	if ch != "o" {
@@ -278,7 +276,7 @@ func readHelloMessage(hgcl *HgClient) error {
 			string(ln))
 	}
 	hello := make([]byte, ln)
-	_, err = hgcl.pout.Read(hello)
+	_, err = hgcl.pipeOut.Read(hello)
 	if err != io.EOF && err != nil {
 		return err
 	}
@@ -314,7 +312,7 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 
 	// get channel and length
 	data := make([]byte, 5)
-	_, err = hgcl.pout.Read(data)
+	_, err = hgcl.pipeOut.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -335,7 +333,7 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 
 	// now get ln bytes of data
 	data = make([]byte, ln)
-	_, err = hgcl.pout.Read(data)
+	_, err = hgcl.pipeOut.Read(data)
 	if err != io.EOF && err != nil {
 		return ch, data, err
 	}
@@ -382,7 +380,7 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 
 	// perform the actual send to the Hg CS
 	var i int
-	i, err = hgcl.pin.Write(data)
+	i, err = hgcl.pipeIn.Write(data)
 	if i != len(data) {
 		return fmt.Errorf("sendToHg(): writing data failed: %s", err)
 	}
@@ -478,9 +476,9 @@ func calcIntFromBytes(s []byte) (i int32, err error) {
 	return
 }
 
-// HgPath returns the path of the Mercurial executable used in the Hg CS.
-func (hgcl *HgClient) HgPath() string {
-	return hgcl.hgPath
+// HgExe returns the path of the Mercurial executable used in the Hg CS.
+func (hgcl *HgClient) HgExe() string {
+	return hgcl.hgExe
 }
 
 // HgVersion returns the Mercurial version of the connected Hg CS.
@@ -490,7 +488,7 @@ func (hgcl *HgClient) HgVersion() string {
 
 // Repo returns the root of the repository the connected Hg CS is working on.
 func (hgcl *HgClient) Repo() string {
-	return hgcl.repo
+	return hgcl.repoRoot
 }
 
 // Capabilities returns the capabilities of the connected Hg CS.
@@ -505,5 +503,5 @@ func (hgcl *HgClient) Encoding() string {
 
 // IsConnected tells if there is a connection to a Hg CS.
 func (hgcl *HgClient) IsConnected() bool {
-	return hgcl.hgserver != nil
+	return hgcl.hgServer != nil
 }
