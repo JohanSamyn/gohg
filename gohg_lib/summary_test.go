@@ -21,6 +21,6 @@ func TestHgClient_Summary(t *testing.T) {
 		t.Error(err)
 	}
 	if got != expected {
-		t.Fatalf("Test Summary: expected:\n%s and got:\n%s\n", expected, got)
+		t.Fatalf("Test Summary: expected:\n%s\n and got:\n%s\n", expected, got)
 	}
 }
