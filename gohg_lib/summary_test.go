@@ -16,11 +16,11 @@ func TestHgClient_Summary(t *testing.T) {
 		"branch: default\n" +
 		"commit: (clean)\n" +
 		"update: (current)\n"
-	got, err := hct.Summary()
+	got, err := hct.Summary([]string{})
 	if err != nil {
 		t.Error(err)
 	}
 	if got != expected {
-		t.Fatalf("Test Summary: expected:\n%s and got:\n%s", expected, got)
+		t.Fatalf("Test Summary: expected:\n%s and got:\n%s\n", expected, got)
 	}
 }

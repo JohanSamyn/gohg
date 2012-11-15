@@ -13,8 +13,9 @@ import (
 // TODO	Put the results in an appropriate go struct for possible further treatment.
 
 // Summary provides the 'hg summary' command.
-func (hgcl *HgClient) Summary() (string, error) {
-	data, hgerr, ret, err := hgcl.run([]string{"summary"})
+func (hgcl *HgClient) Summary(opts []string) (string, error) {
+	cmd := buildCmd([]string{"summary"}, opts)
+	data, hgerr, ret, err := hgcl.run(cmd)
 	if err != nil {
 		return "", fmt.Errorf("from hgcl.run(): %s", err)
 	}
