@@ -8,6 +8,11 @@
 
 * Add the possibility to use options with commands.
 
+* Find out if it is possible to interrupt the Hg CS when it is producing a
+lengthy result ? F;I; if someone commanded "hg log", with no limitation, for a
+rather big repo, one should be able to interrupt it. Such output should be
+accepted and passed thru in a buffered way too I guess.
+
 * Make sure Init() fails gracefuly when no Hg repo avail, and it 'asks' for
 the name of a new (= unexisting) repo in it's failure message, which much
 differ from the repo the Hg CS is associated with (which would fail anyway).
