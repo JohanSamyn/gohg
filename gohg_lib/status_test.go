@@ -20,7 +20,7 @@ func TestHgClient_Status_Clean(t *testing.T) {
 		t.Error(err)
 	}
 	if string(got) != string(expected) {
-		t.Fatalf("Test Status (clean): expected:\n%s\n and got:\n%s\n", expected, got)
+		t.Fatalf("Test Status (clean): expected:\n%s\n but got:\n%s\n", expected, got)
 	}
 }
 
@@ -46,6 +46,6 @@ func TestHgClient_Status_Dirty(t *testing.T) {
 	}
 
 	if string(got) == string(expected) {
-		t.Fatalf("Test Status (dirty): expected:\n%s\n and got:\n%s\n", expected, got)
+		t.Fatalf("Test Status (dirty): expected:\n%s\n but got:\n%s\n", expected, got)
 	}
 }

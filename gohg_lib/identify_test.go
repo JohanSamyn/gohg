@@ -21,7 +21,7 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 		t.Error(err)
 	}
 	if got != expected {
-		t.Fatalf("Test Identify: expected:\n%s\n and got:\n%s\n", expected, got)
+		t.Fatalf("Test Identify: expected:\n%s\n but got:\n%s\n", expected, got)
 	}
 }
 
@@ -51,7 +51,7 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 // 	// 	t.Error(err)
 // 	// }
 // 	// if got != expected {
-// 	// 	t.Fatalf("Test Identify: expected:\n%s and got:\n%s\n", expected, got)
+// 	// 	t.Fatalf("Test Identify: expected:\n%s but got:\n%s\n", expected, got)
 // 	// }
 // }
 
