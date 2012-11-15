@@ -26,7 +26,7 @@ func (hgcl *HgClient) Init(path string) error {
 	if err1 != nil {
 		return fmt.Errorf("Init() -> filepath.Abs(): %s", err1)
 	}
-	if path == "" || path == "." || fa == hgcl.Repo() {
+	if path == "" || path == "." || fa == hgcl.RepoRoot() {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}
