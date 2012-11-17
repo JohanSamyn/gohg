@@ -16,7 +16,7 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 	defer teardown(t, hct)
 
 	var expected string = "000000000000 tip\n"
-	got, err := hct.Identify([]string{})
+	got, err := hct.Identify(nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -46,7 +46,7 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 
 // 	// use a regex to match the (any) hash
 // 	// var expected string = "000000000000 tip\n"
-// 	// got, err := hct.Identify([]string{})
+// 	// got, err := hct.Identify(nil)
 // 	// if err != nil {
 // 	// 	t.Error(err)
 // 	// }

@@ -13,7 +13,7 @@ func TestHgClient_Log_EmptyRepo(t *testing.T) {
 	defer teardown(t, hct)
 
 	// log should be empty for newly created repo
-	data, err := hct.Log([]string{})
+	data, err := hct.Log(nil)
 	if err != nil {
 		t.Error(err)
 	}

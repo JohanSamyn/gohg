@@ -33,10 +33,10 @@ func TestHgClient_Status_Dirty(t *testing.T) {
 	// have to make the working dir dirty !
 	f, err := os.Create(hct.RepoRoot() + "/a")
 	_, _ = f.Write([]byte{'a', 'a', 'a'})
+	f.Sync()
 	f.Close()
-
 	// add all there is to add to the repo
-	_, err = hct.Add([]string{})
+	_, err = hct.Add(nil)
 
 	// now we can perform the real test
 	expected := []byte{}
@@ -44,7 +44,6 @@ func TestHgClient_Status_Dirty(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-
 	if string(got) == string(expected) {
 		t.Fatalf("Test Status (dirty): expected:\n%s\n but got:\n%s\n", expected, got)
 	}

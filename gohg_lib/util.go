@@ -5,7 +5,7 @@
 package gohg_lib
 
 func buildCmd(cmd []string, opts []string) []string {
-	if len(opts) == 0 {
+	if opts == nil || len(opts) == 0 {
 		return cmd
 	}
 	fullcmd := make([]string, len(cmd)+len(opts))

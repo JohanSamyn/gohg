@@ -16,7 +16,7 @@ func TestHgClient_Summary(t *testing.T) {
 		"branch: default\n" +
 		"commit: (clean)\n" +
 		"update: (current)\n"
-	got, err := hct.Summary([]string{})
+	got, err := hct.Summary(nil)
 	if err != nil {
 		t.Error(err)
 	}
