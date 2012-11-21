@@ -2,18 +2,26 @@
 
 (in no particular order, and order can change anytime)
 
-* Add the other Hg CS channels to readToHg() and sendToHg().
+* Is it really necessary to have a seperate method for each command ?
+As they are all very alike, maybe I can come up with some generic command
+method, and lead all commands to it ?
+Having a seperate method for each one does offer the possibility to add some
+more things, like converting the result of certain commands into a more Go-like
+format. F.i. returning log info as a map of changesets (key = hash), so each
+element of a cset is easily addressable without the client having to parse the
+gohg result.
+
+* Add the other Hg CS channels to readFromHg() and sendToHg().
 
 * Allow to start the Hg CS in debug mode (logging to '-').
 
-* Add the possibility to use options with commands.
-
 * Find out if it is possible to interrupt the Hg CS when it is producing a
-lengthy result ? F;I; if someone commanded "hg log", with no limitation, for a
-rather big repo, one should be able to interrupt it. Such output should be
-accepted and passed thru in a buffered way too I guess.
+lengthy result ? F.i. if someone commanded "hg log", with no limitation, for a
+rather big repo, one should be able to interrupt it. Like you can type ctrl-c
+on the commandline. Such output should be accepted and passed thru in a buffered
+way too I guess.
 
-* Make sure Init() fails gracefuly when no Hg repo avail, and it 'asks' for
+* Make sure init() fails gracefuly when no Hg repo avail, and it 'asks' for
 the name of a new (= unexisting) repo in it's failure message, which much
 differ from the repo the Hg CS is associated with (which would fail anyway).
 
@@ -56,6 +64,13 @@ testing situation. (or: e0001 for errors, w0001 for warnings, etc.?)
 Question: can we manage more than 1 repo from the same Hg Command Server
 instance ? If not then I don't think multiple connections will work.
 But maybe we can manage more than one Hg CS instance, each to a different repo ?
+Further thoughts on this:
+Think about offering one entrypoint into gohg, always passing in the reporoot
+and the command to run. Then gohg checks if there is already a task for that
+reporoot or not. If not, your command is run, otherwise it has to wait. So we
+can queue the commands for one reporoot (perhaps in a buffered channel). Maybe
+that will require the caller (client) also to wait on a (unbuffered) channel for
+the result ? This would be a kind of hosting version of gohg.
 
 * ADVANCED - Add the possibility to switch to another repo then the one used to
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
@@ -67,6 +82,8 @@ start the Hg CS. If possible, that is. Maybe this should be solved by adding a p
 
 * DONE - Refactor Connect() and Close() into methods of HgServer.
 Or even of HgClient, and eliminate HgServer ?
+
+* DONE - Add the possibility to use options with commands.
 
 
 * WONTFIX (at least not in the near future) -
