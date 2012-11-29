@@ -19,7 +19,7 @@ import (
 // 	}
 
 // 	cfg := make([]string, 0)
-// 	err = Hgclient.Connect("M:/DEV/hg-stable/hg", repo, cfg)
+// 	err = Hgclient.Connect("M:/DEV/hg-stable/hg" /*"hg"*/, repo, cfg)
 // 	if err != nil {
 // 		log.Fatal(err)
 // 	}

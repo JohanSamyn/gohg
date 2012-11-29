@@ -95,8 +95,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	hgcl.hgExe = hgexe
 	if hgcl.hgExe == "" {
 		// Let the OS determine what Mercurial to run for this machine/user combination.
-		// hgcl.hgExe = "hg"
-		hgcl.hgExe = "M:/DEV/hg-stable/hg"
+		hgcl.hgExe = "hg"
 	}
 
 	// The Hg Command Server needs a repository.
