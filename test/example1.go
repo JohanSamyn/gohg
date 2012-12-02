@@ -46,12 +46,21 @@ func main() {
 	fmt.Println("--------------------")
 
 	var s string
-	if s, err = hc.Summary(); err != nil {
+	if s, err = hc.Summary([]string{}); err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("[[summary]]:\n%s", s)
+
+	fmt.Println("--------------------")
+
+	var l []byte
+	if l, err = hc.Log([]string{"-l", "2"}); err != nil {
 		fmt.Println(err)
 		return
 	}
 	// use 'go run example1.go | less' (or more) to view big results (such as a full log)
-	fmt.Printf("[[Summary]]:\n%s", s)
+	fmt.Printf("[[log -l 2]]:\n%s", l)
 
 	// give time to see the Hg CS session live and die from Process Explorer
 	// fmt.Print("waiting...")
