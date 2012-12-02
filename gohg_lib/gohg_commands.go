@@ -43,7 +43,7 @@ func (hgcl *HgClient) Init(path string, opts []string) error {
 			" from the Command Server repo path")
 	}
 
-	allopts := buildCmd(fa, []string{})
+	allopts := prependStringToSlice(fa, []string{})
 	_, err := command(hgcl, "init", allopts)
 	return err
 }

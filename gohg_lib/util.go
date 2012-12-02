@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-func buildCmd(cmd string, opts []string) []string {
+func prependStringToSlice(cmd string, opts []string) []string {
 	// adds a string as the first element of an existing slice-of-strings
 
 	c := []string{cmd}
@@ -24,7 +24,7 @@ func buildCmd(cmd string, opts []string) []string {
 func command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
 	// boilerplate code for all commands
 
-	cmdline := buildCmd(cmd, opts)
+	cmdline := prependStringToSlice(cmd, opts)
 	data, hgerr, ret, err := hgcl.run(cmdline)
 	if err != nil {
 		return nil, fmt.Errorf("from hgcl.run(): %s", err)
