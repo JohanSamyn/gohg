@@ -32,7 +32,7 @@ func TestHgClient_Version_Short(t *testing.T) {
 
 	_, err := hct.Version()
 	if err != nil {
-		t.Error("HgClient.Version() failed with -q flag")
+		t.Error("HgClient.Version() failed")
 	}
 }
 
