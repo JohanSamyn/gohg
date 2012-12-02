@@ -11,5 +11,5 @@
 * The default repo to work on is the first one found in/up the current path.
 * Accepts the Hg repo to work on as the second argument to the Connect() method.
 * Implements commands: Init(), Summary(), Version()
-* Has a testsuite that can be run by: 'cd gohg_lib; go test'
+* Has a testsuite that can be run by: 'cd gohg; go test'
 * Does not allow for interaction with Hg (yet?).

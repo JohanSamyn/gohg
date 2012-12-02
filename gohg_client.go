@@ -8,7 +8,7 @@
 // For Mercurial see: http://mercurial.selenic.com.
 //
 // For the Hg Command Server see: http://mercurial.selenic.com/wiki/CommandServer.
-package gohg_lib
+package gohg
 
 import (
 	"bytes"

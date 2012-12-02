@@ -26,7 +26,7 @@ Only Go and it's standard library; at least for now.
 
 At the commandline type:
 
-    go get bitbucket.org/gohg/gohg/gohg_lib
+    go get bitbucket.org/gohg/gohg/gohg
 
 ### Example
 
@@ -34,7 +34,7 @@ At the commandline type:
     package main
 
     import (
-        "bitbucket.org/gohg/gohg/gohg_lib"
+        "bitbucket.org/gohg/gohg/gohg"
         "fmt"
         "log"
     )
@@ -44,7 +44,7 @@ At the commandline type:
         hgexe := "hg"
         repo := "/path/to/hgrepo"
         var cfg []string
-        hc := gohg_lib.NewHgClient()
+        hc := gohg.NewHgClient()
         if err = hc.Connect(hgexe, repo, cfg); err != nil {
             log.Fatal(err)
         }

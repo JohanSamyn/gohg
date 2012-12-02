@@ -90,7 +90,7 @@ Or even of HgClient, and eliminate HgServer ?
 Perhaps rename gohg.go into gohglib.go, and add a new gohg.go as a command,
 so one can use the 'gohg' command from the commandline the same way one uses
 the original 'hg' one (see the chg tool Yuya developped) ? Used another
-solution: I put gohg.go into folder gohg_lib, so I can add a command sourcefile
+solution: I put gohg.go into folder gohg, so I can add a command sourcefile
 in folder gohg_cmd.
 
 * WONTFIX - ADVANCED -

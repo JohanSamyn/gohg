@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE file.
 
-package gohg_lib_test
+package gohg_test
 
 import (
 	"os"
