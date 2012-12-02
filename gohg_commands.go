@@ -11,6 +11,20 @@ import (
 	"strings"
 )
 
+func command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
+	// boilerplate code for all commands
+
+	cmdline := prependStringToSlice(cmd, opts)
+	data, hgerr, ret, err := hgcl.run(cmdline)
+	if err != nil {
+		return nil, fmt.Errorf("from hgcl.run(): %s", err)
+	}
+	if ret != 0 || hgerr != nil {
+		return nil, fmt.Errorf("Status(): returncode=%d\nhgerr:\n%s\n", data, string(hgerr))
+	}
+	return data, nil
+}
+
 // Add provides the 'hg add' command.
 func (hgcl *HgClient) Add(opts []string) ([]byte, error) {
 	data, err := command(hgcl, "add", opts)
