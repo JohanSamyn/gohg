@@ -4,19 +4,19 @@
 
 package gohg_lib
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
-// Status provides the 'hg status' command.
-func (hgcl *HgClient) Status(opts []string) ([]byte, error) {
-	cmd := buildCmd([]string{"status"}, opts)
-	data, hgerr, ret, err := hgcl.run(cmd)
-	if err != nil {
-		return nil, fmt.Errorf("from hgcl.run(): %s", err)
-	}
-	if ret != 0 || hgerr != nil {
-		return nil, fmt.Errorf("Status(): returncode=%d\nhgerr:\n%s\n", ret, string(hgerr))
-	}
-	return data, nil
-}
+// // Status provides the 'hg status' command.
+// func (hgcl *HgClient) Status(opts []string) ([]byte, error) {
+// 	cmd := buildCmd("status", opts)
+// 	data, hgerr, ret, err := hgcl.run(cmd)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("from hgcl.run(): %s", err)
+// 	}
+// 	if ret != 0 || hgerr != nil {
+// 		return nil, fmt.Errorf("Status(): returncode=%d\nhgerr:\n%s\n", ret, string(hgerr))
+// 	}
+// 	return data, nil
+// }

@@ -4,19 +4,19 @@
 
 package gohg_lib
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
-// Log provides the 'hg log' command.
-func (hgcl *HgClient) Log(opts []string) ([]byte, error) {
-	cmd := buildCmd([]string{"log"}, opts)
-	data, hgerr, ret, err := hgcl.run(cmd)
-	if err != nil {
-		return nil, fmt.Errorf("from hgcl.run(): %s", err)
-	}
-	if ret != 0 || hgerr != nil {
-		return nil, fmt.Errorf("Log(): returncode=%d\nhgerr:\n%s\n", ret, string(hgerr))
-	}
-	return data, nil
-}
+// // Log provides the 'hg log' command.
+// func (hgcl *HgClient) Log(opts []string) ([]byte, error) {
+// 	cmd := buildCmd("log", opts)
+// 	data, hgerr, ret, err := hgcl.run(cmd)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("from hgcl.run(): %s", err)
+// 	}
+// 	if ret != 0 || hgerr != nil {
+// 		return nil, fmt.Errorf("Log(): returncode=%d\nhgerr:\n%s\n", ret, string(hgerr))
+// 	}
+// 	return data, nil
+// }

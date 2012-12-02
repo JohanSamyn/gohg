@@ -8,13 +8,16 @@ import (
 	"fmt"
 )
 
-func buildCmd(cmd []string, opts []string) []string {
+func buildCmd(cmd string, opts []string) []string {
+	// adds a string as the first element of an existing slice-of-strings
+
+	c := []string{cmd}
 	if opts == nil || len(opts) == 0 {
-		return cmd
+		return c
 	}
-	fullcmd := make([]string, len(cmd)+len(opts))
-	copy(fullcmd, cmd)
-	copy(fullcmd[len(cmd):], opts)
+	fullcmd := make([]string, len(c)+len(opts))
+	copy(fullcmd, c)
+	copy(fullcmd[len(c):], opts)
 	return fullcmd
 }
 
