@@ -13,5 +13,5 @@
 *   Implements commands: Add(), Identity(), Log(), Init(), Status(), Summary(), Version().
 *   Has a testsuite that can be run by: 'cd test & go test' (Linux/OS X: 'cd test; go test').
 *   There's an example1.go program in the examples folder, acting as a second kind of test.
-*   There's also a test for the example program from the README (test/example_test.go).
+*   There's also a test for the example program from the README (test/readme_test.go).
 *   Does not allow for interaction with Hg (yet).
