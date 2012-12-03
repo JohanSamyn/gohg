@@ -12,5 +12,5 @@
 *   Accepts the Hg repo to work on as the second argument to the Connect() method.
 *   Implements commands: Add(), Identity(), Log(), Init(), Status(), Summary(), Version().
 *   Has a testsuite that can be run by: 'cd test & go test' (Linux/OS X: 'cd test; go test').
-*	There's an example1.go program in the examples folder.
+*   There's an example1.go program in the examples folder.
 *   Does not allow for interaction with Hg (yet).
