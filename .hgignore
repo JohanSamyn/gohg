@@ -17,7 +17,6 @@ test/t.cmd
 pyhglib.py*
 commit-steps.txt
 test/log.txt
-readme-test.go
 
 syntax:regexp
 ^bin/
