@@ -21,7 +21,7 @@ Only Go and it's standard library.
 
 At the commandline type:
 
-    go get bitbucket.org/gohg/gohg/gohg
+    go get bitbucket.org/gohg/gohg
 
 ### Example
 
@@ -29,7 +29,7 @@ At the commandline type:
     package main
 
     import (
-        "bitbucket.org/gohg/gohg/gohg"
+        "bitbucket.org/gohg/gohg"
         "fmt"
         "log"
     )
