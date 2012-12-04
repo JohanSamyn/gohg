@@ -45,7 +45,7 @@ func main() {
 
 	fmt.Println("--------------------")
 
-	var s string
+	var s []byte
 	if s, err = hc.Summary([]string{}); err != nil {
 		fmt.Println(err)
 		return

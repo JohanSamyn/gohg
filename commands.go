@@ -75,9 +75,9 @@ func (hgcl *HgClient) Status(opts []string) ([]byte, error) {
 }
 
 // Summary provides the 'hg summary' command.
-func (hgcl *HgClient) Summary(opts []string) (string, error) {
+func (hgcl *HgClient) Summary(opts []string) ([]byte, error) {
 	data, err := command(hgcl, "summary", opts)
-	return string(data), err
+	return data, err
 }
 
 // Version implements the 'hg version -q' command,

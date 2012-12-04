@@ -24,7 +24,7 @@ func main() {
 	}
 	defer hc.Close()
 
-	var s string
+	var s []byte
 	if s, err = hc.Summary([]string{}); err != nil {
 		log.Println(err)
 		return
