@@ -2,6 +2,8 @@
 
 (in no particular order, and order can change anytime)
 
+* Remove one of Encoding() and HgEncoding() in client.go.
+
 * Is it really necessary to have a seperate method for each command ?
 As they are all very alike, maybe I can come up with some generic command
 method, and lead all commands to it ?
