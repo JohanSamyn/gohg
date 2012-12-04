@@ -2,8 +2,6 @@
 
 (in no particular order, and order can change anytime)
 
-* Remove one of Encoding() and HgEncoding() in client.go.
-
 * Is it really necessary to have a seperate method for each command ?
 As they are all very alike, maybe I can come up with some generic command
 method, and lead all commands to it ?
@@ -77,6 +75,8 @@ the result ? This would be a kind of hosting version of gohg.
 * ADVANCED - Add the possibility to switch to another repo then the one used to
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
+
+* DONE - Remove one of Encoding() and HgEncoding() in client.go.
 
 * DONE - ADD TESTS !!! (good for learning to use the testing package too)
 

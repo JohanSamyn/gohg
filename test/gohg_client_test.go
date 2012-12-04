@@ -5,8 +5,8 @@
 package gohg_test
 
 import (
-	// "fmt"
-	"testing"
+// "fmt"
+// "testing"
 )
 
 // func TestConnect(*testing.T) {
@@ -24,21 +24,6 @@ import (
 // 		log.Fatal(err)
 // 	}
 // }
-
-func TestHgEncoding(t *testing.T) {
-	hct := setup(t)
-	defer teardown(t, hct)
-
-	var err error
-	var encoding string
-	encoding, err = hct.HgEncoding()
-	if err != nil {
-		t.Errorf("from HgEncoding : %s", string(err.Error()))
-	}
-	if encoding == "" {
-		t.Error("HgEncoding did not return a valid encoding")
-	}
-}
 
 // func TestRun(t *testing.T) {
 // 	hct := setup(t)

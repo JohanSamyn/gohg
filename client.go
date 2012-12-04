@@ -386,13 +386,6 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
-// HgEncoding returns the servers encoding on the result channel.
-// Currently only UTF8 is supported.
-func (hgcl *HgClient) HgEncoding() (string, error) {
-	enc, _, _, err := runInHg(hgcl, "getencoding", []string{})
-	return string(enc), err
-}
-
 // run allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
 func (hgcl *HgClient) run(hgcmd []string) (data []byte, hgerr []byte, ret int32, err error) {
