@@ -32,9 +32,9 @@ func (hgcl *HgClient) Add(opts []string) ([]byte, error) {
 }
 
 // Identify provides the 'hg identify' command.
-func (hgcl *HgClient) Identify(opts []string) (string, error) {
+func (hgcl *HgClient) Identify(opts []string) ([]byte, error) {
 	data, err := command(hgcl, "identify", opts)
-	return string(data), err
+	return data, err
 }
 
 // TODO	Implement the flags for hg init.
