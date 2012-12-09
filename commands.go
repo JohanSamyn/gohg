@@ -20,7 +20,8 @@ func command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error)
 		return nil, fmt.Errorf("from hgcl.run(): %s", err)
 	}
 	if ret != 0 || hgerr != nil {
-		return nil, fmt.Errorf("Status(): returncode=%d\nhgerr:\n%s\n", data, string(hgerr))
+		return nil, fmt.Errorf("%s(): returncode=%d\nhgerr:\n%s\n",
+			strings.Title(cmd), data, string(hgerr))
 	}
 	return data, nil
 }
