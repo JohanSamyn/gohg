@@ -2,6 +2,9 @@
 
 (in no particular order, and order can change anytime)
 
+* Package gohg should never panic itself, nor use *Fatal*. That is to be left
+to the using software. It should simply always return errors.
+
 * Is it really necessary to have a seperate method for each command ?
 As they are all very alike, maybe I can come up with some generic command
 method, and lead all commands to it ?
