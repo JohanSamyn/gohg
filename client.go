@@ -397,8 +397,13 @@ func (hgcl *HgClient) run(hgcmd []string) (data []byte, hgerr []byte, ret int32,
 // and fetches the result (using readFromHg).
 func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, []byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
+	var err error
 
-	err := sendToHg(hgcl, command, args)
+	if command == "" || hgcmd == nil {
+		return nil, nil, 0, fmt.Errorf("Invalid empty or blank params passed to run().")
+	}
+
+	err = sendToHg(hgcl, command, args)
 	if err != nil {
 		fmt.Println(err)
 		return nil, nil, 0, err

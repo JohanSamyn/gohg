@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
+func Command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
 	// boilerplate code for all commands
 
 	cmdline := PrependStringToSlice(cmd, opts)
@@ -28,13 +28,13 @@ func command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error)
 
 // Add provides the 'hg add' command.
 func (hgcl *HgClient) Add(opts []string) ([]byte, error) {
-	data, err := command(hgcl, "add", opts)
+	data, err := Command(hgcl, "add", opts)
 	return data, err
 }
 
 // Identify provides the 'hg identify' command.
 func (hgcl *HgClient) Identify(opts []string) ([]byte, error) {
-	data, err := command(hgcl, "identify", opts)
+	data, err := Command(hgcl, "identify", opts)
 	return data, err
 }
 
@@ -59,25 +59,25 @@ func (hgcl *HgClient) Init(path string, opts []string) error {
 	}
 
 	allopts := PrependStringToSlice(fa, []string{})
-	_, err := command(hgcl, "init", allopts)
+	_, err := Command(hgcl, "init", allopts)
 	return err
 }
 
 // Add provides the 'hg log' command.
 func (hgcl *HgClient) Log(opts []string) ([]byte, error) {
-	data, err := command(hgcl, "log", opts)
+	data, err := Command(hgcl, "log", opts)
 	return data, err
 }
 
 // Status provides the 'hg status' command.
 func (hgcl *HgClient) Status(opts []string) ([]byte, error) {
-	data, err := command(hgcl, "status", opts)
+	data, err := Command(hgcl, "status", opts)
 	return data, err
 }
 
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary(opts []string) ([]byte, error) {
-	data, err := command(hgcl, "summary", opts)
+	data, err := Command(hgcl, "summary", opts)
 	return data, err
 }
 
@@ -87,7 +87,7 @@ func (hgcl *HgClient) Version() (string, error) {
 	var err error
 	if hgcl.hgVersion == "" {
 		var data []byte
-		data, err = command(hgcl, "version", []string{"-q"})
+		data, err = Command(hgcl, "version", []string{"-q"})
 		if err == nil {
 			ver := strings.Split(string(data), "\n")[0]
 			ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]
