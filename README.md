@@ -45,10 +45,10 @@ At the commandline type:
         }
         defer hc.Close()
 
-        var s string
-        if s, err = hc.Summary(); err != nil {
+        var summ []byte
+        if summ, err = hc.Summary(); err != nil {
             log.Println(err)
             return
         }
-        fmt.Printf("[[Summary for repo %s]]:\n%s", repo, s)
+        fmt.Printf("[[Summary for repo %s]]:\n%s", repo, summ)
     }

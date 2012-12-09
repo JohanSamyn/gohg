@@ -24,10 +24,10 @@ func main() {
 	}
 	defer hc.Close()
 
-	var s []byte
-	if s, err = hc.Summary([]string{}); err != nil {
+	var summ []byte
+	if summ, err = hc.Summary([]string{}); err != nil {
 		log.Println(err)
 		return
 	}
-	fmt.Printf("[[Summary for repo %s]]:\n%s", repo, s)
+	fmt.Printf("[[Summary for repo %s]]:\n%s", repo, summ)
 }
