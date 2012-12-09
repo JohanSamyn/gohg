@@ -14,7 +14,7 @@ import (
 func command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
 	// boilerplate code for all commands
 
-	cmdline := prependStringToSlice(cmd, opts)
+	cmdline := PrependStringToSlice(cmd, opts)
 	data, hgerr, ret, err := hgcl.run(cmdline)
 	if err != nil {
 		return nil, fmt.Errorf("from hgcl.run(): %s", err)
@@ -58,7 +58,7 @@ func (hgcl *HgClient) Init(path string, opts []string) error {
 			" from the Command Server repo path")
 	}
 
-	allopts := prependStringToSlice(fa, []string{})
+	allopts := PrependStringToSlice(fa, []string{})
 	_, err := command(hgcl, "init", allopts)
 	return err
 }

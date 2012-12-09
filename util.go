@@ -4,7 +4,7 @@
 
 package gohg
 
-func prependStringToSlice(cmd string, opts []string) []string {
+func PrependStringToSlice(cmd string, opts []string) []string {
 	// adds a string as the first element of an existing slice-of-strings
 
 	c := []string{cmd}
