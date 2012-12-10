@@ -2,6 +2,19 @@
 
 (in no particular order, and order can change anytime)
 
+* Make the return of the commands in gohg a slice-of-strings (separated by the
+linefeed in the Hg output). That way you already avoid having trouble with
+multi-byte chars (runes) when parsing. It will also make tests easier (slice
+only comparable to nil).
+
+* Make sure nothing in gohg depends on translatable pieces in Hg.
+
+* log.Fatal should only be used at the topmost level (and probably even never
+in a lib !?)
+
+* hct.Version() : test and compare with a "commandline call to the same hg"
+and capturing cmd.Output
+
 * Package gohg should never panic itself, nor use *Fatal*. That is to be left
 to the using software. It should simply always return errors.
 
