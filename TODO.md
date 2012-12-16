@@ -2,14 +2,17 @@
 
 (in no particular order, and order can change anytime)
 
+* Verify() should return the data _and_ the error info returned by the Hg CS,
+as this is important info for the caller. So Command() should return both the
+data and the error info returned by the Hg CS.
+Maybe we should allow all commands to return the hgerr info?
+
 * Encoding (in the hellomessage) should be UTF-8.
 
 * Make the return of the commands in gohg a slice-of-strings (separated by the
 linefeed in the Hg output). That way you already avoid having trouble with
 multi-byte chars (runes) when parsing. It will also make tests easier (slice
 only comparable to nil).
-
-* Make sure nothing in gohg depends on translatable pieces in Hg.
 
 * Tests should make use of the returncode of commands too. And of the fact that
 function command() returns nil as data when an error was detected.
@@ -145,3 +148,7 @@ See http://code.google.com/p/winsvc/ and search for it's counterpart for Python.
 If the Hg CS aborts (because of an unknown command f.i.), gracefully
 re-establish the connection. Up to a max number of times, otherwise abort the
 client too.
+
+* WONTFIX Make sure nothing in gohg depends on translatable pieces in Hg.
+This is not necessary, as we assure HGPLAIN=True, so all that Hg returns is
+in english.
