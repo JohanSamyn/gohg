@@ -4,7 +4,8 @@
 
 package gohg
 
-// comment the one above, and use the one below to run this program
+// comment the one above, and use the one below to run this program using:
+// C:\...\bitbucket.org\gohg\gohg> go run test/readme-test.go
 // package main
 
 import (

@@ -46,7 +46,7 @@ At the commandline type:
         defer hc.Close()
 
         var summ []byte
-        if summ, err = hc.Summary(); err != nil {
+        if summ, err = hc.Summary([]string{}); err != nil {
             log.Println(err)
             return
         }
