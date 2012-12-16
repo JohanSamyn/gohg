@@ -11,6 +11,9 @@ only comparable to nil).
 
 * Make sure nothing in gohg depends on translatable pieces in Hg.
 
+* Tests should make use of the returncode of commands too. And of the fact that
+function command() returns nil as data when an error was detected.
+
 * log.Fatal should only be used at the topmost level (and probably even never
 in a lib !?)
 
