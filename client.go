@@ -92,6 +92,15 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return fmt.Errorf("Connect(): already running a Hg Command Server for %s", hgcl.repoRoot)
 	}
 
+	// Set some environment variables, so we can depend on a known situation.
+	// HGPLAIN: Enabling this also assures Hg itself works in english,
+	// so we can depend on some strings.
+	os.Setenv("HGPLAIN", "True")
+	// HGRCPATH: Use only the .hg/hgrc from the repo itself.
+	// This one should perhaps be guarded with a passed-in option.
+	os.Setenv("HGRCPATH", "")
+	os.Setenv("HGENCODING", "UTF-8")
+
 	hgcl.hgExe = hgexe
 	if hgcl.hgExe == "" {
 		// Let the OS determine what Mercurial to run for this machine/user combination.
