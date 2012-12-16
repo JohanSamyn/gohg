@@ -84,7 +84,7 @@ func (hgcl *HgClient) Summary(opts []string) ([]byte, error) {
 	return data, err
 }
 
-// Verify provides the 'hg vearify' command.
+// Verify provides the 'hg verify' command.
 func (hgcl *HgClient) Verify(opts []string) ([]byte, error) {
 	data, err := Command(hgcl, "verify", opts)
 	return data, err
