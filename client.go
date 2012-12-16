@@ -104,7 +104,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.hgExe = hgexe
 	if hgcl.hgExe == "" {
-		// Let the OS determine what Mercurial to run for this machine/user combination.
+		// Let the OS determine what Mercurial to run.
 		hgcl.hgExe = "hg"
 	}
 
