@@ -390,7 +390,7 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	var i int
 	i, err = hgcl.pipeIn.Write(data)
 	if i != len(data) {
-		return fmt.Errorf("sendToHg(): writing data failed: %s", err)
+		return fmt.Errorf("sendToHg(): writing data to Hg CS failed: %s", err)
 	}
 
 	return nil
