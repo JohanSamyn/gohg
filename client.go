@@ -70,7 +70,7 @@ func NewHgClient() *HgClient {
 //		(see function locateRepository()).
 //	config
 //		Configuration settings that will be added to the necessary
-//		fixed settings (see composeHgConfig() for more). Optional.
+//		fixed settings (see composeStartupConfig() for more). Optional.
 //
 // Returns an error if the connection could not be established properly.
 func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) error {
@@ -118,11 +118,11 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return fmt.Errorf("Connect(): could not find a Hg repository at: %s", reponame)
 	}
 
-	var hgconfig []string
-	hgconfig = composeHgConfig(hgcl.hgExe, hgcl.repoRoot, config)
+	var hgServerArgs []string
+	hgServerArgs = composeStartupConfig(hgcl.hgExe, hgcl.repoRoot, config)
 
 	hgcl.hgServer = exec.Command(hgcl.hgExe)
-	hgcl.hgServer.Args = hgconfig
+	hgcl.hgServer.Args = hgServerArgs
 	hgcl.hgServer.Dir = hgcl.repoRoot
 
 	hgcl.pipeOut, err = hgcl.hgServer.StdoutPipe()
@@ -218,9 +218,9 @@ func locateRepository(reponame string) (string, error) {
 
 } // locateRepository()
 
-// composeHgConfig handles the different config settings that will be used
+// composeStartupConfig handles the different config settings that will be used
 // to make the connection with the Hg CS. It concerns specific Hg settings.
-func composeHgConfig(hgcmd string, repo string, config []string) []string {
+func composeStartupConfig(hgcmd string, repo string, config []string) []string {
 	var hgconfig []string
 
 	// Zoek uit hoe de inhoud van parameter config kan toegevoegd worden zonder in conflict
@@ -248,7 +248,7 @@ func composeHgConfig(hgcmd string, repo string, config []string) []string {
 		"serve", "--cmdserver", "pipe")
 
 	return hgconfig
-} // composeHgConfig()
+} // composeStartupConfig()
 
 // readHelloMessage reads the special hello message send by the Hg CS.
 //
