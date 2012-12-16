@@ -13,12 +13,15 @@ import (
 
 func Command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
 	// boilerplate code for all commands
+	// This function is only exported for the sake of tests.
+	// Wonder how this could be avoided.
 
 	cmdline := PrependStringToSlice(cmd, opts)
 	data, hgerr, ret, err := hgcl.run(cmdline)
 	if err != nil {
 		return nil, fmt.Errorf("from hgcl.run(): %s", err)
 	}
+	// Maybe make this 2 checks, to differentiate between ret and hgerr?
 	if ret != 0 || hgerr != nil {
 		return nil, fmt.Errorf("%s(): returncode=%d\nhgerr:\n%s\n",
 			strings.Title(cmd), ret, string(hgerr))

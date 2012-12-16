@@ -18,7 +18,7 @@ func TestCommand_Ok(t *testing.T) {
 
 	data, err := gohg.Command(hct, "identify", []string{})
 	if err != nil || data == nil || string(data) == "" {
-		t.Fatalf("Command did not perform correctly.")
+		t.Fatalf("Did not perform correctly.")
 	}
 }
 
@@ -39,8 +39,8 @@ func TestCommand_HgError(t *testing.T) {
 	defer teardown(t, hct)
 
 	// catching hgerr in Command()
-	_, err := gohg.Command(hct, "dad", []string{})
+	_, err := gohg.Command(hct, "nonexistinghgcommand", []string{})
 	if err == nil {
-		t.Fatalf("Did not get catch hgerr.")
+		t.Fatalf("Did not catch hgerr.")
 	}
 }
