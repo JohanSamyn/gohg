@@ -98,7 +98,9 @@ from the pipe.
 * Place all error messages together (in a separate file?) and give them a
 concise varname (perhaps 'msg0001' ?) that can be more easily used in a
 testing situation. (or: e0001 for errors, w0001 for warnings, etc.?)
-
+This seems not to be the standard Go practice though. Only when some error
+condition occurs in different places it seems they are turned into some global
+constant form and moved into a common place.
 
 * KNOWN LIMITATION - Currently only UTF8 encoding is supported.
 
