@@ -84,6 +84,12 @@ func (hgcl *HgClient) Summary(opts []string) ([]byte, error) {
 	return data, err
 }
 
+// Verify provides the 'hg vearify' command.
+func (hgcl *HgClient) Verify(opts []string) ([]byte, error) {
+	data, err := Command(hgcl, "verify", opts)
+	return data, err
+}
+
 // Version implements the 'hg version -q' command,
 // and only returns the version number.
 func (hgcl *HgClient) Version() (string, error) {
