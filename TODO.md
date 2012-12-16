@@ -2,6 +2,8 @@
 
 (in no particular order, and order can change anytime)
 
+* Encoding (in the hellomessage) should be UTF-8.
+
 * Make the return of the commands in gohg a slice-of-strings (separated by the
 linefeed in the Hg output). That way you already avoid having trouble with
 multi-byte chars (runes) when parsing. It will also make tests easier (slice
@@ -11,6 +13,27 @@ only comparable to nil).
 
 * log.Fatal should only be used at the topmost level (and probably even never
 in a lib !?)
+
+* Add methods to add options and flags to commands, so no syntax errors can be
+made. See [JavaHg](https://bitbucket.org/aragost/javahg) for an example.
+Maybe add a struct containing all possible options and flags as booleans, and
+let the caller activate them, and pass-in data for them when appropriate.
+
+* Set HGRCPATH (explicitely) to "" and HGPLAIN to "True".
+The first assures that only the hgrc file from the repo itself is used.
+The second assures all Mercurial output is with default values, including
+internationalization. Use HGPLAINEXCEPT="i18n" to keep internationalization,
+what can be useful for error messages f.i.. (see CommandServerFactory.scala in
+[Meutrino](http://code.google.com/p/meutrino))
+DO NOT use HGPLAINEXCEPT for keeping the language, as gohg should shield the
+caller from those mesages, and return "it's own" error messages. Or not ?
+
+* Assure that Close() cannot terminate the connection when a command is still
+running, unless a kind of --force option is passed-in.
+
+* The Verify() command should simply whether the result channel returns 0 (=ok)
+or 1 (=error). In case of 0 it simply returns something like "Repo %s is healthy".
+In the case of 1 it should pass thru the errors produced by Hg.
 
 * hct.Version() : test and compare with a "commandline call to the same hg"
 and capturing cmd.Output
