@@ -78,8 +78,9 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// for example:
 	// hgcl.hgServer =
 	//		exec.Command("M:/DEV/hg-stable/hg",	// the Hg command
+	// 		"--cwd", "C:/DEV/go/src/golout/",	// the repo
 	// 		"-R", "C:/DEV/go/src/golout/",		// the repo
-	// 		"--config", "ui.interactive=True",	// mandatory settings
+	// 		"--config", "ui.interactive=False",	// mandatory settings
 	// 		"--config", "extensions.color=!",	// more settings (for Windows)
 	// 		"serve", "--cmdserver", "pipe")		// start the Command Server
 
