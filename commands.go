@@ -21,7 +21,7 @@ func Command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error)
 	}
 	if ret != 0 || hgerr != nil {
 		return nil, fmt.Errorf("%s(): returncode=%d\nhgerr:\n%s\n",
-			strings.Title(cmd), data, string(hgerr))
+			strings.Title(cmd), ret, string(hgerr))
 	}
 	return data, nil
 }
