@@ -264,7 +264,7 @@ func readHelloMessage(hgcl *HgClient) error {
 	if len(s) == 0 {
 		return errors.New("no hello message data received from Hg Command Server")
 	}
-	const t1 = "hg serve [OPTION]"
+	const t1 = "hg se" // hg returned: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
 		log.Fatalf("Need at least version 1.9 of Mercurial to use the Command Server.\n"+
 			"Used hgexe: '%s'\n", hgcl.HgExe())
