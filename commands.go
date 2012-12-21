@@ -11,10 +11,8 @@ import (
 	"strings"
 )
 
-func Command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
+func command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error) {
 	// boilerplate code for all commands
-	// This function is only exported for the sake of tests.
-	// Wonder how this could be avoided.
 
 	cmdline := PrependStringToSlice(cmd, opts)
 	data, hgerr, ret, err := hgcl.run(cmdline)
@@ -31,13 +29,13 @@ func Command(hgcl *HgClient, cmd string, opts []string) (data []byte, err error)
 
 // Add provides the 'hg add' command.
 func (hgcl *HgClient) Add(opts []string) ([]byte, error) {
-	data, err := Command(hgcl, "add", opts)
+	data, err := command(hgcl, "add", opts)
 	return data, err
 }
 
 // Identify provides the 'hg identify' command.
 func (hgcl *HgClient) Identify(opts []string) ([]byte, error) {
-	data, err := Command(hgcl, "identify", opts)
+	data, err := command(hgcl, "identify", opts)
 	return data, err
 }
 
@@ -62,31 +60,31 @@ func (hgcl *HgClient) Init(path string, opts []string) error {
 	}
 
 	allopts := PrependStringToSlice(fa, []string{})
-	_, err := Command(hgcl, "init", allopts)
+	_, err := command(hgcl, "init", allopts)
 	return err
 }
 
 // Add provides the 'hg log' command.
 func (hgcl *HgClient) Log(opts []string) ([]byte, error) {
-	data, err := Command(hgcl, "log", opts)
+	data, err := command(hgcl, "log", opts)
 	return data, err
 }
 
 // Status provides the 'hg status' command.
 func (hgcl *HgClient) Status(opts []string) ([]byte, error) {
-	data, err := Command(hgcl, "status", opts)
+	data, err := command(hgcl, "status", opts)
 	return data, err
 }
 
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary(opts []string) ([]byte, error) {
-	data, err := Command(hgcl, "summary", opts)
+	data, err := command(hgcl, "summary", opts)
 	return data, err
 }
 
 // Verify provides the 'hg verify' command.
 func (hgcl *HgClient) Verify(opts []string) ([]byte, error) {
-	data, err := Command(hgcl, "verify", opts)
+	data, err := command(hgcl, "verify", opts)
 	return data, err
 }
 
@@ -96,7 +94,7 @@ func (hgcl *HgClient) Version() (string, error) {
 	var err error
 	if hgcl.hgVersion == "" {
 		var data []byte
-		data, err = Command(hgcl, "version", []string{"-q"})
+		data, err = command(hgcl, "version", []string{"-q"})
 		if err == nil {
 			ver := strings.Split(string(data), "\n")[0]
 			ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]
