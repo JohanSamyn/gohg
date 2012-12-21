@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE file.
 
-package gohg_test
+package gohg
 
 import (
-	"bitbucket.org/gohg/gohg"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -14,7 +13,7 @@ import (
 
 var testdir string
 
-func setup(t *testing.T) (hct *gohg.HgClient) {
+func setup(t *testing.T) (hct *HgClient) {
 	// Set var hgexe to whatever is appropriate for your situation.
 	// You can also change it to test with different versions of Mercurial.
 	hgexe := "hg"
@@ -33,7 +32,7 @@ func setup(t *testing.T) (hct *gohg.HgClient) {
 
 	repo := testdir
 
-	hct = gohg.NewHgClient()
+	hct = NewHgClient()
 	cfg := make([]string, 0)
 	err = hct.Connect(hgexe, repo, cfg)
 	if err != nil {
@@ -42,7 +41,7 @@ func setup(t *testing.T) (hct *gohg.HgClient) {
 	return hct
 }
 
-func teardown(t *testing.T, hct *gohg.HgClient) {
+func teardown(t *testing.T, hct *HgClient) {
 	err := hct.Close()
 	if err != nil {
 		t.Errorf("from Close(): %s", string(err.Error()))

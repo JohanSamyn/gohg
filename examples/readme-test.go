@@ -2,11 +2,7 @@
 // Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE file.
 
-package gohg
-
-// comment the one above, and use the one below to run this program using:
-// C:\...\bitbucket.org\gohg\gohg> go run test/readme-test.go
-// package main
+package main
 
 import (
 	"bitbucket.org/gohg/gohg"
@@ -30,5 +26,5 @@ func main() {
 		log.Println(err)
 		return
 	}
-	fmt.Printf("[[Summary for repo %s]]:\n%s", repo, summ)
+	fmt.Printf("[[Summary for repo %s]]:\n%s\n", repo, summ)
 }

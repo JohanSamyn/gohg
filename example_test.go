@@ -4,15 +4,14 @@
 
 // This program is an example of how to use the gohg library.
 
-package gohg_test
+package gohg
 
 import (
-	"bitbucket.org/gohg/gohg"
 	"log"
 )
 
 func ExampleHgClient_Connect() {
-	hc := gohg.NewHgClient()
+	hc := NewHgClient()
 	if err := hc.Connect("hg", ".", []string{""}); err != nil {
 		log.Fatal(err)
 	}

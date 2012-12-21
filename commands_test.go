@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE file.
 
-package gohg_test
+package gohg
 
 import (
-	"bitbucket.org/gohg/gohg"
 	"strings"
 	"testing"
 )
@@ -16,7 +15,7 @@ func TestCommand_Ok(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	data, err := gohg.Command(hct, "identify", []string{})
+	data, err := Command(hct, "identify", []string{})
 	if err != nil || data == nil || string(data) == "" {
 		t.Fatalf("Did not perform correctly.")
 	}
@@ -28,7 +27,7 @@ func TestCommand_runError(t *testing.T) {
 	// and so catching err in Command()
 	teardown(t, hct)
 
-	_, err := gohg.Command(hct, "", []string{})
+	_, err := Command(hct, "", []string{})
 	if err == nil || strings.Contains(err.Error(), "from hgcl.run():") == false {
 		t.Fatalf("Did not get hgcl().run error.")
 	}
@@ -39,7 +38,7 @@ func TestCommand_HgError(t *testing.T) {
 	defer teardown(t, hct)
 
 	// catching hgerr in Command()
-	_, err := gohg.Command(hct, "nonexistinghgcommand", []string{})
+	_, err := Command(hct, "nonexistinghgcommand", []string{})
 	if err == nil {
 		t.Fatalf("Did not catch hgerr.")
 	}

@@ -50,5 +50,5 @@ At the commandline type:
             log.Println(err)
             return
         }
-        fmt.Printf("[[Summary for repo %s]]:\n%s", repo, summ)
+        fmt.Printf("[[Summary for repo %s]]:\n%s\n", repo, summ)
     }
