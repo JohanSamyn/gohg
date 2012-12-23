@@ -8,7 +8,9 @@ import (
 	"testing"
 )
 
-func TestHgClient_Summary(t *testing.T) {
+// TODO	Add tests for the --remote and --mq options, and for setting the repo explicitely.
+
+func TestHgClient_Summary_NoOptions(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
@@ -16,7 +18,12 @@ func TestHgClient_Summary(t *testing.T) {
 		"branch: default\n" +
 		"commit: (clean)\n" +
 		"update: (current)\n"
-	got, err := hct.Summary(nil)
+	scmd := NewSummary()
+	// scmd = scmd.SetRepo(hct.RepoRoot())
+	// scmd = scmd.SetRepo("C:/DEV/go/src/bitbucket.org/gohg/gohg")
+	// scmd = scmd.SetRemote(true)
+	got, err := hct.Summary(scmd)
+	// got, err := hct.Summary(NewSummary())
 	if err != nil {
 		t.Error(err)
 	}
