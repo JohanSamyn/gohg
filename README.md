@@ -46,7 +46,8 @@ At the commandline type:
         defer hc.Close()
 
         var summ []byte
-        if summ, err = hc.Summary([]string{}); err != nil {
+        scmd := gohg.NewSummary()
+        if summ, err = hc.Summary(scmd); err != nil {
             log.Println(err)
             return
         }

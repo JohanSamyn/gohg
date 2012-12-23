@@ -43,7 +43,8 @@ func main() {
 	fmt.Println("--------------------")
 
 	var s []byte
-	if s, err = hc.Summary([]string{}); err != nil {
+	scmd := gohg.NewSummary()
+	if s, err = hc.Summary(scmd); err != nil {
 		fmt.Println(err)
 		return
 	}
