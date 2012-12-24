@@ -9,42 +9,30 @@ import (
 )
 
 type SummaryOpt interface {
-	AddOpt(*SummaryCmd)
+	AddSummaryOpt(*SummaryCmd)
 }
 
-type O_repository string
-
-func (o O_repository) AddOpt(s *SummaryCmd) {
+func (o O_repository) AddSummaryOpt(s *SummaryCmd) {
 	s.O_repository = string(o)
 }
 
-type O_remote bool
-
-func (o O_remote) AddOpt(s *SummaryCmd) {
+func (o O_remote) AddSummaryOpt(s *SummaryCmd) {
 	s.O_remote = bool(o)
 }
 
-type O_mq bool
-
-func (o O_mq) AddOpt(s *SummaryCmd) {
+func (o O_mq) AddSummaryOpt(s *SummaryCmd) {
 	s.O_mq = bool(o)
 }
 
-type O_debug bool
-
-func (o O_debug) AddOpt(s *SummaryCmd) {
+func (o O_debug) AddSummaryOpt(s *SummaryCmd) {
 	s.O_debug = bool(o)
 }
 
-type O_traceback bool
-
-func (o O_traceback) AddOpt(s *SummaryCmd) {
+func (o O_traceback) AddSummaryOpt(s *SummaryCmd) {
 	s.O_traceback = bool(o)
 }
 
-type O_profile bool
-
-func (o O_profile) AddOpt(s *SummaryCmd) {
+func (o O_profile) AddSummaryOpt(s *SummaryCmd) {
 	s.O_profile = bool(o)
 }
 
@@ -72,7 +60,7 @@ func NewSummary(opts ...SummaryOpt) *SummaryCmd {
 
 	// apply option values given by the user
 	for _, o := range opts {
-		o.AddOpt(cmd)
+		o.AddSummaryOpt(cmd)
 	}
 
 	return cmd

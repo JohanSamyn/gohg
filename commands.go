@@ -11,6 +11,15 @@ import (
 	"strings"
 )
 
+type (
+	O_repository string
+	O_remote     bool
+	O_mq         bool
+	O_debug      bool
+	O_traceback  bool
+	O_profile    bool
+)
+
 func command(hgcl *HgClient, cmd []string) (data []byte, err error) {
 	// boilerplate code for all commands
 
