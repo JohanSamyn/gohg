@@ -8,14 +8,45 @@ import (
 	"fmt"
 )
 
-type (
-	O_repository string
-	O_remote     bool
-	O_mq         bool
-	O_debug      bool
-	O_traceback  bool
-	O_profile    bool
-)
+type SummaryOpt interface {
+	AddOpt(*SummaryCmd)
+}
+
+type O_repository string
+
+func (o O_repository) AddOpt(s *SummaryCmd) {
+	s.O_repository = string(o)
+}
+
+type O_remote bool
+
+func (o O_remote) AddOpt(s *SummaryCmd) {
+	s.O_remote = bool(o)
+}
+
+type O_mq bool
+
+func (o O_mq) AddOpt(s *SummaryCmd) {
+	s.O_mq = bool(o)
+}
+
+type O_debug bool
+
+func (o O_debug) AddOpt(s *SummaryCmd) {
+	s.O_debug = bool(o)
+}
+
+type O_traceback bool
+
+func (o O_traceback) AddOpt(s *SummaryCmd) {
+	s.O_traceback = bool(o)
+}
+
+type O_profile bool
+
+func (o O_profile) AddOpt(s *SummaryCmd) {
+	s.O_profile = bool(o)
+}
 
 type SummaryCmd struct {
 	// define all necessary options/flags
@@ -27,7 +58,7 @@ type SummaryCmd struct {
 	O_profile    bool
 }
 
-func NewSummary(opts ...interface{}) *SummaryCmd {
+func NewSummary(opts ...SummaryOpt) *SummaryCmd {
 	// applies type defaults
 	cmd := new(SummaryCmd)
 
@@ -39,27 +70,9 @@ func NewSummary(opts ...interface{}) *SummaryCmd {
 	cmd.O_traceback = false
 	cmd.O_profile = false
 
-	// apply option values given by user
-	if len(opts) > 0 {
-		for _, o := range opts {
-			switch v := o.(type) {
-			case O_repository:
-				cmd.O_repository = string(v)
-			case O_remote:
-				cmd.O_remote = bool(v)
-			case O_mq:
-				cmd.O_mq = bool(v)
-			case O_debug:
-				cmd.O_debug = bool(v)
-			case O_traceback:
-				cmd.O_traceback = bool(v)
-			case O_profile:
-				cmd.O_profile = bool(v)
-			case nil:
-			default:
-				panic(fmt.Errorf("Bad option: (%T) %v", o, o))
-			}
-		}
+	// apply option values given by the user
+	for _, o := range opts {
+		o.AddOpt(cmd)
 	}
 
 	return cmd
