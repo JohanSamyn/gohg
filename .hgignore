@@ -17,6 +17,7 @@ test/t.cmd
 pyhglib.py*
 commit-steps.txt
 test/log.txt
+gohg-coverage*.*
 
 syntax:regexp
 ^bin/
