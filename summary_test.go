@@ -19,9 +19,16 @@ func TestHgClient_Summary_NoOptions(t *testing.T) {
 		"commit: (clean)\n" +
 		"update: (current)\n"
 	scmd := NewSummary()
+	// scmd := NewSummary(0)
+
 	// scmd = scmd.SetRepo(hct.RepoRoot())
 	// scmd = scmd.SetRepo("C:/DEV/go/src/bitbucket.org/gohg/gohg")
 	// scmd = scmd.SetRemote(true)
+
+	// scmd, err := NewSummary(int(0))
+
+	// scmd, err := NewSummary(O_remote(true), O_mq(true), O_test(true))
+
 	got, err := hct.Summary(scmd)
 	// got, err := hct.Summary(NewSummary())
 	if err != nil {
