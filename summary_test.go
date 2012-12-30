@@ -18,22 +18,26 @@ func TestHgClient_Summary_NoOptions(t *testing.T) {
 		"branch: default\n" +
 		"commit: (clean)\n" +
 		"update: (current)\n"
-	scmd := NewSummary()
-	// scmd := NewSummary(0)
 
-	// scmd = scmd.SetRepo(hct.RepoRoot())
-	// scmd = scmd.SetRepo("C:/DEV/go/src/bitbucket.org/gohg/gohg")
-	// scmd = scmd.SetRemote(true)
+	// example 1
+	got, err := hct.Summary()
 
-	// scmd, err := NewSummary(int(0))
+	// example 2
+	// got, err := hct.Summary(O_profile(true))
 
-	// scmd, err := NewSummary(O_remote(true), O_mq(true), O_test(true))
+	// example 3
+	// p := O_profile(true)
+	// got, err := hct.Summary(p)
 
-	got, err := hct.Summary(scmd)
-	// got, err := hct.Summary(NewSummary())
+	// example 4
+	// var p O_profile
+	// p = true
+	// got, err := hct.Summary(p)
+
 	if err != nil {
 		t.Error(err)
 	}
+
 	if string(got) != expected {
 		t.Fatalf("Test Summary: expected:\n%s\n but got:\n%s\n", expected, got)
 	}

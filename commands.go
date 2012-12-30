@@ -11,15 +11,6 @@ import (
 	"strings"
 )
 
-type (
-	O_repository string
-	O_remote     bool
-	O_mq         bool
-	O_debug      bool
-	O_traceback  bool
-	O_profile    bool
-)
-
 func command(hgcl *HgClient, cmd []string) (data []byte, err error) {
 	// boilerplate code for all commands
 
@@ -32,7 +23,6 @@ func command(hgcl *HgClient, cmd []string) (data []byte, err error) {
 	// Maybe make this 2 checks, to differentiate between ret and hgerr?
 	if ret != 0 || hgerr != nil {
 		return nil, fmt.Errorf("%s(): returncode=%d\nhgerr:\n%s\n",
-			// strings.Title(cmd), ret, string(hgerr))
 			strings.Title(cmd[0]), ret, string(hgerr))
 	}
 	return data, nil
