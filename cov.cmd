@@ -19,5 +19,5 @@ gocov test %1 > data\%2-coverage.json
 echo === Creating logfile...
 gocov report data\%2-coverage.json > data\%2-coverage.log
 echo === Annotating functions...
-gocov annotate data\%2-coverage.json %2.* > data\%2-coverage-annotate.log
+gocov annotate data\%2-coverage.json .* > data\%2-coverage-annotate.log
 echo === Done!
