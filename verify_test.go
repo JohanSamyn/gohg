@@ -6,6 +6,7 @@ package gohg
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -36,8 +37,17 @@ func TestHgClient_Verify_Sick(t *testing.T) {
 		t.Fatal(err)
 	}
 	// cause some integrity problem
-	err = os.Rename(hct.RepoRoot()+"\\.hg\\store\\00manifest.i",
-		hct.RepoRoot()+"\\.hg\\store\\00manifest.i_BAK")
+	var from string
+	var to string
+	from, err = filepath.Abs(hct.RepoRoot() + "/.hg/store/00manifest.i")
+	if err != nil {
+		t.Error(err)
+	}
+	to, err = filepath.Abs(from + "_BAK")
+	if err != nil {
+		t.Error(err)
+	}
+	err = os.Rename(from, to)
 	if err != nil {
 		t.Fatal(err)
 	}
