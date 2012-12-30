@@ -6,13 +6,18 @@
 ::		cov gohg gohg
 ::
 echo === Deleting existing logfiles...
-if exist %2-coverage.json (del %2-coverage.json)
-if exist %2-coverage.log (del %2-coverage.log)
-if exist %2-coverage-annotate.log (del %2-coverage-annotate.log)
+if exist data\. (
+if exist data\%2-coverage.json (del data\%2-coverage.json)
+if exist data\%2-coverage.log (del data\%2-coverage.log)
+if exist data\%2-coverage-annotate.log (del data\%2-coverage-annotate.log)
+goto new
+)
+mkdir data
+:new
 echo === Gathering coverage info...
-gocov test %1 > %2-coverage.json
+gocov test %1 > data\%2-coverage.json
 echo === Creating logfile...
-gocov report %2-coverage.json > %2-coverage.log
+gocov report data\%2-coverage.json > data\%2-coverage.log
 echo === Annotating functions...
-gocov annotate %2-coverage.json %2.* > %2-coverage-annotate.log
+gocov annotate data\%2-coverage.json %2.* > data\%2-coverage-annotate.log
 echo === Done!

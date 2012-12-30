@@ -6,23 +6,30 @@
 #
 
 echo === Deleting existing logfiles...
-if [ -f $2-coverage.json ]
+if [ -d data ]
 then
-  rm $2-coverage.json
+  if [ -f data/$2-coverage.json ]
+  then
+    rm data/$2-coverage.json
+  fi
+  if [ -f data/$2-coverage.log ]
+  then
+    rm data/$2-coverage.log
+  fi
+  if [ -f data/$2-coverage-annotate.log ]
+  then
+    rm data/$2-coverage-annotate.log
+  fi
+  goto new
+else
+  mkdir data; chmod 777 data
 fi
-if [ -f $2-coverage.log ]
-then
-  rm $2-coverage.log
-fi
-if [ -f $2-coverage-annotate.log ]
-then
-  rm $2-coverage-annotate.log
-fi
+:new
 echo === Gathering coverage info...
-gocov test $1 > $2-coverage.json
+gocov test $1 > data/$2-coverage.json
 echo === Creating logfile...
-gocov report $2-coverage.json > $2-coverage.log
+gocov report data/$2-coverage.json > data/$2-coverage.log
 echo === Annotating functions...
-gocov annotate $2-coverage.json .* > $2-coverage-annotate.log
+gocov annotate data/$2-coverage.json .* > data/$2-coverage-annotate.log
 echo "=== Done!"
 
