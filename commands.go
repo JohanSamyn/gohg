@@ -92,19 +92,3 @@ func (hgcl *HgClient) Status(opts []string) ([]byte, error) {
 	data, err := commandOld(hgcl, "status", opts)
 	return data, err
 }
-
-// Version implements the 'hg version -q' command,
-// and only returns the version number.
-func (hgcl *HgClient) Version() (string, error) {
-	var err error
-	if hgcl.hgVersion == "" {
-		var data []byte
-		data, err = commandOld(hgcl, "version", []string{"-q"})
-		if err == nil {
-			ver := strings.Split(string(data), "\n")[0]
-			ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]
-			hgcl.hgVersion = ver
-		}
-	}
-	return hgcl.hgVersion, err
-}
