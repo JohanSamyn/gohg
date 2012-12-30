@@ -20,11 +20,9 @@ then
   then
     rm data/$2-coverage-annotate.log
   fi
-  goto new
 else
   mkdir data; chmod 777 data
 fi
-:new
 echo === Gathering coverage info...
 gocov test $1 > data/$2-coverage.json
 echo === Creating logfile...
