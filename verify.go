@@ -60,9 +60,6 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 	if cmd.O_debug == true {
 		hgcmd = append(hgcmd, "--debug")
 	}
-	if cmd.O_time == true {
-		hgcmd = append(hgcmd, "--time")
-	}
 	if cmd.O_traceback == true {
 		hgcmd = append(hgcmd, "--traceback")
 	}

@@ -20,7 +20,6 @@ type (
 	// so that each HgClient can only work on "it's own" repository ?
 	// O_repository string
 
-	O_time      bool //    --time
 	O_traceback bool //    --traceback
 	O_verbose   bool // -v --verbose
 )
@@ -70,10 +69,6 @@ func (o O_remote) addOption(i interface{}) {
 // func (o O_repository) addOption(i interface{}) {
 // 	reflect.ValueOf(i).Elem().FieldByName("O_repository").SetString(string(o))
 // }
-
-func (o O_time) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_time").SetBool(bool(o))
-}
 
 func (o O_traceback) addOption(i interface{}) {
 	reflect.ValueOf(i).Elem().FieldByName("O_traceback").SetBool(bool(o))
