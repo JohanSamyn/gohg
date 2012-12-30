@@ -7,6 +7,7 @@ package gohg
 import (
 	"errors"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -22,8 +23,11 @@ func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	path := testdir + "\\gohg-init-success\\"
-	err := os.RemoveAll(path)
+	path, err := filepath.Abs(testdir + "/gohg-init-success/")
+	if err != nil {
+		t.Error(err)
+	}
+	err = os.RemoveAll(path)
 	if err != nil {
 		t.Fatal(err)
 	}
