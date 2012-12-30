@@ -193,7 +193,7 @@ func locateRepository(reponame string) (string, error) {
 	repo, err = filepath.Abs(repo)
 	if err != nil {
 		return "", fmt.Errorf("%s\ncould not determine absolute path for: %s",
-			err, repo)
+			err.Error(), repo)
 	}
 	repo = filepath.Clean(repo)
 
