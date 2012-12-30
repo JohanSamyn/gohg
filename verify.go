@@ -40,6 +40,7 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 	// cmd.O_repository = "" // uses HgClient.RepoRoot()
 	cmd.O_mq = false
 	cmd.O_debug = false
+	cmd.O_time = false
 	cmd.O_traceback = false
 	cmd.O_profile = false
 
@@ -58,6 +59,9 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 	}
 	if cmd.O_debug == true {
 		hgcmd = append(hgcmd, "--debug")
+	}
+	if cmd.O_time == true {
+		hgcmd = append(hgcmd, "--time")
 	}
 	if cmd.O_traceback == true {
 		hgcmd = append(hgcmd, "--traceback")

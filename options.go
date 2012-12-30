@@ -9,23 +9,25 @@ import (
 )
 
 type (
-	O_debug   bool
-	O_limit   int
-	O_mq      bool
-	O_profile bool
-	O_quiet   bool
-	O_remote  bool
+	O_debug   bool //    --debug
+	O_limit   int  // -l --limit
+	O_mq      bool //    --mq
+	O_profile bool //    --profile
+	O_quiet   bool // -q --quiet
+	O_remote  bool //    --remote
 
-	// O_repository string
 	// Maybe I should not allow the -R option,
 	// so that each HgClient can only work on "it's own" repository ?
+	// O_repository string
 
-	O_traceback bool
-	O_verbose   bool
+	O_time      bool //    --time
+	O_traceback bool //    --traceback
+	O_verbose   bool // -v --verbose
 )
 
 type hgDebugOpts struct {
 	O_debug     bool
+	O_time      bool
 	O_traceback bool
 	O_profile   bool
 }
@@ -68,6 +70,10 @@ func (o O_remote) addOption(i interface{}) {
 // func (o O_repository) addOption(i interface{}) {
 // 	reflect.ValueOf(i).Elem().FieldByName("O_repository").SetString(string(o))
 // }
+
+func (o O_time) addOption(i interface{}) {
+	reflect.ValueOf(i).Elem().FieldByName("O_time").SetBool(bool(o))
+}
 
 func (o O_traceback) addOption(i interface{}) {
 	reflect.ValueOf(i).Elem().FieldByName("O_traceback").SetBool(bool(o))
