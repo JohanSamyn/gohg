@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE file.
 
+// This program is the same as in the README.md file.
+// It is meant for testing that code.
+
 package main
 
 import (
