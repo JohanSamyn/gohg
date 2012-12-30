@@ -28,7 +28,7 @@ func TestCommand_runError(t *testing.T) {
 	teardown(t, hct)
 
 	_, err := commandOld(hct, "", []string{})
-	if err == nil || strings.Contains(err.Error(), "from hgcl.run():") == false {
+	if err == nil || strings.Contains(err, "from hgcl.run():") == false {
 		t.Fatalf("Did not get hgcl().run error.")
 	}
 }
