@@ -33,7 +33,7 @@ type HgClient struct {
 	capabilities []string       // as per the hello message
 	encoding     string         // as per the hello message
 	repoRoot     string         // the full path to the Hg repo
-	hgVersion    string         // the version number only
+	hgversion    string         // the version number only
 	// config       []string
 }
 
@@ -148,9 +148,9 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return err
 	}
 
-	hgcl.hgVersion, err = hgcl.Version()
+	hgcl.hgversion, err = hgcl.Version()
 	if err != nil {
-		log.Fatalf("from HgVersion() : %s", err)
+		log.Fatalf("from Version() : %s", err)
 	}
 
 	return nil
@@ -485,9 +485,9 @@ func (hgcl *HgClient) HgExe() string {
 	return hgcl.hgExe
 }
 
-// HgVersion returns the Mercurial version of the connected Hg CS.
-func (hgcl *HgClient) HgVersion() string {
-	return hgcl.hgVersion
+// hgVersion returns the Mercurial version of the connected Hg CS.
+func (hgcl *HgClient) hgVersion() string {
+	return hgcl.hgversion
 }
 
 // Repo returns the root of the repository the connected Hg CS is working on.

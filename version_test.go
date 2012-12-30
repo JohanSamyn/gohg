@@ -48,7 +48,7 @@ func TestHgClient_Version_AsConnected(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if ver != hct.HgVersion() {
-		t.Error("HgClient.Version(): expected value " + hct.HgVersion() + " but got " + ver)
+	if ver != hct.hgVersion() {
+		t.Error("HgClient.Version(): expected value " + hct.hgVersion() + " but got " + ver)
 	}
 }
