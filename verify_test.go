@@ -37,17 +37,12 @@ func TestHgClient_Verify_Sick(t *testing.T) {
 		t.Fatal(err)
 	}
 	// cause some integrity problem
-	var from string
-	var to string
-	from, err = filepath.Abs(hct.RepoRoot() + "/.hg/store/00manifest.i")
+	var f string
+	f, err = filepath.Abs(hct.RepoRoot() + "/.hg/store/00manifest.i")
 	if err != nil {
 		t.Error(err)
 	}
-	to, err = filepath.Abs(from + "_BAK")
-	if err != nil {
-		t.Error(err)
-	}
-	err = os.Rename(from, to)
+	err = os.Rename(f, f+"_BAK")
 	if err != nil {
 		t.Fatal(err)
 	}
