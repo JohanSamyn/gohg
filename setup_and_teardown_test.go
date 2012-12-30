@@ -51,3 +51,20 @@ func teardown(t *testing.T, hct *HgClient) {
 		t.Errorf("teardown(): %s", string(err.Error()))
 	}
 }
+
+func addAndCommitFile(t *testing.T, hct *HgClient) error {
+	f, err := os.Create(hct.RepoRoot() + "/a")
+	_, _ = f.Write([]byte{'a', 'a', 'a'})
+	f.Sync()
+	f.Close()
+	// add all there is to add to the repo,
+	_, err = hct.Add(nil)
+	// commit it
+	var cmd *exec.Cmd
+	cmd = exec.Command(hct.HgExe(), "--cwd", hct.RepoRoot(), "commit", "-Am\"first commit\"")
+	if err = cmd.Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	return nil
+}

@@ -6,7 +6,6 @@ package gohg
 
 import (
 	"os"
-	"os/exec"
 	"testing"
 )
 
@@ -19,7 +18,7 @@ func TestHgClient_Verify_Healthy(t *testing.T) {
 		"crosschecking files in changesets and manifests\n" +
 		"checking files\n" +
 		"0 files, 0 changesets, 0 total revisions\n"
-	got, err := hct.Verify(nil)
+	got, err := hct.Verify()
 	if err != nil {
 		t.Error(err)
 	}
@@ -32,17 +31,8 @@ func TestHgClient_Verify_Sick(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	// have to make the working dir dirty
-	f, err := os.Create(hct.RepoRoot() + "/a")
-	_, _ = f.Write([]byte{'a', 'a', 'a'})
-	f.Sync()
-	f.Close()
-	// add all there is to add to the repo,
-	_, err = hct.Add(nil)
-	// commit it
-	var cmd *exec.Cmd
-	cmd = exec.Command(hct.HgExe(), "--cwd", hct.RepoRoot(), "commit", "-Am\"first commit\"")
-	if err = cmd.Run(); err != nil {
+	err := addAndCommitFile(t, hct)
+	if err != nil {
 		t.Fatal(err)
 	}
 	// cause some integrity problem
@@ -52,9 +42,7 @@ func TestHgClient_Verify_Sick(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// now we can perform the real test
-
-	_, err = hct.Verify(nil)
+	_, err = hct.Verify()
 	if err == nil {
 		t.Fatalf("Test Verify: did not get expected error")
 	}
