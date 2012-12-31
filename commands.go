@@ -5,9 +5,7 @@
 package gohg
 
 import (
-	"errors"
 	"fmt"
-	"path/filepath"
 	"strings"
 )
 
@@ -54,31 +52,6 @@ func (hgcl *HgClient) Add(opts []string) ([]byte, error) {
 func (hgcl *HgClient) Identify(opts []string) ([]byte, error) {
 	data, err := commandOld(hgcl, "identify", opts)
 	return data, err
-}
-
-// TODO	Implement the flags for hg init.
-
-// Init provides the 'hg init' command.
-//
-// Be aware of the fact that it cannot be used to initialize the repo you want
-// the (current) Hg CS to work on, as the Hg CS requires an existing repo.
-// But Init() can be used to create any new repo outside the one the Hg CS is
-// running for.
-func (hgcl *HgClient) Init(path string, opts []string) error {
-	var err1 error
-	var fa string
-	fa, err1 = filepath.Abs(path)
-	if err1 != nil {
-		return fmt.Errorf("Init() -> filepath.Abs(): %s", err1)
-	}
-	if path == "" || path == "." || fa == hgcl.RepoRoot() {
-		return errors.New("HgClient.Init: path for new repo must be different" +
-			" from the Command Server repo path")
-	}
-
-	allopts := PrependStringToSlice(fa, []string{})
-	_, err := commandOld(hgcl, "init", allopts)
-	return err
 }
 
 // Add provides the 'hg log' command.

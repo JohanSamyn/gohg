@@ -9,12 +9,13 @@ import (
 )
 
 type (
-	O_debug   bool //    --debug
-	O_limit   int  // -l --limit
-	O_mq      bool //    --mq
-	O_profile bool //    --profile
-	O_quiet   bool // -q --quiet
-	O_remote  bool //    --remote
+	O_debug    bool   //    --debug
+	O_filepath string // no equivalent Hg option, used by init
+	O_limit    int    // -l --limit
+	O_mq       bool   //    --mq
+	O_profile  bool   //    --profile
+	O_quiet    bool   // -q --quiet
+	O_remote   bool   //    --remote
 
 	// Maybe I should not allow the -R option,
 	// so that each HgClient can only work on "it's own" repository ?
@@ -43,6 +44,10 @@ type optionAdder interface {
 
 func (o O_debug) addOption(i interface{}) {
 	reflect.ValueOf(i).Elem().FieldByName("O_debug").SetBool(bool(o))
+}
+
+func (o O_filepath) addOption(i interface{}) {
+	reflect.ValueOf(i).Elem().FieldByName("O_filepath").SetString(string(o))
 }
 
 func (o O_limit) addOption(i interface{}) {
