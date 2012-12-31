@@ -396,6 +396,23 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
+func command(hgcl *HgClient, cmd []string) (data []byte, err error) {
+	// boilerplate code for all commands
+
+	// fmt.Printf("cmd = %s\nopts = %v\n", cmd[0], cmd[1:])
+
+	data, hgerr, ret, err := hgcl.run(cmd)
+	if err != nil {
+		return nil, fmt.Errorf("from hgcl.run(): %s", err)
+	}
+	// Maybe make this 2 checks, to differentiate between ret and hgerr?
+	if ret != 0 || hgerr != nil {
+		return nil, fmt.Errorf("%s(): returncode=%d\nhgerr:\n%s\n",
+			strings.Title(cmd[0]), ret, string(hgerr))
+	}
+	return data, nil
+}
+
 // run allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
 func (hgcl *HgClient) run(hgcmd []string) (data []byte, hgerr []byte, ret int32, err error) {
