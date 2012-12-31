@@ -1,0 +1,27 @@
+#
+# script for running go test
+#
+
+if [ "$1" == "" ]
+then
+  echo
+  echo "  usage:    'gtc <command> [-v]' or 'gtc all [-v]'"
+  echo
+  echo "  examples:    gtc summary"
+  echo "               gtc all"
+  echo
+else
+  if [ "$1" == "all" ]
+  then
+    go test $2 $3 $4 $5 $6 $7 $8 $9
+  else
+    if [ "$1" == "version" ]
+    then
+      go test $2 $3 $4 $5 $6 $7 $8 $9 client.go commands.go options.go util.go setup_and_teardown_test.go $1.go $1_test.go
+    else
+      # Need version.go to avoid compile error, cause Version() is called in client.go.
+      go test $2 $3 $4 $5 $6 $7 $8 $9 client.go commands.go options.go util.go version.go setup_and_teardown_test.go $1.go $1_test.go
+    fi
+  fi
+fi
+
