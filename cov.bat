@@ -29,9 +29,11 @@ goto end
 
 :usage
 echo.
-echo usage: cov ^<package^>
-echo
-echo Run this script from the package folder.
+echo   usage: cov ^<package^>
+echo.
+echo   example:  cov bitbucket.org/gohg/gohg
+echo.
+echo   Run this script from the package folder itself.
 echo.
 
 :end
