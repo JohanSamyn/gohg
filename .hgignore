@@ -17,13 +17,13 @@ test/t.cmd
 pyhglib.py*
 commit-steps.txt
 test/log.txt
-gohg-coverage*.*
 examples/opts-ex.go
 examples/opts-ex2.go
 testiface2.go
 testiface.go
 testiface2.go_BAK
 testiface.go_BAK
+covdata/*.*
 
 syntax:regexp
 ^bin/

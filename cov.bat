@@ -1,23 +1,37 @@
 @echo off
 ::
-:: usage: cov <package> <logfile-prefix>
-:: examples:
-::		cov . gohg
-::		cov gohg gohg
+:: script for using gocov
+:: see: https://github.com/axw/gocov
 ::
-echo === Deleting existing logfiles...
-if exist data\. (
-if exist data\%2-coverage.json (del data\%2-coverage.json)
-if exist data\%2-coverage.log (del data\%2-coverage.log)
-if exist data\%2-coverage-annotate.log (del data\%2-coverage-annotate.log)
-goto new
+
+if "%1" == "" (
+	goto usage
 )
-mkdir data
-:new
+
+echo === Deleting existing logfiles...
+if exist covdata\. (
+if exist covdata\coverage.json (del covdata\coverage.json)
+if exist covdata\coverage.log (del covdata\coverage.log)
+if exist covdata\coverage-annotate.log (del covdata\coverage-annotate.log)
+goto docov
+)
+mkdir covdata
+
+:docov
 echo === Gathering coverage info...
-gocov test %1 > data\%2-coverage.json
-echo === Creating logfile...
-gocov report data\%2-coverage.json > data\%2-coverage.log
+gocov test %1 > covdata\coverage.json
+echo === Creating summary report...
+gocov report covdata\coverage.json > covdata\coverage.log
 echo === Annotating functions...
-gocov annotate data\%2-coverage.json .* > data\%2-coverage-annotate.log
+gocov annotate covdata\coverage.json .* > covdata\coverage-annotate.log
 echo === Done!
+goto end
+
+:usage
+echo.
+echo usage: cov ^<package^>
+echo
+echo Run this script from the package folder.
+echo.
+
+:end

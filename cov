@@ -1,33 +1,39 @@
 #
-# usage: cov <package> <logfile-prefix>
-# examples:
-#		cov . gohg
-#		cov gohg gohg
+# script for using gocov
+# see: https://github.com/axw/gocov
 #
 
-echo === Deleting existing logfiles...
-if [ -d data ]
+if [ "$1" == "" ]
 then
-  if [ -f data/$2-coverage.json ]
-  then
-    rm data/$2-coverage.json
-  fi
-  if [ -f data/$2-coverage.log ]
-  then
-    rm data/$2-coverage.log
-  fi
-  if [ -f data/$2-coverage-annotate.log ]
-  then
-    rm data/$2-coverage-annotate.log
-  fi
+  echo
+  echo usage: cov <package>
+  echo
+  echo Run this script from the package folder.
+  echo
 else
-  mkdir data; chmod 777 data
+  echo === Deleting existing logfiles...
+  if [ -d covdata ]
+  then
+    if [ -f covdata/coverage.json ]
+    then
+      rm covdata/coverage.json
+    fi
+    if [ -f covdata/coverage.log ]
+    then
+      rm covdata/coverage.log
+    fi
+    if [ -f covdata/coverage-annotate.log ]
+    then
+      rm covdata/coverage-annotate.log
+    fi
+  else
+    mkdir covdata; chmod 777 covdata
+  fi
+  echo === Gathering coverage info...
+  gocov test $1 > covdata/coverage.json
+  echo === Creating summary report...
+  gocov report covdata/coverage.json > covdata/coverage.log
+  echo === Annotating functions...
+  gocov annotate covdata/coverage.json .* > covdata/coverage-annotate.log
+  echo "=== Done!"
 fi
-echo === Gathering coverage info...
-gocov test $1 > data/$2-coverage.json
-echo === Creating logfile...
-gocov report data/$2-coverage.json > data/$2-coverage.log
-echo === Annotating functions...
-gocov annotate data/$2-coverage.json .* > data/$2-coverage-annotate.log
-echo "=== Done!"
-
