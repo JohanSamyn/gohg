@@ -6,7 +6,7 @@
 if [ "$1" == "" ]
 then
   echo
-  echo usage: cov <package>
+  echo usage: cov "<package>"
   echo
   echo Run this script from the package folder.
   echo
