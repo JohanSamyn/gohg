@@ -26,7 +26,6 @@ type (
 
 type hgDebugOpts struct {
 	O_debug     bool
-	O_time      bool
 	O_traceback bool
 	O_profile   bool
 }
