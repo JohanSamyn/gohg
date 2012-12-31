@@ -19,10 +19,12 @@ goto end
 
 :usage
 echo.
-echo   usage:    'gt <command> [-v]' or 'gt all [-v]'
+echo   usage:    'gt ^<command^> [-v]' or 'gt all [-v]'
 echo.
 echo   examples: gt verify
 echo             gt all -v
+echo.
+echo   Run this script from the package folder itself.
 echo.
 
 :end
