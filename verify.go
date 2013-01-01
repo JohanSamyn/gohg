@@ -9,7 +9,6 @@ import (
 )
 
 type verifyCmd struct {
-	// O_repository string
 	O_mq bool
 	hgDebugOpts
 }
@@ -22,14 +21,6 @@ func (cmd *verifyCmd) String() string {
 		cmd.O_debug, cmd.O_debug, cmd.O_traceback, cmd.O_traceback, cmd.O_profile, cmd.O_profile)
 }
 
-// func (cmd *verifyCmd) String() string {
-// 	return fmt.Sprintf(
-// 		"verifyCmd = {\n    repository: (%T) %q\n    mq: (%T) %t\n"+
-// 			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-// 		cmd.O_repository, cmd.O_repository, cmd.O_mq, cmd.O_mq,
-// 		cmd.O_debug, cmd.O_debug, cmd.O_traceback, cmd.O_traceback, cmd.O_profile, cmd.O_profile)
-// }
-
 // Verify provides the 'hg verify' command.
 func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 
@@ -37,7 +28,6 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 	cmd := new(verifyCmd)
 
 	// apply library defaults
-	// cmd.O_repository = "" // uses HgClient.RepoRoot()
 	cmd.O_mq = false
 	cmd.O_debug = false
 	cmd.O_traceback = false
@@ -49,10 +39,6 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 	}
 
 	hgcmd := []string{"verify"}
-	// if cmd.O_repository != "" {
-	// 	hgcmd = append(hgcmd, "-R")
-	// 	hgcmd = append(hgcmd, cmd.O_repository)
-	// }
 	if cmd.O_mq == true {
 		hgcmd = append(hgcmd, "--mq")
 	}

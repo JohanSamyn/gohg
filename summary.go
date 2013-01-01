@@ -9,7 +9,6 @@ import (
 )
 
 type summaryCmd struct {
-	// O_repository string
 	O_remote bool
 	O_mq     bool
 	hgDebugOpts
@@ -23,14 +22,6 @@ func (cmd *summaryCmd) String() string {
 		cmd.O_debug, cmd.O_debug, cmd.O_traceback, cmd.O_traceback, cmd.O_profile, cmd.O_profile)
 }
 
-// func (cmd *summaryCmd) String() string {
-// 	return fmt.Sprintf(
-// 		"summaryCmd = {\n    repository: (%T) %q\n    remote: (%T) %t\n    mq: (%T) %t\n"+
-// 			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-// 		cmd.O_repository, cmd.O_repository, cmd.O_remote, cmd.O_remote, cmd.O_mq, cmd.O_mq,
-// 		cmd.O_debug, cmd.O_debug, cmd.O_traceback, cmd.O_traceback, cmd.O_profile, cmd.O_profile)
-// }
-
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary(opts ...optionAdder) ([]byte, error) {
 
@@ -38,7 +29,6 @@ func (hgcl *HgClient) Summary(opts ...optionAdder) ([]byte, error) {
 	cmd := new(summaryCmd)
 
 	// apply library defaults
-	// cmd.O_repository = "" // uses HgClient.RepoRoot()
 	cmd.O_remote = false
 	cmd.O_mq = false
 	cmd.O_debug = false
@@ -51,10 +41,6 @@ func (hgcl *HgClient) Summary(opts ...optionAdder) ([]byte, error) {
 	}
 
 	hgcmd := []string{"summary"}
-	// if cmd.O_repository != "" {
-	// 	hgcmd = append(hgcmd, "-R")
-	// 	hgcmd = append(hgcmd, cmd.O_repository)
-	// }
 	if cmd.O_remote == true {
 		hgcmd = append(hgcmd, "--remote")
 	}
