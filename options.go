@@ -43,31 +43,52 @@ type optionAdder interface {
 // So maybe this warning should be in some logfile or so.
 
 func (o O_debug) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_debug").SetBool(bool(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_debug")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
 }
 
 func (o O_filepath) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_filepath").SetString(string(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_filepath")
+	if f.IsValid() || f.CanSet() {
+		f.SetString(string(o))
+	}
 }
 
 func (o O_limit) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_limit").SetInt(int64(int(o)))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_limit")
+	if f.IsValid() || f.CanSet() {
+		f.SetInt(int64(int(o)))
+	}
 }
 
 func (o O_mq) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_mq").SetBool(bool(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_mq")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
 }
 
 func (o O_profile) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_profile").SetBool(bool(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_profile")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
 }
 
 func (o O_quiet) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_quiet").SetBool(bool(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_quite")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
 }
 
 func (o O_remote) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_remote").SetBool(bool(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_remote")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
 }
 
 // func (o O_repository) addOption(i interface{}) {
@@ -75,9 +96,15 @@ func (o O_remote) addOption(i interface{}) {
 // }
 
 func (o O_traceback) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_traceback").SetBool(bool(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_traceback")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
 }
 
 func (o O_verbose) addOption(i interface{}) {
-	reflect.ValueOf(i).Elem().FieldByName("O_verbose").SetBool(bool(o))
+	f := reflect.ValueOf(i).Elem().FieldByName("O_verbose")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
 }
