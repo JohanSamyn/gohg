@@ -30,13 +30,6 @@ type optionAdder interface {
 	addOption(interface{})
 }
 
-// addOption:
-// Maybe I have to add some check using reflect.CanSet() ?
-// see: http://stackoverflow.com/questions/6395076/in-golang-using-reflect-how-do-you-set-the-value-of-a-struct-field
-// And eventually give an appropriate warning msg like "Command 'bla' does not accept option 'bla'.".
-// But only as a warning, so still going on afterwards, just skipping the wrong option.
-// So maybe this warning should be in some logfile or so.
-
 func (o O_debug) addOption(i interface{}) {
 	f := reflect.ValueOf(i).Elem().FieldByName("O_debug")
 	if f.IsValid() || f.CanSet() {
