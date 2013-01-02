@@ -36,7 +36,7 @@ func TestHgClient_Status_Dirty(t *testing.T) {
 	f.Sync()
 	f.Close()
 	// add all there is to add to the repo
-	_, err = hct.Add(nil)
+	_, err = hct.Add()
 
 	// now we can perform the real test
 	expected := []byte{}
