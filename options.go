@@ -10,7 +10,7 @@ import (
 
 type (
 	O_debug     bool   //    --debug
-	O_filepath  string // no equivalent Hg option, used by init
+	O_destpath  string // no equivalent Hg option, used by Init()
 	O_limit     int    // -l --limit
 	O_mq        bool   //    --mq
 	O_profile   bool   //    --profile
@@ -37,8 +37,8 @@ func (o O_debug) addOption(i interface{}) {
 	}
 }
 
-func (o O_filepath) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_filepath")
+func (o O_destpath) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("O_destpath")
 	if f.IsValid() || f.CanSet() {
 		f.SetString(string(o))
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 type initCmd struct {
-	O_filepath string
+	O_destpath string
 	hgDebugOpts
 }
 
@@ -19,7 +19,7 @@ func (cmd *initCmd) String() string {
 	return fmt.Sprintf(
 		"initCmd = {\n    filepath: (%T) %q\n"+
 			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.O_filepath, cmd.O_filepath,
+		cmd.O_destpath, cmd.O_destpath,
 		cmd.O_debug, cmd.O_debug, cmd.O_traceback, cmd.O_traceback, cmd.O_profile, cmd.O_profile)
 }
 
@@ -37,7 +37,7 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	cmd := new(initCmd)
 
 	// apply library defaults
-	cmd.O_filepath = "."
+	cmd.O_destpath = "."
 	cmd.O_debug = false
 	cmd.O_traceback = false
 	cmd.O_profile = false
@@ -48,8 +48,8 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	}
 
 	hgcmd := []string{"init"}
-	if cmd.O_filepath != "" {
-		hgcmd = append(hgcmd, cmd.O_filepath)
+	if cmd.O_destpath != "" {
+		hgcmd = append(hgcmd, cmd.O_destpath)
 	}
 	if cmd.O_debug == true {
 		hgcmd = append(hgcmd, "--debug")
@@ -66,11 +66,11 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 
 	var err1 error
 	var fa string
-	fa, err1 = filepath.Abs(cmd.O_filepath)
+	fa, err1 = filepath.Abs(cmd.O_destpath)
 	if err1 != nil {
 		return fmt.Errorf("Init() -> filepath.Abs(): %s", err1)
 	}
-	if cmd.O_filepath == "" || cmd.O_filepath == "." || fa == hgcl.RepoRoot() {
+	if cmd.O_destpath == "" || cmd.O_destpath == "." || fa == hgcl.RepoRoot() {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}
