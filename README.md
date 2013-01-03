@@ -15,8 +15,8 @@ appearance, on both platforms.
 
 ### Dependencies
 
-Only Go and it's standard library. Though I'm using gocov for checking
-test coverage (see: https://github.com/axw/gocov).
+Only Go and it's standard library. Though I'm using
+[gocov](https://github.com/axw/gocov) for checking test coverage.
 
 ### Installation
 

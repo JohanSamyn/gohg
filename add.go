@@ -34,8 +34,10 @@ func (hgcl *HgClient) Add(opts ...optionAdder) ([]byte, error) {
 	cmd.O_profile = false
 
 	// apply option values given by the caller
-	for _, o := range opts {
-		o.addOption(cmd)
+	if len(opts) > 0 {
+		for _, o := range opts {
+			o.addOption(cmd)
+		}
 	}
 
 	hgcmd := []string{"add"}
