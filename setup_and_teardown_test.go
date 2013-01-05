@@ -58,7 +58,7 @@ func addAndCommitFile(t *testing.T, hct *HgClient) error {
 	f.Sync()
 	f.Close()
 	// add all there is to add to the repo,
-	_, err = hct.Add(nil)
+	_, err = hct.Add()
 	// commit it
 	var cmd *exec.Cmd
 	cmd = exec.Command(hct.HgExe(), "--cwd", hct.RepoRoot(), "commit", "-Am\"first commit\"")
