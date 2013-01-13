@@ -29,7 +29,7 @@ func main() {
 	if err = hc.Connect(hgexe, repo, cfg); err != nil {
 		log.Fatal(err)
 	}
-	defer hc.Close()
+	defer hc.Disconnect()
 	defer func() { fmt.Println("========== End of example1 ==========") }()
 
 	var v string

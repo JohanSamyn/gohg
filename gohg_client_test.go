@@ -15,7 +15,7 @@ import (
 // 	var repo = "."
 
 // 	if Hgclient.Connected {
-// 		Close()
+// 		Disconnect()
 // 	}
 
 // 	cfg := make([]string, 0)
@@ -41,9 +41,9 @@ import (
 // 	}
 // }
 
-// func TestClose(t *testing.T) {
-// 	err := Hgclient.Close()
+// func TestDisconnect(t *testing.T) {
+// 	err := Hgclient.Disconnect()
 // 	if err != nil {
-// 		t.Errorf("from Close(): %s", string(err.Error()))
+// 		t.Errorf("from Disconnect(): %s", string(err.Error()))
 // 	}
 // }

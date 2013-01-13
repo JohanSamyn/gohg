@@ -157,13 +157,13 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 } // Connect()
 
-// Close ends the connection with the Mercurial Command Server.
+// Disconnect ends the connection with the Mercurial Command Server.
 //
-// In fact it's closing the stdin of the Hg CS that closes the connection,
+// In fact it's closing the stdin of the Hg CS that disconnects,
 // as per the Hg CS documentation.
-func (hgcl *HgClient) Close() error {
+func (hgcl *HgClient) Disconnect() error {
 	if hgcl.hgServer == nil {
-		log.Println("Close(): Trying to close a closed hgServer.")
+		log.Println("Disconnect(): no connected hgServer.")
 		return nil
 	}
 
@@ -177,7 +177,7 @@ func (hgcl *HgClient) Close() error {
 		return err
 	}
 	return nil
-} // Close()
+} // Disconnect()
 
 // locateRepository assures we have a Mercurial repository available,
 // which is required for working with the Hg Command Server.

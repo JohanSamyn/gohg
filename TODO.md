@@ -34,8 +34,8 @@ what can be useful for error messages f.i.. (see CommandServerFactory.scala in
 DO NOT use HGPLAINEXCEPT for keeping the language, as gohg should shield the
 caller from those mesages, and return "it's own" error messages. Or not ?
 
-* Assure that Close() cannot terminate the connection when a command is still
-running, unless a kind of --force option is passed-in.
+* Assure that Disconnect() cannot terminate the connection when a command is
+still running, unless a kind of --force option is passed-in.
 
 * The Verify() command should simply whether the result channel returns 0 (=ok)
 or 1 (=error). In case of 0 it simply returns something like "Repo %s is healthy".
@@ -129,7 +129,7 @@ start the Hg CS. If possible, that is. Maybe this should be solved by adding a p
 
 * DONE - Use a dedicated repo for the tests.
 
-* DONE - Refactor Connect() and Close() into methods of HgServer.
+* DONE - Refactor Connect() and Disconnect() into methods of HgServer.
 Or even of HgClient, and eliminate HgServer ?
 
 * DONE - Add the possibility to use options with commands.

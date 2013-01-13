@@ -44,7 +44,7 @@ At the commandline type:
         if err = hc.Connect(hgexe, repo, cfg); err != nil {
             log.Fatal(err)
         }
-        defer hc.Close()
+        defer hc.Disconnect()
 
         var summ []byte
         if summ, err = hc.Summary(); err != nil {

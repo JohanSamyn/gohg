@@ -15,6 +15,6 @@ func ExampleHgClient_Connect() {
 	if err := hc.Connect("hg", ".", []string{""}); err != nil {
 		log.Fatal(err)
 	}
-	defer hc.Close()
+	defer hc.Disconnect()
 	// Call some useful methods on hc here.
 }
