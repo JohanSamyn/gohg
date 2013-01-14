@@ -8,10 +8,8 @@ version 1.9.
 
 ### Compatibility
 
-The gohg library is developed with Go1 on Windows 7.
-It is also tested on Ubuntu 12.04 with Go1.
-The used Go1 is being updated to the latest release shortly after it's
-appearance, on both platforms.
+The gohg library is developed with Go1 (go1.0.3) on Windows 7.
+It is also tested on Ubuntu 12.04 with the same version of Go1.
 
 ### Dependencies
 
