@@ -11,14 +11,18 @@ import (
 // TODO	Add tests for the --remote and --mq options, and for setting the repo explicitely.
 
 func TestHgClient_Summary_NoOptions(t *testing.T) {
+
+	// GIVEN a new repo
 	hct := setup(t)
 	defer teardown(t, hct)
 
+	// AND the known result for 'hg summary' for a new repo
 	var expected string = "parent: -1:000000000000 tip (empty repository)\n" +
 		"branch: default\n" +
 		"commit: (clean)\n" +
 		"update: (current)\n"
 
+	// WHEN I call the 'hg summary' command on it
 	// example 1
 	got, err := hct.Summary()
 
@@ -38,6 +42,7 @@ func TestHgClient_Summary_NoOptions(t *testing.T) {
 		t.Error(err)
 	}
 
+	// THEN the resulting info should be as expected
 	if string(got) != expected {
 		t.Fatalf("Test Summary: expected:\n%s\n but got:\n%s\n", expected, got)
 	}

@@ -12,14 +12,21 @@ import (
 )
 
 func TestHgClient_Identify_EmptyRepo(t *testing.T) {
+
+	// GIVEN a new repo
 	hct := setup(t)
 	defer teardown(t, hct)
 
+	// AND the known result for 'hg identify' for a new repo
 	var expected string = "000000000000 tip\n"
+
+	// WHEN I call the 'hg identify' command on it
 	got, err := hct.Identify(nil)
 	if err != nil {
 		t.Error(err)
 	}
+
+	// THEN the resulting info should be as expected
 	if string(got) != expected {
 		t.Fatalf("Test Identify: expected:\n%s\n but got:\n%s\n", expected, got)
 	}
