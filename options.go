@@ -8,86 +8,87 @@ import (
 	"reflect"
 )
 
+// These are the options the Hg commands can take.
 type (
-	O_debug     bool   //    --debug
-	O_destpath  string // no equivalent Hg option, used by Init()
-	O_limit     int    // -l --limit
-	O_mq        bool   //    --mq
-	O_profile   bool   //    --profile
-	O_quiet     bool   // -q --quiet
-	O_remote    bool   //    --remote
-	O_traceback bool   //    --traceback
-	O_verbose   bool   // -v --verbose
+	Debug     bool   //    --debug
+	Destpath  string // no equivalent Hg option, used by Init()
+	Limit     int    // -l --limit
+	Mq        bool   //    --mq
+	Profile   bool   //    --profile
+	Quiet     bool   // -q --quiet
+	Remote    bool   //    --remote
+	Traceback bool   //    --traceback
+	Verbose   bool   // -v --verbose
 )
 
 type hgDebugOpts struct {
-	O_debug     bool
-	O_traceback bool
-	O_profile   bool
+	Debug     bool
+	Profile   bool
+	Traceback bool
 }
 
 type optionAdder interface {
 	addOption(interface{})
 }
 
-func (o O_debug) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_debug")
+func (o Debug) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Debug")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}
 }
 
-func (o O_destpath) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_destpath")
+func (o Destpath) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Destpath")
 	if f.IsValid() || f.CanSet() {
 		f.SetString(string(o))
 	}
 }
 
-func (o O_limit) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_limit")
+func (o Limit) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Limit")
 	if f.IsValid() || f.CanSet() {
 		f.SetInt(int64(int(o)))
 	}
 }
 
-func (o O_mq) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_mq")
+func (o Mq) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Mq")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}
 }
 
-func (o O_profile) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_profile")
+func (o Profile) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Profile")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}
 }
 
-func (o O_quiet) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_quite")
+func (o Quiet) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Quiet")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}
 }
 
-func (o O_remote) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_remote")
+func (o Remote) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Remote")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}
 }
 
-func (o O_traceback) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_traceback")
+func (o Traceback) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Traceback")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}
 }
 
-func (o O_verbose) addOption(i interface{}) {
-	f := reflect.ValueOf(i).Elem().FieldByName("O_verbose")
+func (o Verbose) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Verbose")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}

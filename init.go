@@ -11,7 +11,7 @@ import (
 )
 
 type initCmd struct {
-	O_destpath string
+	Destpath
 	hgDebugOpts
 }
 
@@ -19,8 +19,8 @@ func (cmd *initCmd) String() string {
 	return fmt.Sprintf(
 		"initCmd = {\n    filepath: (%T) %q\n"+
 			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.O_destpath, cmd.O_destpath,
-		cmd.O_debug, cmd.O_debug, cmd.O_traceback, cmd.O_traceback, cmd.O_profile, cmd.O_profile)
+		cmd.Destpath, cmd.Destpath,
+		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
 // TODO	Implement the flags for hg init.
@@ -37,10 +37,10 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	cmd := new(initCmd)
 
 	// apply library defaults
-	cmd.O_destpath = "."
-	cmd.O_debug = false
-	cmd.O_traceback = false
-	cmd.O_profile = false
+	cmd.Destpath = "."
+	cmd.Debug = false
+	cmd.Traceback = false
+	cmd.Profile = false
 
 	// apply option values given by the caller
 	for _, o := range opts {
@@ -48,16 +48,16 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	}
 
 	hgcmd := []string{"init"}
-	if cmd.O_destpath != "" {
-		hgcmd = append(hgcmd, cmd.O_destpath)
+	if cmd.Destpath != "" {
+		hgcmd = append(hgcmd, string(cmd.Destpath))
 	}
-	if cmd.O_debug == true {
+	if cmd.Debug == true {
 		hgcmd = append(hgcmd, "--debug")
 	}
-	if cmd.O_traceback == true {
+	if cmd.Traceback == true {
 		hgcmd = append(hgcmd, "--traceback")
 	}
-	if cmd.O_profile == true {
+	if cmd.Profile == true {
 		hgcmd = append(hgcmd, "--profile")
 	}
 
@@ -66,11 +66,11 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 
 	var err1 error
 	var fa string
-	fa, err1 = filepath.Abs(cmd.O_destpath)
+	fa, err1 = filepath.Abs(string(cmd.Destpath))
 	if err1 != nil {
 		return fmt.Errorf("Init() -> filepath.Abs(): %s", err1)
 	}
-	if cmd.O_destpath == "" || cmd.O_destpath == "." || fa == hgcl.RepoRoot() {
+	if cmd.Destpath == "" || cmd.Destpath == "." || fa == hgcl.RepoRoot() {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}

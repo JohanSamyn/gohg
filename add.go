@@ -9,7 +9,7 @@ import (
 )
 
 type addCmd struct {
-	O_mq bool
+	Mq
 	hgDebugOpts
 }
 
@@ -17,8 +17,8 @@ func (cmd *addCmd) String() string {
 	return fmt.Sprintf(
 		"addCmd = {\n    mq: (%T) %t\n"+
 			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.O_mq, cmd.O_mq,
-		cmd.O_debug, cmd.O_debug, cmd.O_traceback, cmd.O_traceback, cmd.O_profile, cmd.O_profile)
+		cmd.Mq, cmd.Mq,
+		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
 // Add provides the 'hg add' command.
@@ -28,10 +28,10 @@ func (hgcl *HgClient) Add(opts ...optionAdder) ([]byte, error) {
 	cmd := new(addCmd)
 
 	// apply library defaults
-	cmd.O_mq = false
-	cmd.O_debug = false
-	cmd.O_traceback = false
-	cmd.O_profile = false
+	cmd.Mq = false
+	cmd.Debug = false
+	cmd.Traceback = false
+	cmd.Profile = false
 
 	// apply option values given by the caller
 	if len(opts) > 0 {
@@ -41,16 +41,16 @@ func (hgcl *HgClient) Add(opts ...optionAdder) ([]byte, error) {
 	}
 
 	hgcmd := []string{"add"}
-	if cmd.O_mq == true {
+	if cmd.Mq == true {
 		hgcmd = append(hgcmd, "--mq")
 	}
-	if cmd.O_debug == true {
+	if cmd.Debug == true {
 		hgcmd = append(hgcmd, "--debug")
 	}
-	if cmd.O_traceback == true {
+	if cmd.Traceback == true {
 		hgcmd = append(hgcmd, "--traceback")
 	}
-	if cmd.O_profile == true {
+	if cmd.Profile == true {
 		hgcmd = append(hgcmd, "--profile")
 	}
 
