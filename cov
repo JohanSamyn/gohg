@@ -6,7 +6,7 @@
 if [ "$1" == "" -o "$2" == "" -o "$3" == "" -o "$4" == "" ]
 then
   echo
-  echo usage: cov <package> --ceiling <nn> <regex-to-filter-functions>
+  echo usage: cov "<package> --ceiling <nn> <regex-to-filter-functions>"
   echo
   echo Run this script from the package folder.
   echo
