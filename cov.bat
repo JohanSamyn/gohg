@@ -7,6 +7,15 @@
 if "%1" == "" (
 	goto usage
 )
+if "%2" == "" (
+	goto usage
+)
+if "%3" == "" (
+	goto usage
+)
+if "%4" == "" (
+	goto usage
+)
 
 echo === Deleting existing logfiles...
 if exist covdata\. (
@@ -23,13 +32,13 @@ gocov test %1 > covdata\coverage.json
 echo === Creating summary report...
 gocov report covdata\coverage.json > covdata\coverage.log
 echo === Annotating source code...
-gocov annotate covdata\coverage.json .* > covdata\coverage-annotate.log
+gocov annotate covdata\coverage.json %2 %3 %4 > covdata\coverage-annotate.log
 echo === Done!
 goto end
 
 :usage
 echo.
-echo   usage: cov ^<package^>
+echo   usage: cov ^<package^> --ceiling ^<nn^> ^<regex-to-filter-functions^>
 echo.
 echo   example:  cov bitbucket.org/gohg/gohg
 echo.

@@ -3,10 +3,10 @@
 # see: https://github.com/axw/gocov
 #
 
-if [ "$1" == "" ]
+if [ "$1" == "" -o "$2" == "" -o "$3" == "" -o "$4" == "" ]
 then
   echo
-  echo usage: cov "<package>"
+  echo usage: cov <package> --ceiling <nn> <regex-to-filter-functions>
   echo
   echo Run this script from the package folder.
   echo
@@ -34,6 +34,6 @@ else
   echo === Creating summary report...
   gocov report covdata/coverage.json > covdata/coverage.log
   echo === Annotating source code...
-  gocov annotate covdata/coverage.json .* > covdata/coverage-annotate.log
+  gocov annotate covdata/coverage.json $2 $3 $4 > covdata/coverage-annotate.log
   echo "=== Done!"
 fi
