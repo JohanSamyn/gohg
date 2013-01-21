@@ -5,10 +5,10 @@
 
 package=$1
 ceiling=$2
-ceilingvalue=$3
-regex=$4
+regex=$3
+echo $package "=" $ceiling "=" $regex
 
-if [ "$package" == "" -o "$ceiling" == "" -o "$ceilingvalue" == "" -o "$regex" == "" ]
+if [ "$package" == "" -o "$ceiling" == "" -o "$regex" == "" ]
 then
   echo
   echo    Usage: cov "<package> -ceiling=<nn> <regex-to-filter-functions>"
@@ -43,6 +43,6 @@ else
   echo === Creating summary report...
   gocov report covdata/coverage.json > covdata/coverage.log
   echo === Annotating source code...
-  gocov annotate $ceiling=$ceilingvalue covdata/coverage.json $regex > covdata/coverage-annotate.log
+  gocov annotate $ceiling covdata/coverage.json $regex > covdata/coverage-annotate.log
   echo "=== Done!"
 fi

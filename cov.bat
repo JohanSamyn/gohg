@@ -8,7 +8,21 @@ set package=%1
 set ceiling=%2
 set ceilingvalue=%3
 set regex=%4
+goto validate
 
+:usage
+echo.
+echo   Usage: cov ^<package^> -ceiling=^<nn^> ^<regex-to-filter-functions^>
+echo.
+echo          -ceiling=nn    Only annotate functions with coverage %% below nn.
+echo.
+echo   Example:  cov bitbucket.org/gohg/gohg -ceiling=50 .*addOption
+echo.
+echo   Run this script from the package folder itself.
+echo.
+goto end
+
+:validate
 if "%package%" == "" (goto usage)
 if "%ceiling%" == "" (goto usage)
 if "%ceilingvalue%" == "" (goto usage)
@@ -31,17 +45,5 @@ gocov report covdata\coverage.json > covdata\coverage.log
 echo === Annotating source code...
 gocov annotate %ceiling%=%ceilingvalue% covdata\coverage.json %regex% > covdata\coverage-annotate.log
 echo === Done!
-goto end
-
-:usage
-echo.
-echo   Usage: cov ^<package^> -ceiling=^<nn^> ^<regex-to-filter-functions^>
-echo.
-echo          -ceiling=nn    Only annotate functions with coverage %% below nn.
-echo.
-echo   Example:  cov bitbucket.org/gohg/gohg -ceiling=50 .*addOption
-echo.
-echo   Run this script from the package folder itself.
-echo.
 
 :end
