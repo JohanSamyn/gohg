@@ -3,12 +3,21 @@
 # see: https://github.com/axw/gocov
 #
 
-if [ "$1" == "" -o "$2" == "" -o "$3" == "" -o "$4" == "" ]
+package=$1
+ceiling=$2
+ceilingvalue=$3
+regex=$4
+
+if [ "$package" == "" -o "$ceiling" == "" -o "$ceilingvalue" == "" -o "$regex" == "" ]
 then
   echo
-  echo usage: cov "<package> --ceiling <nn> <regex-to-filter-functions>"
+  echo    Usage: cov "<package> -ceiling=<nn> <regex-to-filter-functions>"
   echo
-  echo Run this script from the package folder.
+  echo           -ceiling=nn    Only annotate functions with coverage % below nn.
+  echo
+  echo    Example:  cov bitbucket.org/gohg/gohg -ceiling=50 .*addOption
+  echo
+  echo    Run this script from the package folder.
   echo
 else
   echo === Deleting existing logfiles...
@@ -30,10 +39,10 @@ else
     mkdir covdata; chmod 777 covdata
   fi
   echo === Gathering coverage info...
-  gocov test $1 > covdata/coverage.json
+  gocov test $package > covdata/coverage.json
   echo === Creating summary report...
   gocov report covdata/coverage.json > covdata/coverage.log
   echo === Annotating source code...
-  gocov annotate covdata/coverage.json $2 $3 $4 > covdata/coverage-annotate.log
+  gocov annotate $ceiling=$ceilingvalue covdata/coverage.json $regex > covdata/coverage-annotate.log
   echo "=== Done!"
 fi

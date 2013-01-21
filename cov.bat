@@ -4,43 +4,42 @@
 :: see: https://github.com/axw/gocov
 ::
 
-if "%1" == "" (
-	goto usage
-)
-if "%2" == "" (
-	goto usage
-)
-if "%3" == "" (
-	goto usage
-)
-if "%4" == "" (
-	goto usage
-)
+set package=%1
+set ceiling=%2
+set ceilingvalue=%3
+set regex=%4
+
+if "%package%" == "" (goto usage)
+if "%ceiling%" == "" (goto usage)
+if "%ceilingvalue%" == "" (goto usage)
+if "%regex%" == "" (goto usage)
 
 echo === Deleting existing logfiles...
-if exist covdata\. (
-if exist covdata\coverage.json (del covdata\coverage.json)
-if exist covdata\coverage.log (del covdata\coverage.log)
-if exist covdata\coverage-annotate.log (del covdata\coverage-annotate.log)
-goto docov
+  if exist covdata\. (
+  if exist covdata\coverage.json (del covdata\coverage.json)
+  if exist covdata\coverage.log (del covdata\coverage.log)
+  if exist covdata\coverage-annotate.log (del covdata\coverage-annotate.log)
+  goto docov
 )
 mkdir covdata
 
 :docov
 echo === Gathering coverage info...
-gocov test %1 > covdata\coverage.json
+gocov test %package% > covdata\coverage.json
 echo === Creating summary report...
 gocov report covdata\coverage.json > covdata\coverage.log
 echo === Annotating source code...
-gocov annotate covdata\coverage.json %2 %3 %4 > covdata\coverage-annotate.log
+gocov annotate %ceiling%=%ceilingvalue% covdata\coverage.json %regex% > covdata\coverage-annotate.log
 echo === Done!
 goto end
 
 :usage
 echo.
-echo   usage: cov ^<package^> --ceiling ^<nn^> ^<regex-to-filter-functions^>
+echo   Usage: cov ^<package^> -ceiling=^<nn^> ^<regex-to-filter-functions^>
 echo.
-echo   example:  cov bitbucket.org/gohg/gohg
+echo          -ceiling=nn    Only annotate functions with coverage %% below nn.
+echo.
+echo   Example:  cov bitbucket.org/gohg/gohg -ceiling=50 .*addOption
 echo.
 echo   Run this script from the package folder itself.
 echo.
