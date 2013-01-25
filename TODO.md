@@ -56,7 +56,7 @@ format. F.i. returning log info as a map of changesets (key = hash), so each
 element of a cset is easily addressable without the client having to parse the
 gohg result.
 
-* Add the other Hg CS channels to readFromHg() and sendToHg().
+* Add the other Hg CS channels to receiveFromHg() and sendToHg().
 
 * Allow to start the Hg CS in debug mode (logging to '-').
 

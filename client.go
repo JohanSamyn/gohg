@@ -312,9 +312,9 @@ func validateCapabilities(hgcl *HgClient) error {
 	return nil
 }
 
-// readFromHg returns the channel and all the data read from it.
+// receiveFromHg returns the channel and all the data read from it.
 // Eventually it returns no (or empty) data but an error.
-func readFromHg(hgcl *HgClient) (string, []byte, error) {
+func receiveFromHg(hgcl *HgClient) (string, []byte, error) {
 	var err error
 	var ch string
 
@@ -325,18 +325,18 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 		return ch, data, err
 	}
 	if data == nil {
-		return ch, data, errors.New("readFromHg(): no data read")
+		return ch, data, errors.New("receiveFromHg(): no data read")
 	}
 	ch = string(data[0])
 	if ch == "" {
-		return ch, data, errors.New("readFromHg(): no channel read")
+		return ch, data, errors.New("receiveFromHg(): no channel read")
 	}
 
 	// get the uint that the Hg CS sent us as the length value
 	var ln uint32
 	ln, err = calcDataLength(data[1:5])
 	if err != nil {
-		return ch, data, fmt.Errorf("readFromHg(): binary.Read failed: %s", err)
+		return ch, data, fmt.Errorf("receiveFromHg(): binary.Read failed: %s", err)
 	}
 
 	// now get ln bytes of data
@@ -347,7 +347,7 @@ func readFromHg(hgcl *HgClient) (string, []byte, error) {
 	}
 
 	return ch, data, nil
-} // readFromHg()
+} // receiveFromHg()
 
 // sendToHg writes data to the Hg CS,
 // returning an error if something went wrong.
@@ -421,7 +421,7 @@ func (hgcl *HgClient) run(hgcmd []string) (data []byte, hgerr []byte, ret int32,
 }
 
 // runInHg sends a command to the Hg CS (using sendToHg),
-// and fetches the result (using readFromHg).
+// and fetches the result (using receiveFromHg).
 func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, []byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 	var err error
@@ -444,9 +444,9 @@ CHANNEL_LOOP:
 	for true {
 		var ch string
 		var data []byte
-		ch, data, err = readFromHg(hgcl)
+		ch, data, err = receiveFromHg(hgcl)
 		if err != nil || ch == "" {
-			log.Fatalf("runInHg(): readFromHg failed: %s", err)
+			log.Fatalf("runInHg(): receiveFromHg failed: %s", err)
 		}
 		switch ch {
 		case "d":
