@@ -6,7 +6,6 @@
 package=$1
 ceiling=$2
 regex=$3
-echo $package "=" $ceiling "=" $regex
 
 if [ "$package" == "" -o "$ceiling" == "" -o "$regex" == "" ]
 then
