@@ -18,10 +18,10 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 	defer teardown(t, hct)
 
 	// AND the known result for 'hg identify' for a new repo
-	var expected string = "000000000000 tip\n"
+	var expected string = "000000000000 -1 default tip\n"
 
 	// WHEN I call the 'hg identify' command on it
-	got, err := hct.Identify(nil)
+	got, err := hct.Identify()
 	if err != nil {
 		t.Error(err)
 	}

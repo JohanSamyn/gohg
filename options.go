@@ -10,21 +10,27 @@ import (
 
 // These are the options the Hg commands can take.
 type (
-	Debug     bool   //    --debug
-	Destpath  string // no equivalent Hg option, used by Init()
-	Limit     int    // -l --limit
-	Mq        bool   //    --mq
-	Profile   bool   //    --profile
-	Quiet     bool   // -q --quiet
-	Remote    bool   //    --remote
-	Traceback bool   //    --traceback
-	Verbose   bool   // -v --verbose
+	Debug         bool   //    --debug
+	Destpath      string // no equivalent Hg option, used by Init()
+	Limit         int    // -l --limit
+	Mq            bool   //    --mq
+	Profile       bool   //    --profile
+	Quiet         bool   // -q --quiet
+	Remote        bool   //    --remote
+	Rev           string // -r -- rev REV
+	ShowBookmarks bool   // -B --bookmarks
+	ShowBranch    bool   // -b --branch
+	ShowId        bool   // -i --id
+	ShowNum       bool   // -n --num
+	ShowTags      bool   // -t --tags
+	Traceback     bool   //    --traceback
+	Verbose       bool   // -v --verbose
 )
 
 type hgDebugOpts struct {
-	Debug     bool
-	Profile   bool
-	Traceback bool
+	Debug
+	Profile
+	Traceback
 }
 
 type optionAdder interface {
@@ -75,6 +81,48 @@ func (o Quiet) addOption(i interface{}) {
 
 func (o Remote) addOption(i interface{}) {
 	f := reflect.ValueOf(i).Elem().FieldByName("Remote")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
+}
+
+func (o Rev) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("Rev")
+	if f.IsValid() || f.CanSet() {
+		f.SetString(string(o))
+	}
+}
+
+func (o ShowBookmarks) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("ShowBookmarks")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
+}
+
+func (o ShowBranch) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("ShowBranch")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
+}
+
+func (o ShowId) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("ShowId")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
+}
+
+func (o ShowNum) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("ShowNum")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+	}
+}
+
+func (o ShowTags) addOption(i interface{}) {
+	f := reflect.ValueOf(i).Elem().FieldByName("ShowTags")
 	if f.IsValid() || f.CanSet() {
 		f.SetBool(bool(o))
 	}

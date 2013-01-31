@@ -25,12 +25,6 @@ func commandOld(hgcl *HgClient, cmd string, opts []string) (data []byte, err err
 	return data, nil
 }
 
-// Identify provides the 'hg identify' command.
-func (hgcl *HgClient) Identify(opts []string) ([]byte, error) {
-	data, err := commandOld(hgcl, "identify", opts)
-	return data, err
-}
-
 // Add provides the 'hg log' command.
 func (hgcl *HgClient) Log(opts []string) ([]byte, error) {
 	data, err := commandOld(hgcl, "log", opts)
