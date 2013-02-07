@@ -13,9 +13,12 @@ func commandOld(hgcl *HgClient, cmd string, opts []string) (data []byte, err err
 	// boilerplate code for all commands
 
 	cmdline := PrependStringToSlice(cmd, opts)
-	data, hgerr, ret, err := hgcl.run(cmdline)
+	// data, hgerr, ret, err := hgcl.run(cmdline)
+	var hgerr []byte
+	var ret int32
+	data, hgerr, ret, err = runInHg(hgcl, "runcommand", cmdline)
 	if err != nil {
-		return nil, fmt.Errorf("from hgcl.run(): %s", err)
+		return nil, fmt.Errorf("from runInHg(): %s", err)
 	}
 	// Maybe make this 2 checks, to differentiate between ret and hgerr?
 	if ret != 0 || hgerr != nil {
@@ -25,7 +28,7 @@ func commandOld(hgcl *HgClient, cmd string, opts []string) (data []byte, err err
 	return data, nil
 }
 
-// Add provides the 'hg log' command.
+// Log provides the 'hg log' command.
 func (hgcl *HgClient) Log(opts []string) ([]byte, error) {
 	data, err := commandOld(hgcl, "log", opts)
 	return data, err

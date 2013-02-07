@@ -86,6 +86,6 @@ func (hgcl *HgClient) Identify(opts ...optionAdder) ([]byte, error) {
 		hgcmd = append(hgcmd, "--profile")
 	}
 
-	data, err := command(hgcl, hgcmd)
+	data, err := runcommand(hgcl, hgcmd)
 	return data, err
 }
