@@ -403,9 +403,7 @@ func runcommand(hgcl *HgClient, cmd []string) (data []byte, err error) {
 
 	// fmt.Printf("cmd = %s\nopts = %v\n", cmd[0], cmd[1:])
 
-	var hgerr []byte
-	var ret int32
-	data, hgerr, ret, err = runInHg(hgcl, "runcommand", cmd)
+	data, hgerr, ret, err := runInHg(hgcl, "runcommand", cmd)
 	if err != nil {
 		return nil, fmt.Errorf("from runInHg(): %s", err)
 	}
