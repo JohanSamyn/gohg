@@ -415,7 +415,7 @@ func runcommand(hgcl *HgClient, cmd []string) (data []byte, err error) {
 			strings.Title(cmd[0]), ret, string(hgerr))
 	}
 	return data, nil
-}
+} // runcommand()
 
 // runInHg sends a command to the Hg CS (using sendToHg),
 // and fetches the result (using receiveFromHg).

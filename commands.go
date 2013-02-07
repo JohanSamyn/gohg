@@ -13,7 +13,6 @@ func commandOld(hgcl *HgClient, cmd string, opts []string) (data []byte, err err
 	// boilerplate code for all commands
 
 	cmdline := PrependStringToSlice(cmd, opts)
-	// data, hgerr, ret, err := hgcl.run(cmdline)
 	var hgerr []byte
 	var ret int32
 	data, hgerr, ret, err = runInHg(hgcl, "runcommand", cmdline)
