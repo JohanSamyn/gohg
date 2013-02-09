@@ -201,7 +201,7 @@ func locateRepository(reponame string) (string, error) {
 	// up the path, in case we're deeper in it's working copy.
 	for {
 		_, err = os.Stat(repo + sep + ".hg")
-		if err == nil && os.IsExist(err) == false {
+		if err == nil && !os.IsExist(err) {
 			break
 		}
 		var file string
@@ -306,7 +306,7 @@ func validateCapabilities(hgcl *HgClient) error {
 			break
 		}
 	}
-	if ok == false {
+	if !ok {
 		log.Fatal("could not detect the 'runcommand' capability")
 	}
 	return nil

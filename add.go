@@ -41,16 +41,16 @@ func (hgcl *HgClient) Add(opts ...optionAdder) ([]byte, error) {
 	}
 
 	hgcmd := []string{"add"}
-	if cmd.Mq == true {
+	if cmd.Mq {
 		hgcmd = append(hgcmd, "--mq")
 	}
-	if cmd.Debug == true {
+	if cmd.Debug {
 		hgcmd = append(hgcmd, "--debug")
 	}
-	if cmd.Traceback == true {
+	if cmd.Traceback {
 		hgcmd = append(hgcmd, "--traceback")
 	}
-	if cmd.Profile == true {
+	if cmd.Profile {
 		hgcmd = append(hgcmd, "--profile")
 	}
 

@@ -54,35 +54,35 @@ func (hgcl *HgClient) Identify(opts ...optionAdder) ([]byte, error) {
 	}
 
 	hgcmd := []string{"identify"}
-	if cmd.Mq == true {
+	if cmd.Mq {
 		hgcmd = append(hgcmd, "--mq")
 	}
 	if cmd.Rev != "" {
 		hgcmd = append(hgcmd, "-r")
 		hgcmd = append(hgcmd, string(cmd.Rev))
 	}
-	if cmd.ShowBookmarks == true {
+	if cmd.ShowBookmarks {
 		hgcmd = append(hgcmd, "-B")
 	}
-	if cmd.ShowBranch == true {
+	if cmd.ShowBranch {
 		hgcmd = append(hgcmd, "-b")
 	}
-	if cmd.ShowId == true {
+	if cmd.ShowId {
 		hgcmd = append(hgcmd, "-i")
 	}
-	if cmd.ShowNum == true {
+	if cmd.ShowNum {
 		hgcmd = append(hgcmd, "-n")
 	}
-	if cmd.ShowTags == true {
+	if cmd.ShowTags {
 		hgcmd = append(hgcmd, "-t")
 	}
-	if cmd.Debug == true {
+	if cmd.Debug {
 		hgcmd = append(hgcmd, "--debug")
 	}
-	if cmd.Traceback == true {
+	if cmd.Traceback {
 		hgcmd = append(hgcmd, "--traceback")
 	}
-	if cmd.Profile == true {
+	if cmd.Profile {
 		hgcmd = append(hgcmd, "--profile")
 	}
 

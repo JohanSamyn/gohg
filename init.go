@@ -51,13 +51,13 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	if cmd.Destpath != "" {
 		hgcmd = append(hgcmd, string(cmd.Destpath))
 	}
-	if cmd.Debug == true {
+	if cmd.Debug {
 		hgcmd = append(hgcmd, "--debug")
 	}
-	if cmd.Traceback == true {
+	if cmd.Traceback {
 		hgcmd = append(hgcmd, "--traceback")
 	}
-	if cmd.Profile == true {
+	if cmd.Profile {
 		hgcmd = append(hgcmd, "--profile")
 	}
 
