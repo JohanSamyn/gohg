@@ -138,12 +138,12 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return fmt.Errorf("Connect(): could not start the Hg Command Server: %s", err)
 	}
 
-	err = readHelloMessage(hgcl)
+	err = hgcl.readHelloMessage()
 	if err != nil {
 		return err
 	}
 
-	err = validateCapabilities(hgcl)
+	err = hgcl.validateCapabilities()
 	if err != nil {
 		return err
 	}
@@ -254,7 +254,7 @@ func composeStartupConfig(hgcmd string, repo string, config []string) []string {
 //
 // It has a fixed format, and contains info about the possibilities
 // of the Hg CS at hand. It's also a first proof of a working connection.
-func readHelloMessage(hgcl *HgClient) error {
+func (hgcl *HgClient) readHelloMessage() error {
 	var err error
 	s := make([]byte, 5)
 	_, err = hgcl.pipeOut.Read(s)
@@ -298,7 +298,7 @@ func readHelloMessage(hgcl *HgClient) error {
 	return nil
 } // readHelloMessage()
 
-func validateCapabilities(hgcl *HgClient) error {
+func (hgcl *HgClient) validateCapabilities() error {
 	var ok bool
 	for _, c := range hgcl.capabilities {
 		if c == "runcommand" {
@@ -314,7 +314,7 @@ func validateCapabilities(hgcl *HgClient) error {
 
 // receiveFromHg returns the channel and all the data read from it.
 // Eventually it returns no (or empty) data but an error.
-func receiveFromHg(hgcl *HgClient) (string, []byte, error) {
+func (hgcl *HgClient) receiveFromHg() (string, []byte, error) {
 	var err error
 	var ch string
 
@@ -351,7 +351,7 @@ func receiveFromHg(hgcl *HgClient) (string, []byte, error) {
 
 // sendToHg writes data to the Hg CS,
 // returning an error if something went wrong.
-func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
+func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 	var err error
 
 	// cmd: can only be 'runcommand' or 'getencoding' for now
@@ -398,12 +398,12 @@ func sendToHg(hgcl *HgClient, cmd string, args []byte) error {
 
 // runcommand allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
-func runcommand(hgcl *HgClient, cmd []string) (data []byte, err error) {
+func (hgcl *HgClient) runcommand(cmd []string) (data []byte, err error) {
 	// boilerplate code for all commands
 
 	// fmt.Printf("cmd = %s\nopts = %v\n", cmd[0], cmd[1:])
 
-	data, hgerr, ret, err := runInHg(hgcl, "runcommand", cmd)
+	data, hgerr, ret, err := hgcl.runInHg("runcommand", cmd)
 	if err != nil {
 		return nil, fmt.Errorf("from runInHg(): %s", err)
 	}
@@ -417,7 +417,7 @@ func runcommand(hgcl *HgClient, cmd []string) (data []byte, err error) {
 
 // runInHg sends a command to the Hg CS (using sendToHg),
 // and fetches the result (using receiveFromHg).
-func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, []byte, int32, error) {
+func (hgcl *HgClient) runInHg(command string, hgcmd []string) ([]byte, []byte, int32, error) {
 	args := []byte(strings.Join(hgcmd, string(0x0)))
 	var err error
 
@@ -425,7 +425,7 @@ func runInHg(hgcl *HgClient, command string, hgcmd []string) ([]byte, []byte, in
 		return nil, nil, 0, fmt.Errorf("Invalid empty or blank params passed to run().")
 	}
 
-	err = sendToHg(hgcl, command, args)
+	err = hgcl.sendToHg(command, args)
 	if err != nil {
 		fmt.Println(err)
 		return nil, nil, 0, err
@@ -439,7 +439,7 @@ CHANNEL_LOOP:
 	for true {
 		var ch string
 		var data []byte
-		ch, data, err = receiveFromHg(hgcl)
+		ch, data, err = hgcl.receiveFromHg()
 		if err != nil || ch == "" {
 			log.Fatalf("runInHg(): receiveFromHg failed: %s", err)
 		}

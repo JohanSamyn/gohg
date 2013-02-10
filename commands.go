@@ -15,7 +15,7 @@ func commandOld(hgcl *HgClient, cmd string, opts []string) (data []byte, err err
 	cmdline := PrependStringToSlice(cmd, opts)
 	var hgerr []byte
 	var ret int32
-	data, hgerr, ret, err = runInHg(hgcl, "runcommand", cmdline)
+	data, hgerr, ret, err = hgcl.runInHg("runcommand", cmdline)
 	if err != nil {
 		return nil, fmt.Errorf("from runInHg(): %s", err)
 	}
