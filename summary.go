@@ -17,7 +17,7 @@ type summaryCmd struct {
 func (cmd *summaryCmd) String() string {
 	return fmt.Sprintf(
 		"summaryCmd = {\n    remote: (%T) %t\n    mq: (%T) %t\n"+
-			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
+			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Remote, cmd.Remote, cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }

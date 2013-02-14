@@ -6,29 +6,32 @@ package gohg
 
 import (
 	"fmt"
+	"strconv"
 )
 
-type verifyCmd struct {
-	Mq
+type logCmd struct {
+	Limit
+	Rev
 	hgDebugOpts
 }
 
-func (cmd *verifyCmd) String() string {
+func (cmd *logCmd) String() string {
 	return fmt.Sprintf(
-		"verifyCmd = {\n    mq: (%T) %t\n"+
+		"logCmd = {\n    limit: (%T) %t\n    rev: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Mq, cmd.Mq,
+		cmd.Limit, cmd.Limit, cmd.Rev, cmd.Rev,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
-// Verify provides the 'hg verify' command.
-func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
+// Log provides the 'hg log' command.
+func (hgcl *HgClient) Log(opts ...optionAdder) ([]byte, error) {
 
 	// applies type defaults
-	cmd := new(verifyCmd)
+	cmd := new(logCmd)
 
 	// apply library defaults
-	cmd.Mq = false
+	cmd.Limit = 0
+	cmd.Rev = "."
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
@@ -38,9 +41,14 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 		o.addOption(cmd)
 	}
 
-	hgcmd := []string{"verify"}
-	if cmd.Mq {
-		hgcmd = append(hgcmd, "--mq")
+	hgcmd := []string{"log"}
+	if cmd.Limit > 0 {
+		hgcmd = append(hgcmd, "-l")
+		hgcmd = append(hgcmd, strconv.Itoa(int(cmd.Limit)))
+	}
+	if cmd.Rev != "" {
+		hgcmd = append(hgcmd, "-r")
+		hgcmd = append(hgcmd, string(cmd.Rev))
 	}
 	if cmd.Debug {
 		hgcmd = append(hgcmd, "--debug")

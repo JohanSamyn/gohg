@@ -54,7 +54,7 @@ func (o Destpath) addOption(i interface{}) {
 func (o Limit) addOption(i interface{}) {
 	f := reflect.ValueOf(i).Elem().FieldByName("Limit")
 	if f.IsValid() || f.CanSet() {
-		f.SetInt(int64(int(o)))
+		f.SetInt(int64(o))
 	}
 }
 

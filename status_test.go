@@ -15,7 +15,8 @@ func TestHgClient_Status_Clean(t *testing.T) {
 
 	// status should be empty for clean working dir
 	expected := []byte{}
-	got, err := hct.Status([]string{"-mardcui"})
+	// got, err := hct.Status([]string{"-mardcui"})
+	got, err := hct.Status()
 	if err != nil {
 		t.Error(err)
 	}
@@ -40,7 +41,8 @@ func TestHgClient_Status_Dirty(t *testing.T) {
 
 	// now we can perform the real test
 	expected := []byte{}
-	got, err := hct.Status([]string{"-mardcui"})
+	// got, err := hct.Status([]string{"-mardcui"})
+	got, err := hct.Status()
 	if err != nil {
 		t.Error(err)
 	}

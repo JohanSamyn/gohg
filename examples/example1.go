@@ -7,7 +7,7 @@
 package main
 
 import (
-	"bitbucket.org/gohg/gohg"
+	. "bitbucket.org/gohg/gohg"
 	"fmt"
 	"log"
 )
@@ -24,7 +24,7 @@ func main() {
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 
-	hc := gohg.NewHgClient()
+	hc := NewHgClient()
 	var cfg []string
 	if err = hc.Connect(hgexe, repo, cfg); err != nil {
 		log.Fatal(err)
@@ -52,7 +52,7 @@ func main() {
 	fmt.Println("--------------------")
 
 	var l []byte
-	if l, err = hc.Log([]string{"-l", "2"}); err != nil {
+	if l, err = hc.Log(Limit(2)); err != nil {
 		fmt.Println(err)
 		return
 	}

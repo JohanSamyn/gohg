@@ -29,7 +29,7 @@ At the commandline type:
     package main
 
     import (
-        "bitbucket.org/gohg/gohg"
+        . "bitbucket.org/gohg/gohg"
         "fmt"
         "log"
     )
@@ -39,7 +39,7 @@ At the commandline type:
         hgexe := "hg"
         repo := "/path/to/hgrepo"
         var cfg []string
-        hc := gohg.NewHgClient()
+        hc := NewHgClient()
         if err = hc.Connect(hgexe, repo, cfg); err != nil {
             log.Fatal(err)
         }

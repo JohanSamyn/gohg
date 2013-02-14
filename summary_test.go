@@ -27,14 +27,14 @@ func TestHgClient_Summary_NoOptions(t *testing.T) {
 	got, err := hct.Summary()
 
 	// example 2
-	// got, err := hct.Summary(O_profile(true))
+	// got, err := hct.Summary(Profile(true))
 
 	// example 3
-	// p := O_profile(true)
+	// p := Profile(true)
 	// got, err := hct.Summary(p)
 
 	// example 4
-	// var p O_profile
+	// var p Profile
 	// p = true
 	// got, err := hct.Summary(p)
 

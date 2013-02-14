@@ -8,27 +8,23 @@ import (
 	"fmt"
 )
 
-type verifyCmd struct {
-	Mq
+type statusCmd struct {
 	hgDebugOpts
 }
 
-func (cmd *verifyCmd) String() string {
+func (cmd *statusCmd) String() string {
 	return fmt.Sprintf(
-		"verifyCmd = {\n    mq: (%T) %t\n"+
-			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Mq, cmd.Mq,
+		"statusCmd = {\n    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
-// Verify provides the 'hg verify' command.
-func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
+// Status provides the 'hg status' command.
+func (hgcl *HgClient) Status(opts ...optionAdder) ([]byte, error) {
 
 	// applies type defaults
-	cmd := new(verifyCmd)
+	cmd := new(statusCmd)
 
 	// apply library defaults
-	cmd.Mq = false
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
@@ -38,10 +34,7 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 		o.addOption(cmd)
 	}
 
-	hgcmd := []string{"verify"}
-	if cmd.Mq {
-		hgcmd = append(hgcmd, "--mq")
-	}
+	hgcmd := []string{"status"}
 	if cmd.Debug {
 		hgcmd = append(hgcmd, "--debug")
 	}

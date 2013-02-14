@@ -18,7 +18,7 @@ type initCmd struct {
 func (cmd *initCmd) String() string {
 	return fmt.Sprintf(
 		"initCmd = {\n    filepath: (%T) %q\n"+
-			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
+			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Destpath, cmd.Destpath,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }

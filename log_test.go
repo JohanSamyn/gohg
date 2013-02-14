@@ -12,7 +12,7 @@ func TestHgClient_Log_NewRepo(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	data, err := hct.Log(nil)
+	data, err := hct.Log(Limit(99))
 	if err != nil {
 		t.Error(err)
 	}
@@ -25,7 +25,7 @@ func TestHgClient_Log_Empty(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	data, err := hct.Log([]string{"-r", "tip"})
+	data, err := hct.Log(Rev("tip:0"))
 	if err != nil {
 		t.Error(err)
 	}
@@ -43,7 +43,7 @@ func TestHgClient_Log_NotEmpty(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := hct.Log([]string{"-r", "tip"})
+	data, err := hct.Log(Rev("tip:0"))
 	if err != nil {
 		t.Error(err)
 	}

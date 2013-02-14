@@ -23,7 +23,7 @@ func (cmd *identifyCmd) String() string {
 	return fmt.Sprintf(
 		"identifyCmd = {\n    bookmarks: (%T) %t\n    branch: (%T) %t\n    id: (%T) %t\n"+
 			"    mq: (%T) %t\n    num: (%T) %t\n    rev: (%T) %t\n    tags: (%T) %t\n"+
-			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
+			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.ShowBookmarks, cmd.ShowBookmarks, cmd.ShowBranch, cmd.ShowBranch,
 		cmd.ShowId, cmd.ShowId, cmd.Mq, cmd.Mq, cmd.ShowNum, cmd.ShowNum,
 		cmd.Rev, cmd.Rev, cmd.ShowTags, cmd.ShowTags,
