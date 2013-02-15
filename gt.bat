@@ -10,11 +10,11 @@ if "%1" == "all" (
   goto end
 )
 if "%1" == "version" (
-  go test %2 %3 %4 %5 %6 %7 %8 %9 client.go commands.go options.go util.go add.go setup_and_teardown_test.go %1.go %1_test.go
+  go test %2 %3 %4 %5 %6 %7 %8 %9 client.go options.go add.go setup_and_teardown_test.go %1.go %1_test.go
   goto end
 )
 :: Need version.go to avoid compile error, cause Version() is called in client.go.
-go test %2 %3 %4 %5 %6 %7 %8 %9 client.go commands.go options.go util.go add.go version.go setup_and_teardown_test.go %1.go %1_test.go
+go test %2 %3 %4 %5 %6 %7 %8 %9 client.go options.go add.go version.go setup_and_teardown_test.go %1.go %1_test.go
 goto end
 
 :usage
