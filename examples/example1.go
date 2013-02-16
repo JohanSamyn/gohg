@@ -34,8 +34,6 @@ func main() {
 
 	var v string
 	if v, err = hc.Version(); err != nil {
-		// fmt.Println(err)
-		// return
 		log.Println(err)
 	}
 	fmt.Printf("[[version]]: %s\n", v)
