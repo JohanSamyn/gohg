@@ -31,7 +31,7 @@ func (hgcl *HgClient) Log(opts ...optionAdder) ([]byte, error) {
 
 	// apply library defaults
 	cmd.Limit = 0
-	cmd.Rev = "."
+	cmd.Rev = ""
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
