@@ -36,33 +36,23 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	// applies type defaults
 	cmd := new(initCmd)
 
-	// apply library defaults
+	// apply gohg defaults
 	cmd.Destpath = "."
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
 
+	hgcmd := []string{"init"}
+
+	var err error
+
 	// apply option values given by the caller
 	for _, o := range opts {
-		o.addOption(cmd)
+		err = o.addOption(cmd)
+		if err == nil {
+			o.translateOption(&hgcmd)
+		}
 	}
-
-	hgcmd := []string{"init"}
-	if cmd.Destpath != "" {
-		hgcmd = append(hgcmd, string(cmd.Destpath))
-	}
-	if cmd.Debug {
-		hgcmd = append(hgcmd, "--debug")
-	}
-	if cmd.Traceback {
-		hgcmd = append(hgcmd, "--traceback")
-	}
-	if cmd.Profile {
-		hgcmd = append(hgcmd, "--profile")
-	}
-
-	// // Is not shown with 'gt init' ??
-	// fmt.Printf("%v\n", cmd)
 
 	var err1 error
 	var fa string
@@ -75,6 +65,6 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 			" from the Command Server repo path")
 	}
 
-	_, err := hgcl.runcommand(hgcmd)
+	_, err = hgcl.runcommand(&hgcmd)
 	return err
 }

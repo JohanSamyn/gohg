@@ -27,33 +27,27 @@ func (hgcl *HgClient) Add(opts ...optionAdder) ([]byte, error) {
 	// applies type defaults
 	cmd := new(addCmd)
 
-	// apply library defaults
+	// apply gohg defaults
 	cmd.Mq = false
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
 
-	// apply option values given by the caller
-	if len(opts) > 0 {
-		for _, o := range opts {
-			o.addOption(cmd)
-		}
-	}
-
 	hgcmd := []string{"add"}
-	if cmd.Mq {
-		hgcmd = append(hgcmd, "--mq")
-	}
-	if cmd.Debug {
-		hgcmd = append(hgcmd, "--debug")
-	}
-	if cmd.Traceback {
-		hgcmd = append(hgcmd, "--traceback")
-	}
-	if cmd.Profile {
-		hgcmd = append(hgcmd, "--profile")
-	}
 
-	data, err := hgcl.runcommand(hgcmd)
+	var err error
+
+	// // apply option values given by the caller
+	// if len(opts) > 0 {
+	// 	for _, o := range opts {
+	// 		err = o.addOption(cmd)
+	// 		if err == nil {
+	// 			o.translateOption(&hgcmd)
+	// 		}
+	// 	}
+	// }
+
+	var data []byte
+	data, err = hgcl.runcommand(&hgcmd)
 	return data, err
 }

@@ -27,31 +27,25 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 	// applies type defaults
 	cmd := new(verifyCmd)
 
-	// apply library defaults
+	// apply gohg defaults
 	cmd.Mq = false
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
 
+	hgcmd := []string{"verify"}
+
+	var err error
+
 	// apply option values given by the caller
 	for _, o := range opts {
-		o.addOption(cmd)
+		err = o.addOption(cmd)
+		if err == nil {
+			o.translateOption(&hgcmd)
+		}
 	}
 
-	hgcmd := []string{"verify"}
-	if cmd.Mq {
-		hgcmd = append(hgcmd, "--mq")
-	}
-	if cmd.Debug {
-		hgcmd = append(hgcmd, "--debug")
-	}
-	if cmd.Traceback {
-		hgcmd = append(hgcmd, "--traceback")
-	}
-	if cmd.Profile {
-		hgcmd = append(hgcmd, "--profile")
-	}
-
-	data, err := hgcl.runcommand(hgcmd)
+	var data []byte
+	data, err = hgcl.runcommand(&hgcmd)
 	return data, err
 }

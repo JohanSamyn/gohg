@@ -36,7 +36,7 @@ func (hgcl *HgClient) Identify(opts ...optionAdder) ([]byte, error) {
 	// applies type defaults
 	cmd := new(identifyCmd)
 
-	// apply library defaults
+	// apply gohg defaults
 	cmd.Mq = false
 	cmd.Rev = ""
 	cmd.ShowBookmarks = true
@@ -48,44 +48,19 @@ func (hgcl *HgClient) Identify(opts ...optionAdder) ([]byte, error) {
 	cmd.Profile = false
 	cmd.Traceback = false
 
+	hgcmd := []string{"identify"}
+
+	var err error
+
 	// apply option values given by the caller
 	for _, o := range opts {
-		o.addOption(cmd)
+		err = o.addOption(cmd)
+		if err == nil {
+			o.translateOption(&hgcmd)
+		}
 	}
 
-	hgcmd := []string{"identify"}
-	if cmd.Mq {
-		hgcmd = append(hgcmd, "--mq")
-	}
-	if cmd.Rev != "" {
-		hgcmd = append(hgcmd, "-r")
-		hgcmd = append(hgcmd, string(cmd.Rev))
-	}
-	if cmd.ShowBookmarks {
-		hgcmd = append(hgcmd, "-B")
-	}
-	if cmd.ShowBranch {
-		hgcmd = append(hgcmd, "-b")
-	}
-	if cmd.ShowId {
-		hgcmd = append(hgcmd, "-i")
-	}
-	if cmd.ShowNum {
-		hgcmd = append(hgcmd, "-n")
-	}
-	if cmd.ShowTags {
-		hgcmd = append(hgcmd, "-t")
-	}
-	if cmd.Debug {
-		hgcmd = append(hgcmd, "--debug")
-	}
-	if cmd.Traceback {
-		hgcmd = append(hgcmd, "--traceback")
-	}
-	if cmd.Profile {
-		hgcmd = append(hgcmd, "--profile")
-	}
-
-	data, err := hgcl.runcommand(hgcmd)
+	var data []byte
+	data, err = hgcl.runcommand(&hgcmd)
 	return data, err
 }

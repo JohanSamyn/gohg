@@ -6,7 +6,7 @@ package gohg
 
 import (
 	"fmt"
-	"strconv"
+	// "strings"
 )
 
 type logCmd struct {
@@ -29,37 +29,32 @@ func (hgcl *HgClient) Log(opts ...optionAdder) ([]byte, error) {
 	// applies type defaults
 	cmd := new(logCmd)
 
-	// apply library defaults
+	// apply gohg defaults
 	cmd.Limit = 0
 	cmd.Rev = ""
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
 
+	hgcmd := []string{"log"}
+
+	var data []byte
+	var err error
+
 	// apply option values given by the caller
 	for _, o := range opts {
-		o.addOption(cmd)
+		err = o.addOption(cmd)
+		if err == nil {
+			o.translateOption(&hgcmd)
+			// } else {
+			// Silently skip the invalid option.
+			// Work out some logging system for gohg,
+			// and write this error message inthere.
+			// err = fmt.Errorf("%s", strings.Replace(fmt.Sprint(err), "<cmd>", "Log", 1))
+			// return data, err
+		}
 	}
 
-	hgcmd := []string{"log"}
-	if cmd.Limit > 0 {
-		hgcmd = append(hgcmd, "-l")
-		hgcmd = append(hgcmd, strconv.Itoa(int(cmd.Limit)))
-	}
-	if cmd.Rev != "" {
-		hgcmd = append(hgcmd, "-r")
-		hgcmd = append(hgcmd, string(cmd.Rev))
-	}
-	if cmd.Debug {
-		hgcmd = append(hgcmd, "--debug")
-	}
-	if cmd.Traceback {
-		hgcmd = append(hgcmd, "--traceback")
-	}
-	if cmd.Profile {
-		hgcmd = append(hgcmd, "--profile")
-	}
-
-	data, err := hgcl.runcommand(hgcmd)
+	data, err = hgcl.runcommand(&hgcmd)
 	return data, err
 }
