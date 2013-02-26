@@ -5,11 +5,13 @@
 package gohg
 
 import (
-	"errors"
-	// "fmt"
+	"fmt"
 	"reflect"
 	"strconv"
+	"strings"
 )
+
+var errstr = "command %s has no option %s"
 
 // These are the options the Hg commands can take.
 
@@ -33,7 +35,6 @@ type (
 
 type optionAdder interface {
 	addOption(interface{}, *[]string) error
-	// translateOption(*[]string)
 }
 
 func (o Debug) addOption(i interface{}, hgcmd *[]string) error {
@@ -44,16 +45,10 @@ func (o Debug) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--debug")
 		}
 	} else {
-		return errors.New("command <cmd> has no option Debug")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Debug")
 	}
 	return nil
 }
-
-// func (o Debug) translateOption(hgcmd []string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--debug")
-// 	}
-// }
 
 func (o Destpath) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Destpath")
@@ -63,16 +58,10 @@ func (o Destpath) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, string(o))
 		}
 	} else {
-		return errors.New("command <cmd> has no option Destpath")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Destpath")
 	}
 	return nil
 }
-
-// func (o Destpath) translateOption(hgcmd *[]string) {
-// 	if string(o) != "" {
-// 		*hgcmd = append(*hgcmd, string(o))
-// 	}
-// }
 
 func (o Limit) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Limit")
@@ -83,17 +72,10 @@ func (o Limit) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, strconv.Itoa(int(int64(o))))
 		}
 	} else {
-		return errors.New("command <cmd> has no option Limit")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Limit")
 	}
 	return nil
 }
-
-// func (o Limit) translateOption(hgcmd *[]string) {
-// 	if int64(o) > 0 {
-// 		*hgcmd = append(*hgcmd, "-l")
-// 		*hgcmd = append(*hgcmd, strconv.Itoa(int(int64(o))))
-// 	}
-// }
 
 func (o Mq) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Mq")
@@ -103,16 +85,10 @@ func (o Mq) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--mq")
 		}
 	} else {
-		return errors.New("command <cmd> has no option Mq")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Mq")
 	}
 	return nil
 }
-
-// func (o Mq) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--mq")
-// 	}
-// }
 
 func (o Profile) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Profile")
@@ -122,16 +98,10 @@ func (o Profile) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--profile")
 		}
 	} else {
-		return errors.New("command <cmd> has no option Profile")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Profile")
 	}
 	return nil
 }
-
-// func (o Profile) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--profile")
-// 	}
-// }
 
 func (o Quiet) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Quiet")
@@ -141,16 +111,10 @@ func (o Quiet) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "-q")
 		}
 	} else {
-		return errors.New("command <cmd> has no option Quiet")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Quiet")
 	}
 	return nil
 }
-
-// func (o Quiet) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "-q")
-// 	}
-// }
 
 func (o Remote) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Remote")
@@ -160,16 +124,10 @@ func (o Remote) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--remote")
 		}
 	} else {
-		return errors.New("command <cmd> has no option Remote")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Remote")
 	}
 	return nil
 }
-
-// func (o Remote) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--remote")
-// 	}
-// }
 
 func (o Rev) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Rev")
@@ -180,17 +138,10 @@ func (o Rev) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, string(o))
 		}
 	} else {
-		return errors.New("command <cmd> has no option Rev")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Rev")
 	}
 	return nil
 }
-
-// func (o Rev) translateOption(hgcmd *[]string) {
-// 	if string(o) != "" {
-// 		*hgcmd = append(*hgcmd, "-r")
-// 		*hgcmd = append(*hgcmd, string(o))
-// 	}
-// }
 
 func (o ShowBookmarks) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowBookmarks")
@@ -200,16 +151,10 @@ func (o ShowBookmarks) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--bookmarks")
 		}
 	} else {
-		return errors.New("command <cmd> has no option ShowBookmarks")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "ShowBookmarks")
 	}
 	return nil
 }
-
-// func (o ShowBookmarks) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--bookmarks")
-// 	}
-// }
 
 func (o ShowBranch) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowBranch")
@@ -219,16 +164,10 @@ func (o ShowBranch) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--branch")
 		}
 	} else {
-		return errors.New("command <cmd> has no option ShowBranch")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "ShowBranch")
 	}
 	return nil
 }
-
-// func (o ShowBranch) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--branch")
-// 	}
-// }
 
 func (o ShowId) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowId")
@@ -239,17 +178,10 @@ func (o ShowId) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--id")
 		}
 	} else {
-		return errors.New("command <cmd> has no option ShowId")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "ShowId")
 	}
 	return nil
 }
-
-// func (o ShowId) translateOption(hgcmd *[]string) {
-// 	fmt.Printf("ShowId.transl %v\n", bool(o))
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--id")
-// 	}
-// }
 
 func (o ShowNum) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowNum")
@@ -260,17 +192,10 @@ func (o ShowNum) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--num")
 		}
 	} else {
-		return errors.New("command <cmd> has no option ShowNum")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "ShowNum")
 	}
 	return nil
 }
-
-// func (o ShowNum) translateOption(hgcmd *[]string) {
-// 	fmt.Printf("ShowNum.transl %v\n", bool(o))
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--num")
-// 	}
-// }
 
 func (o ShowTags) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowTags")
@@ -280,16 +205,10 @@ func (o ShowTags) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--tags")
 		}
 	} else {
-		return errors.New("command <cmd> has no option ShowTags")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "ShowTags")
 	}
 	return nil
 }
-
-// func (o ShowTags) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--tags")
-// 	}
-// }
 
 func (o Traceback) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Traceback")
@@ -299,16 +218,10 @@ func (o Traceback) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "--traceback")
 		}
 	} else {
-		return errors.New("command <cmd> has no option Traceback")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Traceback")
 	}
 	return nil
 }
-
-// func (o Traceback) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "--traceback")
-// 	}
-// }
 
 func (o Verbose) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Verbose")
@@ -318,13 +231,7 @@ func (o Verbose) addOption(i interface{}, hgcmd *[]string) error {
 			*hgcmd = append(*hgcmd, "-v")
 		}
 	} else {
-		return errors.New("command <cmd> has no option Traceback")
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Verbose")
 	}
 	return nil
 }
-
-// func (o Verbose) translateOption(hgcmd *[]string) {
-// 	if bool(o) {
-// 		*hgcmd = append(*hgcmd, "-v")
-// 	}
-// }
