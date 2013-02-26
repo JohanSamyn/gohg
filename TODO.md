@@ -2,11 +2,6 @@
 
 (in no particular order, and order can change anytime)
 
-* Verify() should return the data _and_ the error info returned by the Hg CS,
-as this is important info for the caller. So Command() should return both the
-data and the error info returned by the Hg CS.
-Maybe we should allow all commands to return the hgerr info?
-
 * Encoding (in the hellomessage) should be UTF-8.
 
 * Make the return of the commands in gohg a slice-of-strings (separated by the
@@ -19,11 +14,6 @@ function command() returns nil as data when an error was detected.
 
 * log.Fatal should only be used at the topmost level (and probably even never
 in a lib !?)
-
-* Add methods to add options and flags to commands, so no syntax errors can be
-made. See [JavaHg](https://bitbucket.org/aragost/javahg) for an example.
-Maybe add a struct containing all possible options and flags as booleans, and
-let the caller activate them, and pass-in data for them when appropriate.
 
 * Set HGRCPATH (explicitely) to "" and HGPLAIN to "True".
 The first assures that only the hgrc file from the repo itself is used.
@@ -122,6 +112,16 @@ the result ? This would be a kind of hosting version of gohg.
 * ADVANCED - Add the possibility to switch to another repo then the one used to
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
+
+* DONE - Add methods to add options and flags to commands, so no syntax errors can be
+made. See [JavaHg](https://bitbucket.org/aragost/javahg) for an example.
+Maybe add a struct containing all possible options and flags as booleans, and
+let the caller activate them, and pass-in data for them when appropriate.
+
+* DONE - Verify() should return the data _and_ the error info returned by the Hg CS,
+as this is important info for the caller. So Command() should return both the
+data and the error info returned by the Hg CS.
+Maybe we should allow all commands to return the hgerr info? <- Done too.
 
 * DONE - Remove one of Encoding() and HgEncoding() in client.go.
 
