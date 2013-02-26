@@ -15,11 +15,8 @@ import (
 
 func main() {
 	var err error
-	hgexe := "hg"
-	repo := "."
-	var cfg []string
 	hc := NewHgClient()
-	if err = hc.Connect(hgexe, repo, cfg); err != nil {
+	if err = hc.Connect("", "", nil); err != nil {
 		log.Fatal(err)
 	}
 	defer hc.Disconnect()
@@ -29,5 +26,5 @@ func main() {
 		log.Println(err)
 		return
 	}
-	fmt.Printf("[[Summary for repo %s]]:\n%s\n", repo, summ)
+	fmt.Printf("[[Summary for repo %s]]:\n%s\n", hc.RepoRoot(), summ)
 }
