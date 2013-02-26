@@ -25,6 +25,8 @@ At the commandline type:
 
 ### Example
 
+Run this example from a folder containing a Mercurial repository.
+
     :::go
     package main
 
