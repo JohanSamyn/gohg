@@ -10,7 +10,9 @@ import (
 
 type addCmd struct {
 	Mq
-	hgDebugOpts
+	Debug
+	Profile
+	Traceback
 }
 
 func (cmd *addCmd) String() string {

@@ -11,7 +11,9 @@ import (
 type summaryCmd struct {
 	Remote
 	Mq
-	hgDebugOpts
+	Debug
+	Profile
+	Traceback
 }
 
 func (cmd *summaryCmd) String() string {

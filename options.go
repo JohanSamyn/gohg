@@ -31,12 +31,6 @@ type (
 	Verbose       bool   // -v --verbose
 )
 
-type hgDebugOpts struct {
-	Debug
-	Profile
-	Traceback
-}
-
 type optionAdder interface {
 	addOption(interface{}) error
 	translateOption(*[]string)

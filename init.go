@@ -12,7 +12,9 @@ import (
 
 type initCmd struct {
 	Destpath
-	hgDebugOpts
+	Debug
+	Profile
+	Traceback
 }
 
 func (cmd *initCmd) String() string {

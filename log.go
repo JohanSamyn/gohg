@@ -12,7 +12,9 @@ import (
 type logCmd struct {
 	Limit
 	Rev
-	hgDebugOpts
+	Debug
+	Profile
+	Traceback
 }
 
 func (cmd *logCmd) String() string {

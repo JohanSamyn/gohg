@@ -9,7 +9,9 @@ import (
 )
 
 type statusCmd struct {
-	hgDebugOpts
+	Debug
+	Profile
+	Traceback
 }
 
 func (cmd *statusCmd) String() string {

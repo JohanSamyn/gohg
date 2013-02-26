@@ -16,7 +16,9 @@ type identifyCmd struct {
 	ShowNum
 	Rev
 	ShowTags
-	hgDebugOpts
+	Debug
+	Profile
+	Traceback
 }
 
 func (cmd *identifyCmd) String() string {

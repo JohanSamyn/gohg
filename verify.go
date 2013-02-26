@@ -10,7 +10,9 @@ import (
 
 type verifyCmd struct {
 	Mq
-	hgDebugOpts
+	Debug
+	Profile
+	Traceback
 }
 
 func (cmd *verifyCmd) String() string {
