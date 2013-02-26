@@ -42,7 +42,7 @@ func (hgcl *HgClient) Add(opts ...optionAdder) ([]byte, error) {
 	// // apply option values given by the caller
 	// if len(opts) > 0 {
 	// 	for _, o := range opts {
-	// 		err = o.addOption(cmd)
+	// 		err = o.addOption(cmd, &hgcmd)
 	// 		if err == nil {
 	// 			o.translateOption(&hgcmd)
 	// 		}

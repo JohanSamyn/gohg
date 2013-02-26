@@ -41,10 +41,10 @@ func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 
 	// apply option values given by the caller
 	for _, o := range opts {
-		err = o.addOption(cmd)
-		if err == nil {
-			o.translateOption(&hgcmd)
-		}
+		err = o.addOption(cmd, &hgcmd)
+		// if err == nil {
+		// 	o.translateOption(&hgcmd)
+		// }
 	}
 
 	var data []byte

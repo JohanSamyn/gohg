@@ -43,12 +43,12 @@ func (hgcl *HgClient) Summary(opts ...optionAdder) ([]byte, error) {
 
 	// apply option values given by the caller
 	for _, o := range opts {
-		err = o.addOption(cmd)
-		if err == nil {
-			o.translateOption(&hgcmd)
-		} else {
-			fmt.Printf("err = ", err)
-		}
+		err = o.addOption(cmd, &hgcmd)
+		// if err == nil {
+		// 	o.translateOption(&hgcmd)
+		// } else {
+		// 	fmt.Printf("err = ", err)
+		// }
 	}
 
 	var data []byte

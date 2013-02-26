@@ -50,10 +50,10 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 
 	// apply option values given by the caller
 	for _, o := range opts {
-		err = o.addOption(cmd)
-		if err == nil {
-			o.translateOption(&hgcmd)
-		}
+		err = o.addOption(cmd, &hgcmd)
+		// if err == nil {
+		// 	o.translateOption(&hgcmd)
+		// }
 	}
 
 	var err1 error

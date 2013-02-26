@@ -45,16 +45,16 @@ func (hgcl *HgClient) Log(opts ...optionAdder) ([]byte, error) {
 
 	// apply option values given by the caller
 	for _, o := range opts {
-		err = o.addOption(cmd)
-		if err == nil {
-			o.translateOption(&hgcmd)
-			// } else {
-			// Silently skip the invalid option.
-			// Work out some logging system for gohg,
-			// and write this error message inthere.
-			// err = fmt.Errorf("%s", strings.Replace(fmt.Sprint(err), "<cmd>", "Log", 1))
-			// return data, err
-		}
+		err = o.addOption(cmd, &hgcmd)
+		// if err == nil {
+		// 	o.translateOption(&hgcmd)
+		// 	// } else {
+		// 	// Silently skip the invalid option.
+		// 	// Work out some logging system for gohg,
+		// 	// and write this error message inthere.
+		// 	// err = fmt.Errorf("%s", strings.Replace(fmt.Sprint(err), "<cmd>", "Log", 1))
+		// 	// return data, err
+		// }
 	}
 
 	data, err = hgcl.runcommand(&hgcmd)
