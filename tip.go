@@ -10,7 +10,7 @@ import (
 
 type tipCmd struct {
 	// define all necessary options/flags
-
+	Template
 	Debug
 	Profile
 	Traceback
@@ -29,6 +29,7 @@ func (hgcl *HgClient) Tip(opts ...optionAdder) ([]byte, error) {
 	cmd := new(tipCmd)
 
 	// apply gohg defaults
+	cmd.Template = ""
 	cmd.Debug = false
 	cmd.Profile = false
 	cmd.Traceback = false

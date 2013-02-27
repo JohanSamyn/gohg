@@ -29,6 +29,7 @@ type (
 	ShowId        bool   // -i --id
 	ShowNum       bool   // -n --num
 	ShowTags      bool   // -t --tags
+	Template      string //    --template
 	Traceback     bool   //    --traceback
 	Verbose       bool   // -v --verbose
 )
@@ -206,6 +207,20 @@ func (o ShowTags) addOption(i interface{}, hgcmd *[]string) error {
 		}
 	} else {
 		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "ShowTags")
+	}
+	return nil
+}
+
+func (o Template) addOption(i interface{}, hgcmd *[]string) error {
+	f := reflect.ValueOf(i).Elem().FieldByName("Template")
+	if f.IsValid() || f.CanSet() {
+		f.SetString(string(o))
+		if string(o) != "" {
+			*hgcmd = append(*hgcmd, "--template")
+			*hgcmd = append(*hgcmd, "\""+string(o)+"\"")
+		}
+	} else {
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Traceback")
 	}
 	return nil
 }

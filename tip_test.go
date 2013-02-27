@@ -27,3 +27,19 @@ func TestHgClient_Tip(t *testing.T) {
 		t.Fatalf("Test Tip: expected:\n%s\n but got:\n%s\n", expected, got)
 	}
 }
+
+func TestHgClient_Tip_Rev(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
+	var expected string = "\"-1\n\""
+
+	got, err := hct.Tip(Template("{rev}\n"))
+	if err != nil {
+		t.Error(err)
+	}
+
+	if string(got) != expected {
+		t.Fatalf("Test Tip: expected:\n%s\n but got:\n%s\n", expected, got)
+	}
+}
