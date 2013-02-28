@@ -41,8 +41,6 @@ func (hgcl *HgClient) Heads(opts ...optionAdder) ([]byte, error) {
 		err = o.addOption(cmd, &hgcmd)
 	}
 
-	fmt.Printf("hgcmd = %v", hgcmd)
-
 	var data []byte
 	data, err = hgcl.runcommand(&hgcmd)
 	return data, err
