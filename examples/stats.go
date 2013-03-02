@@ -15,8 +15,8 @@ import (
 )
 
 func main() {
-	hgexe := "M:/DEV/hg-stable/hg"
-	repo := "M:/DEV/thg-qt"
+	hgexe := "hg"
+	repo := "."
 
 	hc := NewHgClient()
 	if err := hc.Connect(hgexe, repo, nil); err != nil {
