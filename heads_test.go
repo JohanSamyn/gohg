@@ -14,7 +14,7 @@ func TestHgClient_Heads(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	var expected string = "\"0\n\""
+	var expected string = "0\n"
 
 	f, err := os.Create(hct.RepoRoot() + "/a")
 	_, _ = f.Write([]byte{'a', 'a', 'a'})

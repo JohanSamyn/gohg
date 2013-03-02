@@ -32,7 +32,7 @@ func TestHgClient_Tip_Rev(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	var expected string = "\"-1\n\""
+	var expected string = "-1\n"
 
 	got, err := hct.Tip(Template("{rev}\n"))
 	if err != nil {

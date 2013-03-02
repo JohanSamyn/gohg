@@ -217,7 +217,7 @@ func (o Template) addOption(i interface{}, hgcmd *[]string) error {
 		f.SetString(string(o))
 		if string(o) != "" {
 			*hgcmd = append(*hgcmd, "--template")
-			*hgcmd = append(*hgcmd, "\""+string(o)+"\"")
+			*hgcmd = append(*hgcmd, string(o))
 		}
 	} else {
 		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Traceback")
