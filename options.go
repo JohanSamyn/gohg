@@ -16,6 +16,8 @@ var errstr = "command %s has no option %s"
 // These are the options the Hg commands can take.
 
 type (
+	Active        bool   // -a --active
+	Closed        bool   // -c --closed
 	Debug         bool   //    --debug
 	Destpath      string // no equivalent Hg option, used by Init()
 	Limit         int    // -l --limit
