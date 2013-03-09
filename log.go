@@ -11,7 +11,9 @@ import (
 
 type logCmd struct {
 	Limit
+	Mq
 	Rev
+	Template
 	Debug
 	Profile
 	Traceback
