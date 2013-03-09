@@ -12,8 +12,7 @@ func TestHgClient_Log_NewRepo(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	data, err := hct.Log(Limit(99), Mq(true))
-	// data, err := hct.Log(Limit(99))
+	data, err := hct.Log(Limit(99))
 	if err != nil {
 		t.Error(err)
 	}
