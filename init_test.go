@@ -48,26 +48,26 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 	}
 }
 
-func TestHgClient_Init_New_Mq_Should_Succeed(t *testing.T) {
-	hct := setup(t)
-	defer teardown(t, hct)
+// func TestHgClient_Init_New_Mq_Should_Succeed(t *testing.T) {
+// 	hct := setup(t)
+// 	defer teardown(t, hct)
 
-	path, err := filepath.Abs(testdir + "/gohg-init-mq-success/")
-	if err != nil {
-		t.Error(err)
-	}
-	err = os.RemoveAll(path)
-	if err != nil {
-		t.Fatal(err)
-	}
+// 	path, err := filepath.Abs(testdir + "/gohg-init-mq-success/")
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
+// 	err = os.RemoveAll(path)
+// 	if err != nil {
+// 		t.Fatal(err)
+// 	}
 
-	err = hct.Init(Destpath(path))
-	if err != nil {
-		t.Error(err)
-	}
+// 	err = hct.Init(Destpath(path))
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
 
-	err = hct.Init(Mq(true), Cwd(path))
-	if err != nil {
-		t.Error(err)
-	}
-}
+// 	err = hct.Init(Mq(true), Cwd(path))
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
+// }
