@@ -11,7 +11,9 @@ import (
 )
 
 type initCmd struct {
+	Cwd
 	Destpath
+	Mq
 	Debug
 	Profile
 	Traceback
@@ -19,9 +21,10 @@ type initCmd struct {
 
 func (cmd *initCmd) String() string {
 	return fmt.Sprintf(
-		"initCmd = {\n    filepath: (%T) %q\n"+
+		"initCmd = {\n    filepath: (%T) %q\n    Mq: (%T) %t\n"+
+			"    Cwd: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Destpath, cmd.Destpath,
+		cmd.Destpath, cmd.Destpath, cmd.Mq, cmd.Mq, cmd.Cwd, cmd.Cwd,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
@@ -39,7 +42,9 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	cmd := new(initCmd)
 
 	// apply gohg defaults
+	cmd.Cwd = ""
 	cmd.Destpath = "."
+	cmd.Mq = false
 	cmd.Debug = false
 	cmd.Traceback = false
 	cmd.Profile = false
@@ -62,7 +67,7 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	if err1 != nil {
 		return fmt.Errorf("Init() -> filepath.Abs(): %s", err1)
 	}
-	if cmd.Destpath == "" || cmd.Destpath == "." || fa == hgcl.RepoRoot() {
+	if (cmd.Destpath == "" || cmd.Destpath == "." || fa == hgcl.RepoRoot()) && cmd.Mq == false {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}
