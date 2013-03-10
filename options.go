@@ -27,7 +27,7 @@ type (
 	Quiet         bool   // -q --quiet
 	Remote        bool   //    --remote
 	Repository    string // -R --repository
-	Rev           string // -r -- rev REV
+	Rev           string // -r --rev REV
 	ShowBookmarks bool   // -B --bookmarks
 	ShowBranch    bool   // -b --branch
 	ShowId        bool   // -i --id

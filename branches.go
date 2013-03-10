@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-type branchesCmd struct {
+type branchesOpts struct {
 	Active
 	Closed
 	Mq
@@ -17,9 +17,9 @@ type branchesCmd struct {
 	Traceback
 }
 
-func (cmd *branchesCmd) String() string {
+func (cmd *branchesOpts) String() string {
 	return fmt.Sprintf(
-		"branchesCmd = {\n    "+
+		"branchesOpts = {\n    "+
 			"Active: (%T) %t\n    Closed: (%T) %t\n    Mq: (%T) %t\n"+
 			"debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Active, cmd.Active, cmd.Closed, cmd.Closed, cmd.Mq, cmd.Mq,
@@ -28,28 +28,10 @@ func (cmd *branchesCmd) String() string {
 
 // Branches provides the 'hg branches' command.
 func (hgcl *HgClient) Branches(opts ...optionAdder) ([]byte, error) {
-
-	// applies type defaults
-	cmd := new(branchesCmd)
-
-	// apply gohg defaults
-	cmd.Active = false
-	cmd.Closed = false
-	cmd.Mq = false
-	cmd.Debug = false
-	cmd.Profile = false
-	cmd.Traceback = false
-
-	hgcmd := []string{"branches"}
-
-	var err error
-
-	// apply option values given by the caller
-	for _, o := range opts {
-		err = o.addOption(cmd, &hgcmd)
+	hgcmd, err := hgcl.buildCommand("branches", new(branchesOpts), opts)
+	if err != nil {
+		return nil, err
 	}
-
-	var data []byte
-	data, err = hgcl.runcommand(&hgcmd)
+	data, err := hgcl.runcommand(&hgcmd)
 	return data, err
 }

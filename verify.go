@@ -8,16 +8,16 @@ import (
 	"fmt"
 )
 
-type verifyCmd struct {
+type verifyOpts struct {
 	Mq
 	Debug
 	Profile
 	Traceback
 }
 
-func (cmd *verifyCmd) String() string {
+func (cmd *verifyOpts) String() string {
 	return fmt.Sprintf(
-		"verifyCmd = {\n    mq: (%T) %t\n"+
+		"verifyOpts = {\n    mq: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
@@ -25,29 +25,10 @@ func (cmd *verifyCmd) String() string {
 
 // Verify provides the 'hg verify' command.
 func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
-
-	// applies type defaults
-	cmd := new(verifyCmd)
-
-	// apply gohg defaults
-	cmd.Mq = false
-	cmd.Debug = false
-	cmd.Traceback = false
-	cmd.Profile = false
-
-	hgcmd := []string{"verify"}
-
-	var err error
-
-	// apply option values given by the caller
-	for _, o := range opts {
-		err = o.addOption(cmd, &hgcmd)
-		// if err == nil {
-		// 	o.translateOption(&hgcmd)
-		// }
+	hgcmd, err := hgcl.buildCommand("verify", new(verifyOpts), opts)
+	if err != nil {
+		return nil, err
 	}
-
-	var data []byte
-	data, err = hgcl.runcommand(&hgcmd)
+	data, err := hgcl.runcommand(&hgcmd)
 	return data, err
 }

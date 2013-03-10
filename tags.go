@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-type tagsCmd struct {
+type tagsOpts struct {
 	Mq
 	Verbose
 	Debug
@@ -16,33 +16,18 @@ type tagsCmd struct {
 	Traceback
 }
 
-func (cmd *tagsCmd) String() string {
+func (cmd *tagsOpts) String() string {
 	return fmt.Sprintf(
-		"tagsCmd = {\n    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
+		"tagsOpts = {\n    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
 // Tags provides the 'hg tags' command.
 func (hgcl *HgClient) Tags(opts ...optionAdder) ([]byte, error) {
-
-	// applies type defaults
-	cmd := new(tagsCmd)
-
-	// apply gohg defaults
-	cmd.Debug = false
-	cmd.Profile = false
-	cmd.Traceback = false
-
-	hgcmd := []string{"tags"}
-
-	var err error
-
-	// apply option values given by the caller
-	for _, o := range opts {
-		err = o.addOption(cmd, &hgcmd)
+	hgcmd, err := hgcl.buildCommand("tags", new(tagsOpts), opts)
+	if err != nil {
+		return nil, err
 	}
-
-	var data []byte
-	data, err = hgcl.runcommand(&hgcmd)
+	data, err := hgcl.runcommand(&hgcmd)
 	return data, err
 }

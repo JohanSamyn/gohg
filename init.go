@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 )
 
-type initCmd struct {
+type initOpts struct {
 	Cwd
 	Destpath
 	Mq
@@ -19,9 +19,9 @@ type initCmd struct {
 	Traceback
 }
 
-func (cmd *initCmd) String() string {
+func (cmd *initOpts) String() string {
 	return fmt.Sprintf(
-		"initCmd = {\n    filepath: (%T) %q\n    Mq: (%T) %t\n"+
+		"initOpts = {\n    filepath: (%T) %q\n    Mq: (%T) %t\n"+
 			"    Cwd: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Destpath, cmd.Destpath, cmd.Mq, cmd.Mq, cmd.Cwd, cmd.Cwd,
@@ -37,37 +37,19 @@ func (cmd *initCmd) String() string {
 // But Init() can be used to create any new repo outside the one the Hg CS is
 // running for.
 func (hgcl *HgClient) Init(opts ...optionAdder) error {
-
-	// applies type defaults
-	cmd := new(initCmd)
-
-	// apply gohg defaults
-	cmd.Cwd = ""
-	cmd.Destpath = "."
-	cmd.Mq = false
-	cmd.Debug = false
-	cmd.Traceback = false
-	cmd.Profile = false
-
-	hgcmd := []string{"init"}
-
-	var err error
-
-	// apply option values given by the caller
-	for _, o := range opts {
-		err = o.addOption(cmd, &hgcmd)
-		// if err == nil {
-		// 	o.translateOption(&hgcmd)
-		// }
+	cmdOpts := new(initOpts)
+	// apply gohg defaults (if they differ from type default)
+	cmdOpts.Destpath = "."
+	hgcmd, err := hgcl.buildCommand("init", cmdOpts, opts)
+	if err != nil {
+		return err
 	}
 
-	var err1 error
-	var fa string
-	fa, err1 = filepath.Abs(string(cmd.Destpath))
-	if err1 != nil {
-		return fmt.Errorf("Init() -> filepath.Abs(): %s", err1)
+	fa, err := filepath.Abs(string(cmdOpts.Destpath))
+	if err != nil {
+		return fmt.Errorf("Init() -> filepath.Abs(): %s", err)
 	}
-	if (cmd.Destpath == "" || cmd.Destpath == "." || fa == hgcl.RepoRoot()) && cmd.Mq == false {
+	if (cmdOpts.Destpath == "" || cmdOpts.Destpath == "." || fa == hgcl.RepoRoot()) && cmdOpts.Mq == false {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}

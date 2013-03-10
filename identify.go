@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-type identifyCmd struct {
+type identifyOpts struct {
 	ShowBookmarks
 	ShowBranch
 	ShowId
@@ -21,9 +21,9 @@ type identifyCmd struct {
 	Traceback
 }
 
-func (cmd *identifyCmd) String() string {
+func (cmd *identifyOpts) String() string {
 	return fmt.Sprintf(
-		"identifyCmd = {\n    bookmarks: (%T) %t\n    branch: (%T) %t\n    id: (%T) %t\n"+
+		"identifyOpts = {\n    bookmarks: (%T) %t\n    branch: (%T) %t\n    id: (%T) %t\n"+
 			"    mq: (%T) %t\n    num: (%T) %t\n    rev: (%T) %t\n    tags: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.ShowBookmarks, cmd.ShowBookmarks, cmd.ShowBranch, cmd.ShowBranch,
@@ -34,35 +34,17 @@ func (cmd *identifyCmd) String() string {
 
 // Identify provides the 'hg identify' command.
 func (hgcl *HgClient) Identify(opts ...optionAdder) ([]byte, error) {
-
-	// applies type defaults
-	cmd := new(identifyCmd)
-
-	// apply gohg defaults
-	cmd.Mq = false
-	cmd.Rev = ""
-	cmd.ShowBookmarks = true
-	cmd.ShowBranch = true
-	cmd.ShowId = true
-	cmd.ShowNum = true
-	cmd.ShowTags = true
-	cmd.Debug = false
-	cmd.Profile = false
-	cmd.Traceback = false
-
-	hgcmd := []string{"identify"}
-
-	var err error
-
-	// apply option values given by the caller
-	for _, o := range opts {
-		err = o.addOption(cmd, &hgcmd)
-		// if err == nil {
-		// 	o.translateOption(&hgcmd)
-		// }
+	cmdOpts := new(identifyOpts)
+	// apply gohg defaults (that differ from type default)
+	cmdOpts.ShowBookmarks = true
+	cmdOpts.ShowBranch = true
+	cmdOpts.ShowId = true
+	cmdOpts.ShowNum = true
+	cmdOpts.ShowTags = true
+	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts)
+	if err != nil {
+		return nil, err
 	}
-
-	var data []byte
-	data, err = hgcl.runcommand(&hgcmd)
+	data, err := hgcl.runcommand(&hgcmd)
 	return data, err
 }

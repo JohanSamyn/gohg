@@ -394,6 +394,29 @@ func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
+// Method buildCommand builds the command string to pass to the Hg CS.
+//	cmdName:	The name of the command ("log", "status", etc.).
+//	cmdOpts:	A type based on struct with the valid options for the command
+//				at hand. Also contains the (gohg) default value for each option
+//				for that particular command.
+//				Used to filter only the options supported by the command.
+//				Is a different type per command.
+//	opts:		The options passed-in by the user.
+func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []optionAdder) (hgcmd []string, err error) {
+	hgcmd = []string{cmdName}
+	for _, o := range opts {
+		err = o.addOption(cmdOpts, &hgcmd)
+		// Silently skip invalid options for now.
+		// if err != nil {
+		// 	fmt.Logf("err = %s", err)
+		// 	// Or work out some logging system for gohg, and write the error message inthere.
+		// 	log.Printf("err = %s", err)
+		// 	return nil, err
+		// }
+	}
+	return hgcmd, nil
+}
+
 // runcommand allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
 func (hgcl *HgClient) runcommand(cmd *[]string) (data []byte, err error) {
