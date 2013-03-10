@@ -18,6 +18,7 @@ var errstr = "command %s has no option %s"
 type (
 	Active        bool   // -a --active
 	Closed        bool   // -c --closed
+	Cwd           string //    --cwd
 	Debug         bool   //    --debug
 	Destpath      string // no equivalent Hg option, used by Init()
 	Limit         int    // -l --limit
@@ -25,6 +26,7 @@ type (
 	Profile       bool   //    --profile
 	Quiet         bool   // -q --quiet
 	Remote        bool   //    --remote
+	Repository    string // -R --repository
 	Rev           string // -r -- rev REV
 	ShowBookmarks bool   // -B --bookmarks
 	ShowBranch    bool   // -b --branch
@@ -38,6 +40,46 @@ type (
 
 type optionAdder interface {
 	addOption(interface{}, *[]string) error
+}
+
+func (o Active) addOption(i interface{}, hgcmd *[]string) error {
+	f := reflect.ValueOf(i).Elem().FieldByName("Active")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+		if bool(o) {
+			*hgcmd = append(*hgcmd, "--active")
+		}
+	} else {
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Active")
+	}
+	return nil
+}
+
+func (o Closed) addOption(i interface{}, hgcmd *[]string) error {
+	f := reflect.ValueOf(i).Elem().FieldByName("Closed")
+	if f.IsValid() || f.CanSet() {
+		f.SetBool(bool(o))
+		if bool(o) {
+			*hgcmd = append(*hgcmd, "--closed")
+		}
+	} else {
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Closed")
+	}
+	return nil
+}
+
+func (o Cwd) addOption(i interface{}, hgcmd *[]string) error {
+	f := reflect.ValueOf(i).Elem().FieldByName("Cwd")
+	if f.IsValid() || f.CanSet() {
+		f.SetString(string(o))
+		if string(o) != "" {
+			*hgcmd = append(*hgcmd, "--cwd")
+			*hgcmd = append(*hgcmd, string(o))
+		}
+	} else {
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Cwd")
+	}
+	return nil
 }
 
 func (o Debug) addOption(i interface{}, hgcmd *[]string) error {
@@ -128,6 +170,20 @@ func (o Remote) addOption(i interface{}, hgcmd *[]string) error {
 		}
 	} else {
 		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Remote")
+	}
+	return nil
+}
+
+func (o Repository) addOption(i interface{}, hgcmd *[]string) error {
+	f := reflect.ValueOf(i).Elem().FieldByName("Repository")
+	if f.IsValid() || f.CanSet() {
+		f.SetString(string(o))
+		if string(o) != "" {
+			*hgcmd = append(*hgcmd, "-R")
+			*hgcmd = append(*hgcmd, string(o))
+		}
+	} else {
+		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), "Repository")
 	}
 	return nil
 }
