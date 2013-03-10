@@ -12,7 +12,6 @@ type branchesCmd struct {
 	Active
 	Closed
 	Mq
-	Template
 	Debug
 	Profile
 	Traceback
@@ -20,7 +19,10 @@ type branchesCmd struct {
 
 func (cmd *branchesCmd) String() string {
 	return fmt.Sprintf(
-		"branchesCmd = {\n    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
+		"branchesCmd = {\n    "+
+			"Active: (%T) %t\n    Closed: (%T) %t\n    Mq: (%T) %t\n"+
+			"debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
+		cmd.Active, cmd.Active, cmd.Closed, cmd.Closed, cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
@@ -31,6 +33,9 @@ func (hgcl *HgClient) Branches(opts ...optionAdder) ([]byte, error) {
 	cmd := new(branchesCmd)
 
 	// apply gohg defaults
+	cmd.Active = false
+	cmd.Closed = false
+	cmd.Mq = false
 	cmd.Debug = false
 	cmd.Profile = false
 	cmd.Traceback = false
