@@ -38,7 +38,7 @@ func (cmd *initOpts) String() string {
 // running for.
 func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	cmdOpts := new(initOpts)
-	// apply gohg defaults (if they differ from type default)
+	// apply gohg defaults (that differ from type default)
 	cmdOpts.Destpath = "."
 	hgcmd, err := hgcl.buildCommand("init", cmdOpts, opts)
 	if err != nil {

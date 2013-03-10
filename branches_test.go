@@ -15,7 +15,7 @@ import (
 
 func TestHgClient_Branches(t *testing.T) {
 	hct := setup(t)
-	// defer teardown(t, hct)
+	defer teardown(t, hct)
 
 	// dropped the revision after the colon for more independent testing
 	var expected string = "newbranch                      1:\n" +
