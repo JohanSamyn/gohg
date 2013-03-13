@@ -6,7 +6,6 @@ package gohg
 
 import (
 	"fmt"
-	// "strings"
 )
 
 type logOpts struct {
