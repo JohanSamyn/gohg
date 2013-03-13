@@ -42,9 +42,18 @@ type optionAdder interface {
 	addOption(interface{}, *[]string) error
 }
 
+// An addOption method does 2 things:
+// 1. It checks if the option is valid for a given command,
+//    by checking its presence in that commands option struct (logOpts, etc.).
+// 2. If the option is valid, it then adds the option and any values for it
+//    to the command's commandline (a []string that is joined to a \0-separated
+//    string later in method runInHg()).
+// It also returns an error stating the option is invalid for the command,
+// but these error messages are silently ignored for the moment.
+
 func (o Active) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Active")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--active")
@@ -57,7 +66,7 @@ func (o Active) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Closed) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Closed")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--closed")
@@ -70,7 +79,7 @@ func (o Closed) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Cwd) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Cwd")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetString(string(o))
 		if string(o) != "" {
 			*hgcmd = append(*hgcmd, "--cwd")
@@ -84,7 +93,7 @@ func (o Cwd) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Debug) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Debug")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--debug")
@@ -97,7 +106,7 @@ func (o Debug) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Destpath) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Destpath")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetString(string(o))
 		if string(o) != "" {
 			*hgcmd = append(*hgcmd, string(o))
@@ -110,7 +119,7 @@ func (o Destpath) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Limit) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Limit")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetInt(int64(o))
 		if int64(o) > 0 {
 			*hgcmd = append(*hgcmd, "-l")
@@ -124,7 +133,7 @@ func (o Limit) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Mq) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Mq")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--mq")
@@ -137,7 +146,7 @@ func (o Mq) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Profile) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Profile")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--profile")
@@ -150,7 +159,7 @@ func (o Profile) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Quiet) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Quiet")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "-q")
@@ -163,7 +172,7 @@ func (o Quiet) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Remote) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Remote")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--remote")
@@ -176,7 +185,7 @@ func (o Remote) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Repository) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Repository")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetString(string(o))
 		if string(o) != "" {
 			*hgcmd = append(*hgcmd, "-R")
@@ -190,7 +199,7 @@ func (o Repository) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Rev) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Rev")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetString(string(o))
 		if string(o) != "" {
 			*hgcmd = append(*hgcmd, "-r")
@@ -204,7 +213,7 @@ func (o Rev) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o ShowBookmarks) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowBookmarks")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--bookmarks")
@@ -217,7 +226,7 @@ func (o ShowBookmarks) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o ShowBranch) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowBranch")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--branch")
@@ -230,7 +239,7 @@ func (o ShowBranch) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o ShowId) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowId")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		// fmt.Printf("ShowId.transl %v\n", bool(o))
 		if bool(o) {
@@ -244,7 +253,7 @@ func (o ShowId) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o ShowNum) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowNum")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		// fmt.Printf("ShowNum.transl %v\n", bool(o))
 		if bool(o) {
@@ -258,7 +267,7 @@ func (o ShowNum) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o ShowTags) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("ShowTags")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--tags")
@@ -271,7 +280,7 @@ func (o ShowTags) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Template) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Template")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetString(string(o))
 		if string(o) != "" {
 			*hgcmd = append(*hgcmd, "--template")
@@ -285,7 +294,7 @@ func (o Template) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Traceback) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Traceback")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "--traceback")
@@ -298,7 +307,7 @@ func (o Traceback) addOption(i interface{}, hgcmd *[]string) error {
 
 func (o Verbose) addOption(i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName("Verbose")
-	if f.IsValid() || f.CanSet() {
+	if f.IsValid() && f.CanSet() {
 		f.SetBool(bool(o))
 		if bool(o) {
 			*hgcmd = append(*hgcmd, "-v")
