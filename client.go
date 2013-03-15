@@ -439,14 +439,15 @@ func (hgcl *HgClient) runcommand(cmd *[]string) (data []byte, err error) {
 // runInHg sends a command to the Hg CS (using sendToHg),
 // and fetches the result (using receiveFromHg).
 func (hgcl *HgClient) runInHg(command string, hgcmd *[]string) ([]byte, []byte, int32, error) {
-	args := []byte(strings.Join(*hgcmd, string(0x0)))
-	// fmt.Printf("args: %s\n", strings.Replace(string(args), string(0x0), " ", -1))
-	var err error
 
 	if command == "" || hgcmd == nil {
-		return nil, nil, 0, fmt.Errorf("Invalid empty or blank params passed to run().")
+		return nil, nil, 0, fmt.Errorf("runInHg(): Received invalid empty or blank params.")
 	}
 
+	args := []byte(strings.Join(*hgcmd, string(0x0)))
+	// fmt.Printf("args: %s\n", strings.Replace(string(args), string(0x0), " ", -1))
+
+	var err error
 	err = hgcl.sendToHg(command, args)
 	if err != nil {
 		fmt.Println(err)
@@ -478,7 +479,7 @@ CHANNEL_LOOP:
 				} else {
 					ret, err = calcReturncode(data[0:4])
 					if err != nil {
-						log.Fatalf("runInHg(): binary.read failed: %s", err)
+						log.Fatalf("runInHg(): calcReturncode() failed: %s", err)
 					}
 				}
 				break CHANNEL_LOOP
