@@ -9,13 +9,16 @@ import (
 )
 
 type identifyOpts struct {
+	Insecure
+	Mq
+	RemoteCmd
+	Rev
 	ShowBookmarks
 	ShowBranch
 	ShowId
-	Mq
 	ShowNum
-	Rev
 	ShowTags
+	Ssh
 	Debug
 	Profile
 	Traceback

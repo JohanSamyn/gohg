@@ -9,7 +9,11 @@ import (
 )
 
 type tagsOpts struct {
+	Git
 	Mq
+	Patch
+	Style
+	Template
 	Verbose
 	Debug
 	Profile

@@ -9,6 +9,9 @@ import (
 )
 
 type manifestOpts struct {
+	All
+	Mq
+	rev
 	Debug
 	Profile
 	Traceback

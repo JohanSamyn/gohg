@@ -9,7 +9,11 @@ import (
 )
 
 type addOpts struct {
+	Dryrun
+	Exclude
+	Include
 	Mq
+	Subrepos
 	Debug
 	Profile
 	Traceback

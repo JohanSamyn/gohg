@@ -13,7 +13,10 @@ import (
 type initOpts struct {
 	Cwd
 	Destpath
+	Insecure
 	Mq
+	Remote
+	Ssh
 	Debug
 	Profile
 	Traceback

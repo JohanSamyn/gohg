@@ -9,6 +9,11 @@ import (
 )
 
 type headsOpts struct {
+	Closed
+	Mq
+	Rev
+	Style
+	Topo
 	Template
 	Debug
 	Profile

@@ -194,7 +194,7 @@ func (o Verbose) addOption(i interface{}, hgcmd *[]string) error {
 func addBoolOpt(opt bool, optname string, cmd string, i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName(optname)
 	if f.IsValid() && f.CanSet() {
-		f.SetBool(opt)
+		// f.SetBool(opt)
 		if opt {
 			*hgcmd = append(*hgcmd, cmd)
 		}
@@ -207,7 +207,7 @@ func addBoolOpt(opt bool, optname string, cmd string, i interface{}, hgcmd *[]st
 func addIntOpt(opt int, optname string, cmd string, i interface{}, hgcmd *[]string) error {
 	f := reflect.ValueOf(i).Elem().FieldByName(optname)
 	if f.IsValid() && f.CanSet() {
-		f.SetInt(int64(opt))
+		// f.SetInt(int64(opt))
 		if opt > 0 {
 			*hgcmd = append(*hgcmd, cmd)
 			*hgcmd = append(*hgcmd, strconv.Itoa(opt))
