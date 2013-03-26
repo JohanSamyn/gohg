@@ -3,8 +3,8 @@
 // that can be found in the LICENSE.txt file.
 
 // This program is an example of how to use the gohg library.
-// Run it in the workingdir of a Mercurial repo, or pass the
-// path of the repo to hc.COnnect().
+// Run it in the working dir of any Mercurial repo, or pass the
+// path of the repo as the second argument to hc.connect().
 
 package main
 
