@@ -11,7 +11,7 @@ import (
 type manifestOpts struct {
 	All
 	Mq
-	rev
+	Rev
 	Debug
 	Profile
 	Traceback
