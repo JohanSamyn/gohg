@@ -13,8 +13,8 @@ type headsOpts struct {
 	Mq
 	Rev
 	Style
-	Topo
 	Template
+	Topo
 	Debug
 	Profile
 	Traceback
