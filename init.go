@@ -37,7 +37,7 @@ func (cmd *initOpts) String() string {
 //
 // Be aware of the fact that it cannot be used to initialize the repo you want
 // the (current) Hg CS to work on, as the Hg CS requires an existing repo.
-// But Init() can be used to create any new repo outside the one the Hg CS is
+// But Init() can be used to create any new repo besides the one the Hg CS is
 // running for.
 func (hgcl *HgClient) Init(opts ...optionAdder) error {
 	cmdOpts := new(initOpts)
