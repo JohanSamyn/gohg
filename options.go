@@ -63,138 +63,138 @@ type optionAdder interface {
 // It also returns an error stating the option is invalid for the command,
 // but these error messages are silently ignored for the moment.
 
-func (o Active) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Active", "--active", i, hgcmd)
+func (opt Active) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Active", "--active", cmdOpts, hgcmd)
 }
 
-func (o All) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "All", "--all", i, hgcmd)
+func (opt All) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "All", "--all", cmdOpts, hgcmd)
 }
 
-func (o Closed) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Closed", "--closed", i, hgcmd)
+func (opt Closed) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Closed", "--closed", cmdOpts, hgcmd)
 }
 
-func (o Cwd) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Cwd", "--cwd", i, hgcmd)
+func (opt Cwd) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Cwd", "--cwd", cmdOpts, hgcmd)
 }
 
-func (o Debug) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Debug", "--debug", i, hgcmd)
+func (opt Debug) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Debug", "--debug", cmdOpts, hgcmd)
 }
 
-func (o Destpath) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Destpath", "", i, hgcmd)
+func (opt Destpath) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Destpath", "", cmdOpts, hgcmd)
 }
 
-func (o Dryrun) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Dryrun", "--dry-run", i, hgcmd)
+func (opt Dryrun) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Dryrun", "--dry-run", cmdOpts, hgcmd)
 }
 
-func (o Exclude) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Exclude", "--exclude", i, hgcmd)
+func (opt Exclude) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Exclude", "--exclude", cmdOpts, hgcmd)
 }
 
-func (o Git) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Git", "--git", i, hgcmd)
+func (opt Git) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Git", "--git", cmdOpts, hgcmd)
 }
 
-func (o Include) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Include", "--include", i, hgcmd)
+func (opt Include) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Include", "--include", cmdOpts, hgcmd)
 }
 
-func (o Insecure) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Insecure", "--insecure", i, hgcmd)
+func (opt Insecure) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Insecure", "--insecure", cmdOpts, hgcmd)
 }
 
-func (o Limit) addOption(i interface{}, hgcmd *[]string) error {
-	return addIntOpt(int(o), "Limit", "--limit", i, hgcmd)
+func (opt Limit) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addIntOpt(int(opt), "Limit", "--limit", cmdOpts, hgcmd)
 }
 
-func (o Mq) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Mq", "--mq", i, hgcmd)
+func (opt Mq) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Mq", "--mq", cmdOpts, hgcmd)
 }
 
-func (o Patch) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Patch", "--patch", i, hgcmd)
+func (opt Patch) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Patch", "--patch", cmdOpts, hgcmd)
 }
 
-func (o Profile) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Profile", "--profile", i, hgcmd)
+func (opt Profile) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Profile", "--profile", cmdOpts, hgcmd)
 }
 
-func (o Quiet) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Quite", "-q", i, hgcmd)
+func (opt Quiet) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Quite", "-q", cmdOpts, hgcmd)
 }
 
-func (o Remote) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Remote", "--remote", i, hgcmd)
+func (opt Remote) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Remote", "--remote", cmdOpts, hgcmd)
 }
 
-func (o RemoteCmd) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "RemoteCmd", "--remotecmd", i, hgcmd)
+func (opt RemoteCmd) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "RemoteCmd", "--remotecmd", cmdOpts, hgcmd)
 }
 
-func (o Repository) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Repository", "-R", i, hgcmd)
+func (opt Repository) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Repository", "-R", cmdOpts, hgcmd)
 }
 
-func (o Rev) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Rev", "--rev", i, hgcmd)
+func (opt Rev) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Rev", "--rev", cmdOpts, hgcmd)
 }
 
-func (o ShowBookmarks) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "ShowBookmarks", "--bookmarks", i, hgcmd)
+func (opt ShowBookmarks) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "ShowBookmarks", "--bookmarks", cmdOpts, hgcmd)
 }
 
-func (o ShowBranch) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "ShowBranch", "--branch", i, hgcmd)
+func (opt ShowBranch) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "ShowBranch", "--branch", cmdOpts, hgcmd)
 }
 
-func (o ShowId) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "ShowId", "--id", i, hgcmd)
+func (opt ShowId) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "ShowId", "--id", cmdOpts, hgcmd)
 }
 
-func (o ShowNum) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "ShowNum", "--num", i, hgcmd)
+func (opt ShowNum) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "ShowNum", "--num", cmdOpts, hgcmd)
 }
 
-func (o ShowTags) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "ShowTags", "--tags", i, hgcmd)
+func (opt ShowTags) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "ShowTags", "--tags", cmdOpts, hgcmd)
 }
 
-func (o Ssh) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Ssh", "--ssh", i, hgcmd)
+func (opt Ssh) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Ssh", "--ssh", cmdOpts, hgcmd)
 }
 
-func (o Style) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Style", "--style", i, hgcmd)
+func (opt Style) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Style", "--style", cmdOpts, hgcmd)
 }
 
-func (o Subrepos) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Subrepos", "--subrepos", i, hgcmd)
+func (opt Subrepos) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Subrepos", "--subrepos", cmdOpts, hgcmd)
 }
 
-func (o Template) addOption(i interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(o), "Template", "--template", i, hgcmd)
+func (opt Template) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Template", "--template", cmdOpts, hgcmd)
 }
 
-func (o Topo) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Topo", "--topo", i, hgcmd)
+func (opt Topo) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Topo", "--topo", cmdOpts, hgcmd)
 }
 
-func (o Traceback) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Traceback", "--traceback", i, hgcmd)
+func (opt Traceback) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Traceback", "--traceback", cmdOpts, hgcmd)
 }
 
-func (o Verbose) addOption(i interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(o), "Verbose", "-v", i, hgcmd)
+func (opt Verbose) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Verbose", "-v", cmdOpts, hgcmd)
 }
 
-func addBoolOpt(opt bool, optname string, cmd string, i interface{}, hgcmd *[]string) error {
-	f := reflect.ValueOf(i).Elem().FieldByName(optname)
-	if f.IsValid() && f.CanSet() {
-		// f.SetBool(opt)
+func addBoolOpt(opt bool, optname string, cmd string, cmdOpts interface{}, hgcmd *[]string) error {
+	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
+	if fld.IsValid() && fld.CanSet() {
+		fld.SetBool(opt) // add the value to the <cmd>Opts struct
 		if opt {
 			*hgcmd = append(*hgcmd, cmd)
 		}
@@ -204,10 +204,10 @@ func addBoolOpt(opt bool, optname string, cmd string, i interface{}, hgcmd *[]st
 	return nil
 }
 
-func addIntOpt(opt int, optname string, cmd string, i interface{}, hgcmd *[]string) error {
-	f := reflect.ValueOf(i).Elem().FieldByName(optname)
-	if f.IsValid() && f.CanSet() {
-		// f.SetInt(int64(opt))
+func addIntOpt(opt int, optname string, cmd string, cmdOpts interface{}, hgcmd *[]string) error {
+	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
+	if fld.IsValid() && fld.CanSet() {
+		fld.SetInt(int64(opt)) // add the value to the <cmd>Opts struct
 		if opt > 0 {
 			*hgcmd = append(*hgcmd, cmd)
 			*hgcmd = append(*hgcmd, strconv.Itoa(opt))
@@ -218,11 +218,11 @@ func addIntOpt(opt int, optname string, cmd string, i interface{}, hgcmd *[]stri
 	return nil
 }
 
-func addStringOpt(opt string, optname string, cmd string, i interface{}, hgcmd *[]string) error {
-	f := reflect.ValueOf(i).Elem().FieldByName(optname)
-	if f.IsValid() && f.CanSet() {
-		f.SetString(opt)
-		if cmd != "" { // think about Destpath f.i.
+func addStringOpt(opt string, optname string, cmd string, cmdOpts interface{}, hgcmd *[]string) error {
+	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
+	if fld.IsValid() && fld.CanSet() {
+		fld.SetString(opt) // add the value to the <cmd>Opts struct
+		if cmd != "" {     // think of Destpath f.i.
 			*hgcmd = append(*hgcmd, cmd)
 		}
 		if opt != "" {
