@@ -4,7 +4,8 @@ cls
 echo ----------------------------------------
 echo running: go test
 echo ----------------------------------------
-go test
+:: %* is for passing in -v f.i.
+go test %*
 pause
 
 echo ----------------------------------------
