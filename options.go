@@ -16,38 +16,42 @@ var errstr = "command %s has no option %s"
 // These are the options the Hg commands can take.
 
 type (
-	Active        bool   // -a --active
-	All           bool   //    --all
-	Closed        bool   // -c --closed
-	Cwd           string //    --cwd
-	Debug         bool   //    --debug
-	Destpath      string // no equivalent Hg option, used by Init()
-	Dryrun        bool   // -n --dry-run (<->ShowNum)
-	Exclude       string // -X --exclude
-	Git           bool   // -g --git
-	Include       string // -I --include
-	Insecure      bool   //    --insecure
-	Limit         int    // -l --limit
-	Mq            bool   //    --mq
-	Patch         bool   // -p --patch
-	Profile       bool   //    --profile
-	Quiet         bool   // -q --quiet
-	Remote        bool   //    --remote
-	RemoteCmd     string //    --remotecmd
-	Repository    string // -R --repository
-	Rev           string // -r --rev REV
-	ShowBookmarks bool   // -B --bookmarks
-	ShowBranch    bool   // -b --branch
-	ShowId        bool   // -i --id
-	ShowNum       bool   // -n --num (<->Dryrun)
-	ShowTags      bool   // -t --tags (<->Topo)
-	Ssh           string // -e --ssh
-	Style         string //    --style
-	Subrepos      bool   // -S --subrepos
-	Template      string //    --template
-	Topo          bool   // -t --topo (<->Tags)
-	Traceback     bool   //    --traceback
-	Verbose       bool   // -v --verbose
+	Active         bool   // -a --active
+	All            bool   //    --all
+	Closed         bool   // -c --closed
+	Config         string //    --config
+	Cwd            string //    --cwd
+	Debug          bool   //    --debug
+	Destpath       string // no equivalent Hg option, used by Init()
+	Dryrun         bool   // -n --dry-run (<->ShowNum)
+	Exclude        string // -X --exclude
+	Git            bool   // -g --git
+	Hidden         bool   //    --hidden
+	Include        string // -I --include
+	Insecure       bool   //    --insecure
+	Limit          int    // -l --limit
+	Mq             bool   //    --mq
+	NonInteractive bool   // -y --noninteractive
+	Patch          bool   // -p --patch
+	Profile        bool   //    --profile
+	Quiet          bool   // -q --quiet
+	Remote         bool   //    --remote
+	RemoteCmd      string //    --remotecmd
+	Repository     string // -R --repository
+	Rev            string // -r --rev REV
+	ShowBookmarks  bool   // -B --bookmarks
+	ShowBranch     bool   // -b --branch
+	ShowId         bool   // -i --id
+	ShowNum        bool   // -n --num (<->Dryrun)
+	ShowTags       bool   // -t --tags (<->Topo)
+	Ssh            string // -e --ssh
+	Style          string //    --style
+	Subrepos       bool   // -S --subrepos
+	Template       string //    --template
+	Time           bool   //    --time
+	Topo           bool   // -t --topo (<->Tags)
+	Traceback      bool   //    --traceback
+	Verbose        bool   // -v --verbose
 )
 
 type optionAdder interface {
@@ -75,6 +79,10 @@ func (opt Closed) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Closed", "--closed", cmdOpts, hgcmd)
 }
 
+func (opt Config) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Config", "--config", cmdOpts, hgcmd)
+}
+
 func (opt Cwd) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOpt(string(opt), "Cwd", "--cwd", cmdOpts, hgcmd)
 }
@@ -99,6 +107,10 @@ func (opt Git) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Git", "--git", cmdOpts, hgcmd)
 }
 
+func (opt Hidden) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Hidden", "--hidden", cmdOpts, hgcmd)
+}
+
 func (opt Include) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOpt(string(opt), "Include", "--include", cmdOpts, hgcmd)
 }
@@ -113,6 +125,10 @@ func (opt Limit) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Mq) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Mq", "--mq", cmdOpts, hgcmd)
+}
+
+func (opt NonInteractive) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "NonInteractive", "--noninteractive", cmdOpts, hgcmd)
 }
 
 func (opt Patch) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -177,6 +193,10 @@ func (opt Subrepos) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Template) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOpt(string(opt), "Template", "--template", cmdOpts, hgcmd)
+}
+
+func (opt Time) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Time", "--time", cmdOpts, hgcmd)
 }
 
 func (opt Topo) addOption(cmdOpts interface{}, hgcmd *[]string) error {
