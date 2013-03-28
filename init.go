@@ -55,6 +55,6 @@ func (hgcl *HgClient) Init(opts ...optionAdder) error {
 			" from the Command Server repo path")
 	}
 
-	_, err = hgcl.runcommand(&hgcmd)
+	_, err = hgcl.runcommand(hgcmd)
 	return err
 }

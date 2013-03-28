@@ -14,7 +14,7 @@ func (hgcl *HgClient) Version() (string, error) {
 	var err error
 	if hgcl.hgversion == "" {
 		var data []byte
-		data, err = hgcl.runcommand(&([]string{"version", "-q"}))
+		data, err = hgcl.runcommand([]string{"version", "-q"})
 		if err == nil {
 			ver := strings.Split(string(data), "\n")[0]
 			ver = ver[strings.LastIndex(ver, " ")+1 : len(ver)-1]

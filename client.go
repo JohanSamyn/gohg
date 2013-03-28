@@ -419,7 +419,7 @@ func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []o
 
 // runcommand allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
-func (hgcl *HgClient) runcommand(cmd *[]string) (data []byte, err error) {
+func (hgcl *HgClient) runcommand(cmd []string) (data []byte, err error) {
 	// boilerplate code for all commands
 
 	// fmt.Printf("cmd = %s\nopts = %v\n", (*cmd)[0], (*cmd)[1:])
@@ -431,20 +431,20 @@ func (hgcl *HgClient) runcommand(cmd *[]string) (data []byte, err error) {
 	// Maybe make this 2 checks, to differentiate between ret and hgerr?
 	if ret != 0 || hgerr != nil {
 		return nil, fmt.Errorf("%s(): returncode=%d\nhgerr:\n%s\n",
-			strings.Title((*cmd)[0]), ret, string(hgerr))
+			strings.Title(cmd[0]), ret, string(hgerr))
 	}
 	return data, nil
 } // runcommand()
 
 // runInHg sends a command to the Hg CS (using sendToHg),
 // and fetches the result (using receiveFromHg).
-func (hgcl *HgClient) runInHg(command string, hgcmd *[]string) ([]byte, []byte, int32, error) {
+func (hgcl *HgClient) runInHg(command string, hgcmd []string) ([]byte, []byte, int32, error) {
 
 	if command == "" || hgcmd == nil {
 		return nil, nil, 0, fmt.Errorf("runInHg(): Received invalid empty or blank params.")
 	}
 
-	args := []byte(strings.Join(*hgcmd, string(0x0)))
+	args := []byte(strings.Join(hgcmd, string(0x0)))
 	// fmt.Printf("args: %s\n", strings.Replace(string(args), string(0x0), " ", -1))
 
 	var err error

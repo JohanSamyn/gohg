@@ -113,6 +113,10 @@ the result ? This would be a kind of hosting version of gohg.
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
 
+* DONE - MUST the first argument of runcommand be an explicit pointer to a []byte ?
+Isn't a []byte a reference type, meaning it is an address already (as its
+content is mutable) ?
+
 * DONE - Add methods to add options and flags to commands, so no syntax errors can be
 made. See [JavaHg](https://bitbucket.org/aragost/javahg) for an example.
 Maybe add a struct containing all possible options and flags as booleans, and

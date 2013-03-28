@@ -27,6 +27,6 @@ func (hgcl *HgClient) Tip(opts ...optionAdder) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data, err := hgcl.runcommand(&hgcmd)
+	data, err := hgcl.runcommand(hgcmd)
 	return data, err
 }
