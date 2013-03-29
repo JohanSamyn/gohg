@@ -31,9 +31,9 @@ At the commandline type:
 
 ### Example
 
-Run this example from a folder containing a Mercurial repository.  
-(You can find the source in the repo as examples/readme-test.go,
-along with a few others.)
+Run this example from a folder containing a Mercurial repository.
+Or pass the repo of your choice as the second parameter for Connect().  
+(You can find the source in examples/readme-test.go, along with a few others.)
 
     :::go
     package main
