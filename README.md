@@ -57,7 +57,14 @@ along with a few others.)
             log.Println(err)
             return
         }
-        fmt.Printf("[[Summary for repo %s]]:\n%s\n", hc.RepoRoot(), summ)
+        fmt.Printf("\"summary\" for repo %s:\n%s\n", hc.RepoRoot(), summ)
+
+        var l []byte
+        if l, err = hc.Log(Limit(2)); err != nil {
+            fmt.Println(err)
+            return
+        }
+        fmt.Printf("\"log -l 2\" for repo %s:\n%s\n", hc.RepoRoot(), l)
     }
 
 ### License
