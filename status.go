@@ -9,8 +9,30 @@ import (
 )
 
 type statusOpts struct {
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
+	Added
+	All
+	Change
+	Clean
+	Copies
+	Deleted
+	Ignored
+	Modified
+	NoStatus
+	Print0
+	Removed
+	SubRepos
+	Unknown
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

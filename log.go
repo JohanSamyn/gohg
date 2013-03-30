@@ -9,13 +9,35 @@ import (
 )
 
 type logOpts struct {
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
+	Branch
+	Copies
+	Date
+	Follow
+	Git
+	Graph
+	Keyword
 	Limit
 	Mq
+	NoMerges
+	Patch
+	Prune
+	Removed
 	Rev
+	Stat
+	Style
 	Template
-	Verbose
+	User
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

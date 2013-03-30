@@ -9,13 +9,22 @@ import (
 )
 
 type addOpts struct {
-	Dryrun
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
+	DryRun
 	Exclude
 	Include
 	Mq
-	Subrepos
+	SubRepos
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

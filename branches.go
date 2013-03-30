@@ -9,11 +9,20 @@ import (
 )
 
 type branchesOpts struct {
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
 	Active
 	Closed
 	Mq
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

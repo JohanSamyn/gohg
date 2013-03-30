@@ -10,10 +10,17 @@ import (
 
 type verifyOpts struct {
 	Cwd // makes it possible to verify another repo than hgcl.Reporoot()
-	Mq
+	Hidden
+	NonInteractive
+	Quiet
 	Repository // makes it possible to verify another repo than hgcl.Reporoot()
+	Verbose
+
+	Mq
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

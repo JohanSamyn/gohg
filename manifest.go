@@ -9,11 +9,20 @@ import (
 )
 
 type manifestOpts struct {
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
 	All
 	Mq
 	Rev
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

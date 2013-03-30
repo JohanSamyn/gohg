@@ -9,10 +9,19 @@ import (
 )
 
 type summaryOpts struct {
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
 	Remote
 	Mq
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

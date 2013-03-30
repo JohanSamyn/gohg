@@ -9,14 +9,20 @@ import (
 )
 
 type tagsOpts struct {
-	Git
-	Mq
-	Patch
-	Style
-	Template
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
 	Verbose
+
+	All
+	Mq
+	Rev
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

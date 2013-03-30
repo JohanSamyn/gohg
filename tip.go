@@ -9,9 +9,22 @@ import (
 )
 
 type tipOpts struct {
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
+	Patch
+	Git
+	Mq
+	Style
 	Template
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

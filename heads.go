@@ -9,14 +9,23 @@ import (
 )
 
 type headsOpts struct {
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
 	Closed
 	Mq
 	Rev
 	Style
 	Template
 	Topo
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 

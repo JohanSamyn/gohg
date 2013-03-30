@@ -12,12 +12,20 @@ import (
 
 type initOpts struct {
 	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+
 	Insecure
 	Mq
 	Remote
 	Ssh
+
 	Debug
 	Profile
+	Time
 	Traceback
 }
 
