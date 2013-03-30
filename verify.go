@@ -16,7 +16,7 @@ type verifyOpts struct {
 	Repository // makes it possible to verify another repo than hgcl.Reporoot()
 	Verbose
 
-	Mq
+	// Mq
 
 	Debug
 	Profile
@@ -26,9 +26,10 @@ type verifyOpts struct {
 
 func (cmd *verifyOpts) String() string {
 	return fmt.Sprintf(
-		"verifyOpts = {\n    mq: (%T) %t\n"+
+		// "verifyOpts = {\n    mq: (%T) %t\n"+
+		"verifyOpts = {\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Mq, cmd.Mq,
+		// cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 

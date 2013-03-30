@@ -17,7 +17,7 @@ type tagsOpts struct {
 	Verbose
 
 	All
-	Mq
+	// Mq
 	Rev
 
 	Debug

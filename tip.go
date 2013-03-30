@@ -18,7 +18,7 @@ type tipOpts struct {
 
 	Patch
 	Git
-	Mq
+	// Mq
 	Style
 	Template
 

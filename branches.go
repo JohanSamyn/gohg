@@ -18,7 +18,7 @@ type branchesOpts struct {
 
 	Active
 	Closed
-	Mq
+	// Mq
 
 	Debug
 	Profile
@@ -29,9 +29,11 @@ type branchesOpts struct {
 func (cmd *branchesOpts) String() string {
 	return fmt.Sprintf(
 		"branchesOpts = {\n    "+
-			"Active: (%T) %t\n    Closed: (%T) %t\n    Mq: (%T) %t\n"+
+			// "Active: (%T) %t\n    Closed: (%T) %t\n    Mq: (%T) %t\n"+
+			"Active: (%T) %t\n    Closed: (%T) %t\n"+
 			"debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Active, cmd.Active, cmd.Closed, cmd.Closed, cmd.Mq, cmd.Mq,
+		cmd.Active, cmd.Active, cmd.Closed, cmd.Closed,
+		// cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 

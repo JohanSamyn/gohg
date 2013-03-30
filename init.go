@@ -19,7 +19,7 @@ type initOpts struct {
 	Verbose
 
 	Insecure
-	Mq
+	// Mq
 	Remote
 	Ssh
 
@@ -31,10 +31,12 @@ type initOpts struct {
 
 func (cmd *initOpts) String() string {
 	return fmt.Sprintf(
+		// "initOpts = {\n    Mq: (%T) %t\n"+
 		"initOpts = {\n    Mq: (%T) %t\n"+
 			"    Cwd: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Mq, cmd.Mq, cmd.Cwd, cmd.Cwd,
+		// cmd.Mq, cmd.Mq,
+		cmd.Cwd, cmd.Cwd,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
@@ -58,7 +60,7 @@ func (hgcl *HgClient) Init(destpath string, opts ...optionAdder) error {
 	if err != nil {
 		return fmt.Errorf("Init() -> filepath.Abs(): %s", err)
 	}
-	if (destpath == "" || destpath == "." || fa == hgcl.RepoRoot()) && cmdOpts.Mq == false {
+	if destpath == "" || destpath == "." || fa == hgcl.RepoRoot() /*&& cmdOpts.Mq == false*/ {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}

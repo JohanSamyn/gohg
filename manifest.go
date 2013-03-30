@@ -17,7 +17,7 @@ type manifestOpts struct {
 	Verbose
 
 	All
-	Mq
+	// Mq
 	Rev
 
 	Debug

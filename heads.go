@@ -17,7 +17,7 @@ type headsOpts struct {
 	Verbose
 
 	Closed
-	Mq
+	// Mq
 	Rev
 	Style
 	Template

@@ -24,7 +24,7 @@ type logOpts struct {
 	Graph
 	Keyword
 	Limit
-	Mq
+	// Mq
 	NoMerges
 	Patch
 	Prune
@@ -43,10 +43,12 @@ type logOpts struct {
 
 func (cmd *logOpts) String() string {
 	return fmt.Sprintf(
-		"logOpts = {\n    limit: (%T) %t\n    rev: (%T) %t\n    mq: (%T) %t\n"+
+		// "logOpts = {\n    limit: (%T) %t\n    rev: (%T) %t\n    mq: (%T) %t\n"+
+		"logOpts = {\n    limit: (%T) %t\n    rev: (%T) %t\n"+
 			"    template: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Limit, cmd.Limit, cmd.Rev, cmd.Rev, cmd.Mq, cmd.Mq,
+		cmd.Limit, cmd.Limit, cmd.Rev, cmd.Rev,
+		// cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 

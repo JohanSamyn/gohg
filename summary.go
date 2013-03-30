@@ -17,7 +17,7 @@ type summaryOpts struct {
 	Verbose
 
 	Remote
-	Mq
+	// Mq
 
 	Debug
 	Profile
@@ -27,9 +27,11 @@ type summaryOpts struct {
 
 func (cmd *summaryOpts) String() string {
 	return fmt.Sprintf(
+		// "summaryOpts = {\n    remote: (%T) %t\n    mq: (%T) %t\n"+
 		"summaryOpts = {\n    remote: (%T) %t\n    mq: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Remote, cmd.Remote, cmd.Mq, cmd.Mq,
+		cmd.Remote, cmd.Remote,
+		// cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 

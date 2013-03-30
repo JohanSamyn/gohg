@@ -17,7 +17,7 @@ type identifyOpts struct {
 	Verbose
 
 	Insecure
-	Mq
+	// Mq
 	RemoteCmd
 	Rev
 	Bookmarks
@@ -36,10 +36,13 @@ type identifyOpts struct {
 func (cmd *identifyOpts) String() string {
 	return fmt.Sprintf(
 		"identifyOpts = {\n    bookmarks: (%T) %t\n    branch: (%T) %t\n    id: (%T) %t\n"+
-			"    mq: (%T) %t\n    num: (%T) %t\n    rev: (%T) %t\n    tags: (%T) %t\n"+
+			// "    mq: (%T) %t\n    num: (%T) %t\n    rev: (%T) %t\n    tags: (%T) %t\n"+
+			"    num: (%T) %t\n    rev: (%T) %t\n    tags: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
 		cmd.Bookmarks, cmd.Bookmarks, cmd.Branch, cmd.Branch,
-		cmd.Id, cmd.Id, cmd.Mq, cmd.Mq, cmd.Num, cmd.Num,
+		cmd.Id, cmd.Id,
+		// cmd.Mq, cmd.Mq,
+		cmd.Num, cmd.Num,
 		cmd.Rev, cmd.Rev, cmd.Tags, cmd.Tags,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }

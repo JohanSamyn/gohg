@@ -51,7 +51,7 @@ type (
 	Keyword   string // -k --keyword
 	Limit     int    // -l --limit
 	Modified  bool   // -m --modified
-	Mq        bool   //    --mq
+	//	Mq        bool   //    --mq
 	NoMerges  bool   // -M --no-merges
 	NoStatus  bool   // -n --no-status
 	Num       bool   // -n --num (<->Dryrun)
@@ -201,9 +201,9 @@ func (opt Modified) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Modified", "--modified", cmdOpts, hgcmd)
 }
 
-func (opt Mq) addOption(cmdOpts interface{}, hgcmd *[]string) error {
-	return addBoolOpt(bool(opt), "Mq", "--mq", cmdOpts, hgcmd)
-}
+// func (opt Mq) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+// 	return addBoolOpt(bool(opt), "Mq", "--mq", cmdOpts, hgcmd)
+// }
 
 func (opt NoMerges) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "NoMerges", "--no-merges", cmdOpts, hgcmd)

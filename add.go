@@ -19,7 +19,7 @@ type addOpts struct {
 	DryRun
 	Exclude
 	Include
-	Mq
+	// Mq
 	SubRepos
 
 	Debug
@@ -30,9 +30,10 @@ type addOpts struct {
 
 func (cmd *addOpts) String() string {
 	return fmt.Sprintf(
-		"addOpts = {\n    mq: (%T) %t\n"+
+		// "addOpts = {\n    mq: (%T) %t\n"+
+		"addOpts = {\n"+
 			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Mq, cmd.Mq,
+		// cmd.Mq, cmd.Mq,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
