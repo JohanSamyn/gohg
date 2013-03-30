@@ -24,7 +24,6 @@ func main() {
 	var summ []byte
 	if summ, err = hc.Summary(); err != nil {
 		log.Println(err)
-		return
 	}
 	fmt.Printf("\"summary\" for repo %s:\n%s\n", hc.RepoRoot(), summ)
 
@@ -32,7 +31,6 @@ func main() {
 	files := []string{}
 	if l, err = hc.Log(files, Limit(2)); err != nil {
 		fmt.Println(err)
-		return
 	}
 	fmt.Printf("\"log -l 2\" for repo %s:\n%s\n", hc.RepoRoot(), l)
 }
