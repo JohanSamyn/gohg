@@ -16,42 +16,47 @@ var errstr = "command %s has no option %s"
 // These are the options the Hg commands can take.
 
 type (
-	Active         bool   // -a --active
-	All            bool   //    --all
-	Closed         bool   // -c --closed
-	Config         string //    --config
+	// the global options
 	Cwd            string //    --cwd
-	Debug          bool   //    --debug
-	Destpath       string // no equivalent Hg option, used by Init()
-	Dryrun         bool   // -n --dry-run (<->ShowNum)
-	Exclude        string // -X --exclude
-	Git            bool   // -g --git
 	Hidden         bool   //    --hidden
-	Include        string // -I --include
-	Insecure       bool   //    --insecure
-	Limit          int    // -l --limit
-	Mq             bool   //    --mq
 	NonInteractive bool   // -y --noninteractive
-	Patch          bool   // -p --patch
-	Profile        bool   //    --profile
 	Quiet          bool   // -q --quiet
-	Remote         bool   //    --remote
-	RemoteCmd      string //    --remotecmd
 	Repository     string // -R --repository
-	Rev            string // -r --rev REV
-	ShowBookmarks  bool   // -B --bookmarks
-	ShowBranch     bool   // -b --branch
-	ShowId         bool   // -i --id
-	ShowNum        bool   // -n --num (<->Dryrun)
-	ShowTags       bool   // -t --tags (<->Topo)
-	Ssh            string // -e --ssh
-	Style          string //    --style
-	Subrepos       bool   // -S --subrepos
-	Template       string //    --template
-	Time           bool   //    --time
-	Topo           bool   // -t --topo (<->Tags)
-	Traceback      bool   //    --traceback
 	Verbose        bool   // -v --verbose
+
+	// command-specific options
+	Active        bool   // -a --active
+	All           bool   //    --all
+	Closed        bool   // -c --closed
+	Config        string //    --config
+	Destpath      string // no equivalent Hg option, used by Init()
+	Dryrun        bool   // -n --dry-run (<->ShowNum)
+	Exclude       string // -X --exclude
+	Git           bool   // -g --git
+	Include       string // -I --include
+	Insecure      bool   //    --insecure
+	Limit         int    // -l --limit
+	Mq            bool   //    --mq
+	Patch         bool   // -p --patch
+	Remote        bool   //    --remote
+	RemoteCmd     string //    --remotecmd
+	Rev           string // -r --rev REV
+	ShowBookmarks bool   // -B --bookmarks
+	ShowBranch    bool   // -b --branch
+	ShowId        bool   // -i --id
+	ShowNum       bool   // -n --num (<->Dryrun)
+	ShowTags      bool   // -t --tags (<->Topo)
+	Ssh           string // -e --ssh
+	Style         string //    --style
+	Subrepos      bool   // -S --subrepos
+	Template      string //    --template
+	Topo          bool   // -t --topo (<->Tags)
+
+	// debugging and profiling options
+	Debug     bool //    --debug
+	Profile   bool //    --profile
+	Time      bool //    --time
+	Traceback bool //    --traceback
 )
 
 type optionAdder interface {
