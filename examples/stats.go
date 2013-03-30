@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE.txt file.
 
-// This program is an example of how to use the gohg library.
+// This program is an example of how you can use the gohg library.
 // Run it in the working dir of any Mercurial repo, or pass the
 // path of the repo as the second argument to hc.connect().
 
