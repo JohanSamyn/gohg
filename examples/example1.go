@@ -50,12 +50,12 @@ func main() {
 	fmt.Println("--------------------")
 
 	var l []byte
-	if l, err = hc.Log(Limit(2)); err != nil {
+	if l, err = hc.Log([]string{"branches_test.go"}, Limit(2), Verbose(true)); err != nil {
 		fmt.Println(err)
 		return
 	}
 	// use 'go run example1.go | less' (or more) to view big results (such as a full log)
-	fmt.Printf("[[log -l 2]]:\n%s", l)
+	fmt.Printf("[[log -v -l 2 branches_test.go]]:\n%s", l)
 
 	// give time to see the Hg CS session live and die from Process Explorer
 	// fmt.Print("waiting...")

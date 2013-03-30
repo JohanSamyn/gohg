@@ -26,7 +26,7 @@ func (cmd *summaryOpts) String() string {
 
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("summary", new(summaryOpts), opts)
+	hgcmd, err := hgcl.buildCommand("summary", new(summaryOpts), opts, nil)
 	if err != nil {
 		return nil, err
 	}

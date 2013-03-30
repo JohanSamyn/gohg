@@ -21,8 +21,8 @@ func (cmd *statusOpts) String() string {
 }
 
 // Status provides the 'hg status' command.
-func (hgcl *HgClient) Status(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("status", new(statusOpts), opts)
+func (hgcl *HgClient) Status(files []string, opts ...optionAdder) ([]byte, error) {
+	hgcmd, err := hgcl.buildCommand("status", new(statusOpts), opts, files)
 	if err != nil {
 		return nil, err
 	}

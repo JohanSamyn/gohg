@@ -38,7 +38,7 @@ func main() {
 	// don't count empty value after last \n
 	files := len(strings.Split(string(m), "\n")) - 1
 
-	h, err := hc.Heads(Template("{rev}\n"))
+	h, err := hc.Heads(nil, Template("{rev}\n"))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -63,7 +63,7 @@ func main() {
 	// don't count tip
 	tags := len(strings.Split(string(tg), "\n")) - 1 - 1
 
-	au, err := hc.Log(Template("{author}\n"))
+	au, err := hc.Log(nil, Template("{author}\n"))
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -79,7 +79,7 @@ func main() {
 	}
 	authors := len(am)
 
-	mg, err := hc.Log(Rev("merge()"), Template("{rev}\n"))
+	mg, err := hc.Log(nil, Rev("merge()"), Template("{rev}\n"))
 	if err != nil {
 		fmt.Println(err)
 		return

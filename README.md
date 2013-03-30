@@ -61,7 +61,8 @@ along with a few others.)
         fmt.Printf("\"summary\" for repo %s:\n%s\n", hc.RepoRoot(), summ)
 
         var l []byte
-        if l, err = hc.Log(Limit(2)); err != nil {
+        files := []string{}
+        if l, err = hc.Log(files, Limit(2)); err != nil {
             fmt.Println(err)
             return
         }

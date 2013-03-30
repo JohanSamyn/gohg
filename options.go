@@ -29,7 +29,6 @@ type (
 	All           bool   //    --all
 	Closed        bool   // -c --closed
 	Config        string //    --config
-	Destpath      string // no equivalent Hg option, used by Init()
 	Dryrun        bool   // -n --dry-run (<->ShowNum)
 	Exclude       string // -X --exclude
 	Git           bool   // -g --git
@@ -94,10 +93,6 @@ func (opt Cwd) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Debug) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Debug", "--debug", cmdOpts, hgcmd)
-}
-
-func (opt Destpath) addOption(cmdOpts interface{}, hgcmd *[]string) error {
-	return addStringOpt(string(opt), "Destpath", "", cmdOpts, hgcmd)
 }
 
 func (opt Dryrun) addOption(cmdOpts interface{}, hgcmd *[]string) error {

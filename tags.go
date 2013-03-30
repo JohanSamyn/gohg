@@ -28,7 +28,7 @@ func (cmd *tagsOpts) String() string {
 
 // Tags provides the 'hg tags' command.
 func (hgcl *HgClient) Tags(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("tags", new(tagsOpts), opts)
+	hgcmd, err := hgcl.buildCommand("tags", new(tagsOpts), opts, nil)
 	if err != nil {
 		return nil, err
 	}

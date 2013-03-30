@@ -12,7 +12,6 @@ import (
 
 type initOpts struct {
 	Cwd
-	Destpath
 	Insecure
 	Mq
 	Remote
@@ -24,10 +23,10 @@ type initOpts struct {
 
 func (cmd *initOpts) String() string {
 	return fmt.Sprintf(
-		"initOpts = {\n    filepath: (%T) %q\n    Mq: (%T) %t\n"+
+		"initOpts = {\n    Mq: (%T) %t\n"+
 			"    Cwd: (%T) %t\n"+
 			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Destpath, cmd.Destpath, cmd.Mq, cmd.Mq, cmd.Cwd, cmd.Cwd,
+		cmd.Mq, cmd.Mq, cmd.Cwd, cmd.Cwd,
 		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
 }
 
@@ -39,18 +38,19 @@ func (cmd *initOpts) String() string {
 // the (current) Hg CS to work on, as the Hg CS requires an existing repo.
 // But Init() can be used to create any new repo besides the one the Hg CS is
 // running for.
-func (hgcl *HgClient) Init(opts ...optionAdder) error {
+func (hgcl *HgClient) Init(destpath string, opts ...optionAdder) error {
 	cmdOpts := new(initOpts)
-	hgcmd, err := hgcl.buildCommand("init", cmdOpts, opts)
+	params := []string{destpath}
+	hgcmd, err := hgcl.buildCommand("init", cmdOpts, opts, params)
 	if err != nil {
 		return err
 	}
 
-	fa, err := filepath.Abs(string(cmdOpts.Destpath))
+	fa, err := filepath.Abs(destpath)
 	if err != nil {
 		return fmt.Errorf("Init() -> filepath.Abs(): %s", err)
 	}
-	if (cmdOpts.Destpath == "" || cmdOpts.Destpath == "." || fa == hgcl.RepoRoot()) && cmdOpts.Mq == false {
+	if (destpath == "" || destpath == "." || fa == hgcl.RepoRoot()) && cmdOpts.Mq == false {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
 	}

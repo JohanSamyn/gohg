@@ -400,9 +400,10 @@ func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 //				at hand. Also contains the (gohg) default value for each option
 //				for that particular command.
 //				Used to filter only the options supported by the command.
-//				Is a different type per command.
-//	opts:		The options passed-in by the user.
-func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []optionAdder) (hgcmd []string, err error) {
+//	opts:		The options passed by the caller.
+//	params:		Any filenames, paths or other that the command needs.
+//				These are to be added as the last things of the command.
+func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []optionAdder, params []string) (hgcmd []string, err error) {
 	hgcmd = []string{cmdName}
 	for _, o := range opts {
 		err = o.addOption(cmdOpts, &hgcmd)
@@ -413,6 +414,11 @@ func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []o
 		// 	log.Printf("err = %s", err)
 		// 	return nil, err
 		// }
+	}
+	for _, p := range params {
+		if p != "" {
+			hgcmd = append(hgcmd, p)
+		}
 	}
 	return hgcmd, nil
 }

@@ -23,7 +23,7 @@ func (cmd *tipOpts) String() string {
 
 // Tip provides the 'hg tip' command.
 func (hgcl *HgClient) Tip(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("tip", new(tipOpts), opts)
+	hgcmd, err := hgcl.buildCommand("tip", new(tipOpts), opts, nil)
 	if err != nil {
 		return nil, err
 	}

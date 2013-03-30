@@ -27,8 +27,8 @@ func (cmd *headsOpts) String() string {
 }
 
 // Heads provides the 'hg heads' command.
-func (hgcl *HgClient) Heads(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("heads", new(headsOpts), opts)
+func (hgcl *HgClient) Heads(revs []string, opts ...optionAdder) ([]byte, error) {
+	hgcmd, err := hgcl.buildCommand("heads", new(headsOpts), opts, revs)
 	if err != nil {
 		return nil, err
 	}

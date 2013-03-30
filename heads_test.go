@@ -26,7 +26,7 @@ func TestHgClient_Heads(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got, err := hct.Heads(Template("{rev}\n"))
+	got, err := hct.Heads(nil, Template("{rev}\n"))
 	if err != nil {
 		t.Error(err)
 	}

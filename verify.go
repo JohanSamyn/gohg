@@ -9,7 +9,9 @@ import (
 )
 
 type verifyOpts struct {
+	Cwd // makes it possible to verify another repo than hgcl.Reporoot()
 	Mq
+	Repository // makes it possible to verify another repo than hgcl.Reporoot()
 	Debug
 	Profile
 	Traceback
@@ -25,7 +27,7 @@ func (cmd *verifyOpts) String() string {
 
 // Verify provides the 'hg verify' command.
 func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("verify", new(verifyOpts), opts)
+	hgcmd, err := hgcl.buildCommand("verify", new(verifyOpts), opts, nil)
 	if err != nil {
 		return nil, err
 	}

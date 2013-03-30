@@ -28,8 +28,8 @@ func (cmd *addOpts) String() string {
 }
 
 // Add provides the 'hg add' command.
-func (hgcl *HgClient) Add(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("add", new(addOpts), opts)
+func (hgcl *HgClient) Add(files []string, opts ...optionAdder) ([]byte, error) {
+	hgcmd, err := hgcl.buildCommand("add", new(addOpts), opts, files)
 	if err != nil {
 		return nil, err
 	}

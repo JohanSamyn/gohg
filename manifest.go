@@ -25,7 +25,7 @@ func (cmd *manifestOpts) String() string {
 
 // Manifest provides the 'hg manifest' command.
 func (hgcl *HgClient) Manifest(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("manifest", new(manifestOpts), opts)
+	hgcmd, err := hgcl.buildCommand("manifest", new(manifestOpts), opts, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -13,6 +13,7 @@ type logOpts struct {
 	Mq
 	Rev
 	Template
+	Verbose
 	Debug
 	Profile
 	Traceback
@@ -28,8 +29,8 @@ func (cmd *logOpts) String() string {
 }
 
 // Log provides the 'hg log' command.
-func (hgcl *HgClient) Log(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("log", new(logOpts), opts)
+func (hgcl *HgClient) Log(files []string, opts ...optionAdder) ([]byte, error) {
+	hgcmd, err := hgcl.buildCommand("log", new(logOpts), opts, files)
 	if err != nil {
 		return nil, err
 	}

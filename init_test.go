@@ -32,7 +32,7 @@ func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = hct.Init(Destpath(path))
+	err = hct.Init(path)
 	if err != nil {
 		t.Error(err)
 	}
@@ -42,7 +42,21 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	err := hct.Init(Destpath(hct.RepoRoot()))
+	path, err := filepath.Abs(testdir + "/gohg-init-failure/")
+	if err != nil {
+		t.Error(err)
+	}
+	err = os.RemoveAll(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = hct.Init(path)
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = hct.Init(path)
 	if err == nil {
 		t.Error(errors.New("HgClient.Init() did not fail in an existing Hg working copy"))
 	}

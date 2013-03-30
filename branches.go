@@ -28,7 +28,7 @@ func (cmd *branchesOpts) String() string {
 
 // Branches provides the 'hg branches' command.
 func (hgcl *HgClient) Branches(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("branches", new(branchesOpts), opts)
+	hgcmd, err := hgcl.buildCommand("branches", new(branchesOpts), opts, nil)
 	if err != nil {
 		return nil, err
 	}
