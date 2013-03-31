@@ -11,6 +11,18 @@ Mercurial 2.5.2, both on Windows 7 and Ubuntu 12.04.
 Currently there is no mechanism to handle differences in possibilities between
 different Mercurial versions.
 
+Dependencies
+
+Only Go and it's standard library. Though I'm using gocov for checking test
+coverage (see https://github.com/axw/gocov).
+
+Installation
+
+At the commandline type:
+  go get [-u] bitbucket.org/gohg/gohg
+  go install bitbucket.org/gohg/gohg
+  go test -v bitbucket.org/gohg/gohg
+
 Import the package
 
 Start with importing the gohg package:
@@ -128,6 +140,14 @@ The following config settings are fixated in the code (at least for now):
 As mentioned earlier, passing config info is not implemented yet.
 
 Currently there is no support for any extensions to Mercurial.
+
+Issues
+
+If you experience any issues using the gohg tool, please register an issue using
+the Bitbucket issue tracker at https://bitbucket.org/gohg/gohg/issues.
+
+You can also register any enhancement requests or suggestions for improvement
+there.
 
 License
 
