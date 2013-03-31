@@ -61,6 +61,5 @@ func (hgcl *HgClient) Identify(source string, opts ...optionAdder) ([]byte, erro
 	if err != nil {
 		return nil, err
 	}
-	data, err := hgcl.runcommand(hgcmd)
-	return data, err
+	return hgcl.runcommand(hgcmd)
 }

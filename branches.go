@@ -43,6 +43,5 @@ func (hgcl *HgClient) Branches(opts ...optionAdder) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	data, err := hgcl.runcommand(hgcmd)
-	return data, err
+	return hgcl.runcommand(hgcmd)
 }
