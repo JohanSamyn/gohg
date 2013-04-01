@@ -11,8 +11,6 @@ import (
 	"strings"
 )
 
-var errstr = "command %s has no option %s"
-
 // These are the options the Hg commands can take.
 
 type (
@@ -362,7 +360,7 @@ func addBoolOpt(opt bool, optname string, cmd string, cmdOpts interface{}, hgcmd
 			*hgcmd = append(*hgcmd, cmd)
 		}
 	} else {
-		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), optname)
+		return fmt.Errorf("command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
 	}
 	return nil
 }
@@ -376,7 +374,7 @@ func addIntOpt(opt int, optname string, cmd string, cmdOpts interface{}, hgcmd *
 			*hgcmd = append(*hgcmd, strconv.Itoa(opt))
 		}
 	} else {
-		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), optname)
+		return fmt.Errorf("command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
 	}
 	return nil
 }
@@ -392,7 +390,7 @@ func addStringOpt(opt string, optname string, cmd string, cmdOpts interface{}, h
 			*hgcmd = append(*hgcmd, opt)
 		}
 	} else {
-		return fmt.Errorf(errstr, strings.Title((*hgcmd)[0]), optname)
+		return fmt.Errorf("command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
 	}
 	return nil
 }
