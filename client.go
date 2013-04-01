@@ -242,7 +242,8 @@ func composeStartupConfig(hgcmd string, repo string, config []string) []string {
 		"--cwd", repo,
 		"-R", repo,
 		// These arguments are fixed.
-		"--config", "ui.interactive=False,extensions.color=!",
+		"--config", "ui.interactive=False",
+		"--config", "extensions.color=!",
 		"serve", "--cmdserver", "pipe")
 
 	return hgconfig
