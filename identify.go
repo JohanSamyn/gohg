@@ -49,15 +49,7 @@ func (cmd *identifyOpts) String() string {
 
 // Identify provides the 'hg identify' command.
 func (hgcl *HgClient) Identify(source string, opts ...optionAdder) ([]byte, error) {
-	cmdOpts := new(identifyOpts)
-	// apply gohg defaults (that differ from type default)
-	cmdOpts.Bookmarks = true
-	cmdOpts.Branch = true
-	cmdOpts.Id = true
-	cmdOpts.Num = true
-	cmdOpts.Tags = true
-	params := []string{source}
-	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts, params)
+	hgcmd, err := hgcl.buildCommand("identify", new(identifyOpts), opts, []string{source})
 	if err != nil {
 		return nil, err
 	}
