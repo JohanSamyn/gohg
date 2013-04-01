@@ -27,31 +27,36 @@ type (
 
 	// command-specific options
 
-	Active    bool   // -a --active
-	Added     bool   // -a --added
-	All       bool   //    --all
-	Bookmarks bool   // -B --bookmarks
-	Branch    bool   // -b --branch
-	Change    bool   //    --change
-	Clean     bool   // -c --clean
-	Closed    bool   // -c --closed
-	Config    string //    --config
-	Copies    bool   // -C --copies
-	Date      string // -d --date
-	Deleted   bool   // -d --deleted
-	DryRun    bool   // -n --dry-run (<->ShowNum)
-	Exclude   string // -X --exclude
-	Follow    bool   // -f --follow
-	Git       bool   // -g --git
-	Graph     bool   // -G --graph
-	Id        bool   // -i --id
-	Ignored   bool   // -i --ignored
-	Include   string // -I --include
-	Insecure  bool   //    --insecure
-	Keyword   string // -k --keyword
-	Limit     int    // -l --limit
-	Modified  bool   // -m --modified
-	//	Mq        bool   //    --mq
+	Active      bool   // -a --active
+	Added       bool   // -a --added
+	AddRemove   bool   // -A  --addremove
+	All         bool   //    --all
+	Amend       bool   //    --ammend
+	Bookmarks   bool   // -B --bookmarks
+	Branch      bool   // -b --branch
+	Change      bool   //    --change
+	Clean       bool   // -c --clean
+	CloseBranch bool   //    --close-branch
+	Closed      bool   // -c --closed
+	Config      string //    --config
+	Copies      bool   // -C --copies
+	Date        string // -d --date
+	Deleted     bool   // -d --deleted
+	DryRun      bool   // -n --dry-run (<->ShowNum)
+	Exclude     string // -X --exclude
+	Follow      bool   // -f --follow
+	Git         bool   // -g --git
+	Graph       bool   // -G --graph
+	Id          bool   // -i --id
+	Ignored     bool   // -i --ignored
+	Include     string // -I --include
+	Insecure    bool   //    --insecure
+	Keyword     string // -k --keyword
+	Limit       int    // -l --limit
+	Logfile     string // -l --logfile
+	Message     string // -m --message
+	Modified    bool   // -m --modified
+	// Mq          bool   //    --mq
 	NoMerges  bool   // -M --no-merges
 	NoStatus  bool   // -n --no-status
 	Num       bool   // -n --num (<->Dryrun)
@@ -101,8 +106,16 @@ func (opt Added) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Added", "--added", cmdOpts, hgcmd)
 }
 
+func (opt AddRemove) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "AddRemove", "--addremove", cmdOpts, hgcmd)
+}
+
 func (opt All) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "All", "--all", cmdOpts, hgcmd)
+}
+
+func (opt Amend) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Amend", "--amend", cmdOpts, hgcmd)
 }
 
 func (opt Bookmarks) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -119,6 +132,10 @@ func (opt Change) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Clean) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Clean", "--clean", cmdOpts, hgcmd)
+}
+
+func (opt CloseBranch) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "CloseBranch", "--close-branch", cmdOpts, hgcmd)
 }
 
 func (opt Closed) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -195,6 +212,14 @@ func (opt Keyword) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Limit) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addIntOpt(int(opt), "Limit", "--limit", cmdOpts, hgcmd)
+}
+
+func (opt Logfile) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Logfile", "--logfile", cmdOpts, hgcmd)
+}
+
+func (opt Message) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "Message", "--message", cmdOpts, hgcmd)
 }
 
 func (opt Modified) addOption(cmdOpts interface{}, hgcmd *[]string) error {

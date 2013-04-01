@@ -38,7 +38,7 @@ func TestHgClient_Log_NotEmpty(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	err := addAndCommitFile(t, hct)
+	err := createAndCommitFile(t, hct)
 	if err != nil {
 		t.Fatal(err)
 	}

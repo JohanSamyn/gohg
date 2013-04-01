@@ -52,11 +52,23 @@ func teardown(t *testing.T, hct *HgClient) {
 	}
 }
 
-func addAndCommitFile(t *testing.T, hct *HgClient) error {
-	f, err := os.Create(hct.RepoRoot() + "/a")
-	_, _ = f.Write([]byte{'a', 'a', 'a'})
+func createFile(file string, data string, hct *HgClient) error {
+	f, err := os.Create(hct.RepoRoot() + "/" + file)
+	if err != nil {
+		return err
+	}
+	_, err = f.Write([]byte(data))
 	f.Sync()
 	f.Close()
+	return err
+}
+
+func createAndCommitFile(t *testing.T, hct *HgClient) error {
+
+	err := createFile("/a", "aaa", hct)
+	if err != nil {
+		t.Fatal(err)
+	}
 	// add all there is to add to the repo,
 	_, err = hct.Add(nil)
 	// commit it
