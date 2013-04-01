@@ -19,8 +19,13 @@ type commitOpts struct {
 	AddRemove
 	Amend
 	CloseBranch
+	Date
+	Exclude
+	Include
 	Logfile
 	Message
+	SubRepos
+	User
 
 	Debug
 	Profile
