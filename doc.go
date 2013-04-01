@@ -86,7 +86,10 @@ starts with a capital letter.
   }
 
 Commands normally return a byte slice containing the resulting data, and an
-error type. But there are exceptions (see api docs hereafter).
+error type. But there are exceptions (see api docs hereafter). If the
+returnvalue of the command indicated it did not complete successful, the
+returnvalue is included in the error message. As is any error message from
+Mercurial.
 
   log, err := hc.Log()          // log is a byte slice
   err := hc.Init("~/mynewrepo") // only returns an error
