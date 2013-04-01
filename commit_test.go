@@ -24,7 +24,7 @@ func TestHgClient_Commit(t *testing.T) {
 		t.Error(err2)
 	}
 	revsBefore, _ := strconv.Atoi(string(t1))
-	revsBefore += 1
+	revsBefore++
 	// fmt.Printf("revsBefore: %d\n", revsBefore)
 
 	var err error
