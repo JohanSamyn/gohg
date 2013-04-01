@@ -40,6 +40,15 @@ func main() {
 
 	fmt.Println("--------------------")
 
+	var i []byte
+	if i, err = hc.Identify(""); err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("[[identify]]:\n%s", i)
+
+	fmt.Println("--------------------")
+
 	var s []byte
 	if s, err = hc.Summary(); err != nil {
 		fmt.Println(err)
