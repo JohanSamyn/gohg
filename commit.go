@@ -38,12 +38,6 @@ func (cmdOpts *commitOpts) String() string {
 
 // Commit provides the 'hg commit' command.
 func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) ([]byte, error) {
-	// // applies type defaults
-	// cmdOpts := new(commitOpts)
-	// // apply gohg defaults
-	// cmdOpts.Debug = false
-	// // apply option values given by the caller
-	// hgcmd, err := hgcl.buildCommand("commit", cmdOpts, opts, files)
 	hgcmd, err := hgcl.buildCommand("commit", new(commitOpts), opts, files)
 	if err != nil {
 		return nil, err
