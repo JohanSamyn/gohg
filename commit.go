@@ -9,6 +9,7 @@ import (
 )
 
 type commitOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

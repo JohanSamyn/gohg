@@ -9,6 +9,7 @@ import (
 )
 
 type statusOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

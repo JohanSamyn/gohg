@@ -9,6 +9,7 @@ import (
 )
 
 type summaryOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

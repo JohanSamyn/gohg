@@ -9,6 +9,7 @@ import (
 )
 
 type identifyOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

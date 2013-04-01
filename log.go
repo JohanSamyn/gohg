@@ -9,6 +9,7 @@ import (
 )
 
 type logOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

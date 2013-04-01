@@ -9,6 +9,7 @@ import (
 )
 
 type addOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

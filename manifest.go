@@ -9,6 +9,7 @@ import (
 )
 
 type manifestOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

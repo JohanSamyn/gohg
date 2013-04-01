@@ -9,6 +9,7 @@ import (
 )
 
 type cloneOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

@@ -18,6 +18,7 @@ var errstr = "command %s has no option %s"
 type (
 	// the global options
 
+	Config         string //    --config
 	Cwd            string //    --cwd
 	Hidden         bool   //    --hidden
 	NonInteractive bool   // -y --noninteractive
@@ -38,7 +39,6 @@ type (
 	Clean       bool   // -c --clean
 	CloseBranch bool   //    --close-branch
 	Closed      bool   // -c --closed
-	Config      string //    --config
 	Copies      bool   // -C --copies
 	Date        string // -d --date
 	Deleted     bool   // -d --deleted

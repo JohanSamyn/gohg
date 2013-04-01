@@ -11,6 +11,7 @@ import (
 )
 
 type initOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

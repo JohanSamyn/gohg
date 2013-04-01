@@ -9,6 +9,7 @@ import (
 )
 
 type branchesOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

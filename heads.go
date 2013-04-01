@@ -9,6 +9,7 @@ import (
 )
 
 type headsOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

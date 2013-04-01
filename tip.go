@@ -9,6 +9,7 @@ import (
 )
 
 type tipOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

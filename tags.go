@@ -9,6 +9,7 @@ import (
 )
 
 type tagsOpts struct {
+	Config
 	Cwd
 	Hidden
 	NonInteractive

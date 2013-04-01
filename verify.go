@@ -9,6 +9,7 @@ import (
 )
 
 type verifyOpts struct {
+	Config
 	Cwd // makes it possible to verify another repo than hgcl.Reporoot()
 	Hidden
 	NonInteractive
