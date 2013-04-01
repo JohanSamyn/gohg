@@ -37,20 +37,6 @@ type HgClient struct {
 	// config       []string
 }
 
-// hgMsg is what we receive from the Hg CS
-type hgMsg struct {
-	Ch   string
-	Ln   uint
-	Data string
-}
-
-// hgCmd is what we send to the Hg CS
-type hgCmd struct {
-	Cmd  string
-	Ln   uint
-	Args string
-}
-
 // NewHgClient creates a new instance of the client object for working with the
 // Hg Command Server.
 func NewHgClient() *HgClient {
