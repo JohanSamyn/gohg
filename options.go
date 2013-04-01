@@ -57,25 +57,29 @@ type (
 	Message     string // -m --message
 	Modified    bool   // -m --modified
 	// Mq          bool   //    --mq
-	NoMerges  bool   // -M --no-merges
-	NoStatus  bool   // -n --no-status
-	Num       bool   // -n --num (<->Dryrun)
-	Patch     bool   // -p --patch
-	Print0    bool   // -0 --print0
-	Prune     bool   // -P --prune
-	Remote    bool   //    --remote
-	RemoteCmd string //    --remotecmd
-	Removed   bool   // (-r) --removed
-	Rev       string // -r --rev REV
-	Ssh       string // -e --ssh
-	Stat      bool   //    --stat
-	Style     string //    --style
-	SubRepos  bool   // -S --subrepos
-	Tags      bool   // -t --tags (<->Topo)
-	Template  string //    --template
-	Topo      bool   // -t --topo (<->Tags)
-	Unknown   bool   // -u --unknown
-	User      string // -u --user
+	NoMerges     bool   // -M --no-merges
+	NoStatus     bool   // -n --no-status
+	NoUpdate     bool   // -U --noupdate
+	Num          bool   // -n --num (<->Dryrun)
+	Patch        bool   // -p --patch
+	Print0       bool   // -0 --print0
+	Prune        bool   // -P --prune
+	Pull         bool   //    --pull
+	Remote       bool   //    --remote
+	RemoteCmd    string //    --remotecmd
+	Removed      bool   // (-r) --removed
+	Rev          string // -r --rev REV
+	Ssh          string // -e --ssh
+	Stat         bool   //    --stat
+	Style        string //    --style
+	SubRepos     bool   // -S --subrepos
+	Tags         bool   // -t --tags (<->Topo)
+	Template     string //    --template
+	Topo         bool   // -t --topo (<->Tags)
+	Uncompressed bool   //    --uncompressed
+	Unknown      bool   // -u --unknown
+	UpdateRev    string // -u --updaterev
+	User         string // -u --user
 
 	// debugging and profiling options
 
@@ -242,6 +246,10 @@ func (opt NoStatus) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "NoStatus", "--no-status", cmdOpts, hgcmd)
 }
 
+func (opt NoUpdate) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "NoUpdate", "--noupdate", cmdOpts, hgcmd)
+}
+
 func (opt Num) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Num", "--num", cmdOpts, hgcmd)
 }
@@ -260,6 +268,10 @@ func (opt Profile) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Prune) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Prune", "--prune", cmdOpts, hgcmd)
+}
+
+func (opt Pull) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Pull", "--pull", cmdOpts, hgcmd)
 }
 
 func (opt Quiet) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -322,8 +334,16 @@ func (opt Traceback) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Traceback", "--traceback", cmdOpts, hgcmd)
 }
 
+func (opt Uncompressed) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOpt(bool(opt), "Uncompressed", "--uncompressed", cmdOpts, hgcmd)
+}
+
 func (opt Unknown) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Unknown", "--unknown", cmdOpts, hgcmd)
+}
+
+func (opt UpdateRev) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOpt(string(opt), "UpdateRev", "--updaterev", cmdOpts, hgcmd)
 }
 
 func (opt User) addOption(cmdOpts interface{}, hgcmd *[]string) error {

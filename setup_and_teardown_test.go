@@ -80,3 +80,15 @@ func createAndCommitFile(t *testing.T, hct *HgClient) error {
 
 	return nil
 }
+
+func createTempdir(t *testing.T) (string, error) {
+	tempdir, err := ioutil.TempDir("", "gohg_temp_")
+	if err != nil {
+		t.Fatal(err)
+	}
+	return tempdir, err
+}
+
+func destroyTempdir(tempDir string) {
+	_ = os.RemoveAll(tempDir)
+}
