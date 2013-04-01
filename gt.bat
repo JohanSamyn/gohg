@@ -18,6 +18,7 @@ if "%1" == "init" (
   goto end
 )
 if "%1" == "commit" (
+  :: uses tip in test
   go test %2 %3 %4 %5 %6 %7 %8 %9 client.go options.go add.go version.go setup_and_teardown_test.go tip.go %1.go %1_test.go
   goto end
 )
