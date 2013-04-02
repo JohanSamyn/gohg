@@ -44,19 +44,20 @@ func (cmdOpts *commitOpts) String() string {
 }
 
 // Commit provides the 'hg commit' command.
-func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) error {
 	ciOpts := new(commitOpts)
 	hgcmd, err := hgcl.buildCommand("commit", ciOpts, opts, files)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Either make sure there is an editor configured for firing up in case
 	// there is no commit message provided, or catch the lack of that message.
 	// For now we catch it.
 	if ciOpts.Message == "" {
-		return nil, errors.New("Commit(): please provide a non-empty commit message.")
+		return errors.New("Commit(): please provide a non-empty commit message.")
 	}
 
-	return hgcl.runcommand(hgcmd)
+	_, err = hgcl.runcommand(hgcmd)
+	return err
 }

@@ -27,8 +27,7 @@ func TestHgClient_Commit(t *testing.T) {
 	revsBefore++
 	// fmt.Printf("revsBefore: %d\n", revsBefore)
 
-	var err error
-	_, err = hct.Commit([]string{"a.txt"}, AddRemove(true), Message("first commit"), User("me"))
+	err := hct.Commit([]string{"a.txt"}, AddRemove(true), Message("first commit"), User("me"))
 	if err != nil {
 		t.Error(err)
 	}
