@@ -43,7 +43,7 @@ func TestHgClient_Clone_To_Existing_Should_Fail(t *testing.T) {
 	// the source repo was created in setup(), and then used as the repo for
 	// connecting the Hg CS
 
-	expected := "Clone(): returncode=-1\n" +
+	expected := "runcommand: Clone(): returncode=-1\n" +
 		"hgerr:\n" +
 		"abort: destination '" + hct.RepoRoot() + "' is not empty\n\n"
 

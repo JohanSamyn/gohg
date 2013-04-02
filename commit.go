@@ -5,6 +5,7 @@
 package gohg
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -54,7 +55,7 @@ func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) ([]byte, error
 	// there is no commit message provided, or catch the lack of that message.
 	// For now we catch it.
 	if ciOpts.Message == "" {
-		return nil, fmt.Errorf("Commit(): please provide a non-empty commit message.", "")
+		return nil, errors.New("Commit(): please provide a non-empty commit message.")
 	}
 
 	return hgcl.runcommand(hgcmd)

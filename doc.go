@@ -73,6 +73,16 @@ Go idiom for this:
   defer hc.Disconnect()
   // do the real work here
 
+Config
+
+The gohg tool sets some environment variables for the Hg CS session, to ensure
+it's good working:
+  // ensure Hg works in english
+  HGPLAIN=True
+  // Use only the .hg/hgrc from the repo itself.
+  HGRCPATH=
+  HGENCODING=UTF-8
+
 Commands
 
 Now that we have a connection to a Hg CS we can do some work with the
@@ -132,6 +142,13 @@ not passed to the Hg CS.
 Some options are not implemented, as they seemed not relevant for use with this
 tool (for instance: the global --color option, or the --print0 option for
 status).
+
+Error handling
+
+The gohg tool only returns errors, with an as clear as possible message, and
+never uses log.Fatal() nor panics, even if that may seem appropriate. It leaves
+it up to the caller to do that eventually. It's not up to this library to decide
+whether to do a retry or to abort the complete app.
 
 Limitations
 

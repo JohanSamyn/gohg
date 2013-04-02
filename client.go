@@ -101,7 +101,11 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return err
 	}
 	if hgcl.repoRoot == "" {
-		return fmt.Errorf("Connect(): could not find a Hg repository at: %s", reponame)
+		dir := reponame
+		if dir == "" {
+			dir = "."
+		}
+		return fmt.Errorf("Connect(): could not find a Hg repository at: %s", dir)
 	}
 
 	var hgServerArgs []string
@@ -117,7 +121,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	}
 	hgcl.pipeIn, err = hgcl.hgServer.StdinPipe()
 	if err != nil {
-		log.Fatalf("Connect(): could not connect StdinPipe: %s", err)
+		return fmt.Errorf("Connect(): could not connect StdinPipe: %s", err)
 	}
 
 	if err := hgcl.hgServer.Start(); err != nil {
@@ -136,7 +140,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 
 	hgcl.hgversion, err = hgcl.Version()
 	if err != nil {
-		log.Fatalf("from Version() : %s", err)
+		return fmt.Errorf("Version(): %s", err)
 	}
 
 	return nil
@@ -196,8 +200,8 @@ func locateRepository(reponame string) (string, error) {
 			break
 		}
 	}
-	if err != nil || repo == "" {
-		return "", nil
+	if err != nil {
+		return "", err
 	}
 
 	return repo, nil
@@ -207,7 +211,7 @@ func locateRepository(reponame string) (string, error) {
 // composeStartupConfig handles the different config settings that will be used
 // to make the connection with the Hg CS. It concerns specific Hg settings.
 func composeStartupConfig(hgcmd string, repo string, config []string) []string {
-	var hgconfig []string
+	var cmdline []string
 
 	// Zoek uit hoe de inhoud van parameter config kan toegevoegd worden zonder in conflict
 	// te komen met de vaste config elementen.
@@ -221,10 +225,10 @@ func composeStartupConfig(hgcmd string, repo string, config []string) []string {
 	// }
 
 	// if len(config) > 0 {
-	// 	hgconfig = append(hgconfig, config...)
+	// 	cmdline = append(cmdline, config...)
 	// }
 
-	hgconfig = append(hgconfig, hgcmd,
+	cmdline = append(cmdline, hgcmd,
 		"--cwd", repo,
 		"-R", repo,
 		// These arguments are fixed.
@@ -232,7 +236,7 @@ func composeStartupConfig(hgcmd string, repo string, config []string) []string {
 		"--config", "extensions.color=!",
 		"serve", "--cmdserver", "pipe")
 
-	return hgconfig
+	return cmdline
 } // composeStartupConfig()
 
 // readHelloMessage reads the special hello message send by the Hg CS.
@@ -247,25 +251,25 @@ func (hgcl *HgClient) readHelloMessage() error {
 		return err
 	}
 	if len(s) == 0 {
-		return errors.New("no hello message data received from Hg Command Server")
+		return errors.New("readHelloMessage(): no hello message data received from Hg Command Server")
 	}
 	const t1 = "hg se" // hg returned: "hg serve [OPTION]"
 	if string(s[0:len(t1)]) == t1 {
-		log.Fatalf("Need at least version 1.9 of Mercurial to use the Command Server.\n"+
+		return fmt.Errorf("Fatal error: Need at least version 1.9 of Mercurial to use the Command Server.\n"+
 			"Used hgexe: '%s'\n", hgcl.HgExe())
 	}
 	ch := string(s[0])
 	if ch != "o" {
-		return fmt.Errorf("received unexpected channel '%s' for hello message from Hg Command Server",
+		return fmt.Errorf("readHelloMessage(): received unexpected channel '%s' for hello message from Hg Command Server",
 			ch)
 	}
 	var ln uint32
 	ln, err = calcDataLength(s[1:5])
 	if err != nil {
-		fmt.Errorf("readHelloMessage(): binary.Read failed: %s", err)
+		return fmt.Errorf("readHelloMessage(): binary.Read failed: %s", err)
 	}
 	if ln <= 0 {
-		return fmt.Errorf("received invalid length '%s' for hello message from Hg Command Server",
+		return fmt.Errorf("readHelloMessage(): received invalid length '%s' for hello message from Hg Command Server",
 			string(ln))
 	}
 	hello := make([]byte, ln)
@@ -275,7 +279,7 @@ func (hgcl *HgClient) readHelloMessage() error {
 	}
 	const t2 = "capabilities:"
 	if string(hello[0:len(t2)]) != t2 {
-		return errors.New("could not determine the capabilities of the Hg Command Server")
+		return errors.New("readHelloMessage(): could not determine the capabilities of the Hg Command Server")
 	}
 	attr := strings.Split(string(hello), "\n")
 	hgcl.capabilities = strings.Fields(attr[0])[1:]
@@ -292,7 +296,7 @@ func (hgcl *HgClient) validateCapabilities() error {
 		}
 	}
 	if !ok {
-		log.Fatal("could not detect the 'runcommand' capability")
+		return errors.New("validateCapabilities(): Fatal error: could not detect the 'runcommand' capability")
 	}
 	return nil
 }
@@ -307,21 +311,21 @@ func (hgcl *HgClient) receiveFromHg() (string, []byte, error) {
 	data := make([]byte, 5)
 	_, err = hgcl.pipeOut.Read(data)
 	if err != io.EOF && err != nil {
-		return ch, data, err
+		return "", data, err
 	}
 	if data == nil {
-		return ch, data, errors.New("receiveFromHg(): no data read")
+		return "", nil, errors.New("receiveFromHg(): no data read")
 	}
 	ch = string(data[0])
 	if ch == "" {
-		return ch, data, errors.New("receiveFromHg(): no channel read")
+		return "", data, errors.New("receiveFromHg(): no channel read")
 	}
 
 	// get the uint that the Hg CS sent us as the length value
 	var ln uint32
 	ln, err = calcDataLength(data[1:5])
 	if err != nil {
-		return ch, data, fmt.Errorf("receiveFromHg(): binary.Read failed: %s", err)
+		return ch, data, fmt.Errorf("receiveFromHg(): calcDataLength(): binary.Read failed: %s", err)
 	}
 
 	// now get ln bytes of data
@@ -358,12 +362,12 @@ func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 		wbuf := new(bytes.Buffer)
 		err = binary.Write(wbuf, binary.BigEndian, ln)
 		if err != nil {
-			return fmt.Errorf("sendToHg(): binary.Write failed: %s", err)
+			return fmt.Errorf("sendToHg(): converting data length to binary failed: %s", err)
 		}
 		b := make([]byte, 4)
 		_, err = io.ReadFull(wbuf, b)
 		if err != nil {
-			return fmt.Errorf("sendToHg(): io.ReadFull failed: %s", err)
+			return fmt.Errorf("sendToHg(): writing the data length to buffer failed: %s", err)
 		}
 		copy(data[lc:lc+4], b)
 
@@ -419,11 +423,11 @@ func (hgcl *HgClient) runcommand(cmd []string) (data []byte, err error) {
 
 	data, hgerr, ret, err := hgcl.runInHg("runcommand", cmd)
 	if err != nil {
-		return nil, fmt.Errorf("from runInHg(): %s", err)
+		return nil, fmt.Errorf("runcommand: %s", err)
 	}
 	// Maybe make this 2 checks, to differentiate between ret and hgerr?
 	if ret != 0 || hgerr != nil {
-		return nil, fmt.Errorf("%s(): returncode=%d\nhgerr:\n%s\n",
+		return nil, fmt.Errorf("runcommand: %s(): returncode=%d\nhgerr:\n%s\n",
 			strings.Title(cmd[0]), ret, string(hgerr))
 	}
 	return data, nil
@@ -457,7 +461,7 @@ CHANNEL_LOOP:
 		var data []byte
 		ch, data, err = hgcl.receiveFromHg()
 		if err != nil || ch == "" {
-			log.Fatalf("runInHg(): receiveFromHg failed: %s", err)
+			return nil, nil, 0, fmt.Errorf("runInHg(): receiveFromHg() failed: %s", err)
 		}
 		switch ch {
 		case "d":
@@ -472,7 +476,7 @@ CHANNEL_LOOP:
 				} else {
 					ret, err = calcReturncode(data[0:4])
 					if err != nil {
-						log.Fatalf("runInHg(): calcReturncode() failed: %s", err)
+						return nil, nil, 0, fmt.Errorf("runInHg(): calcReturncode() failed: %s", err)
 					}
 				}
 				break CHANNEL_LOOP
@@ -480,7 +484,7 @@ CHANNEL_LOOP:
 		case "I":
 		case "L":
 		default:
-			log.Fatalf("runInHg(): unexpected channel '%s' detected", ch)
+			return nil, nil, 0, fmt.Errorf("runInHg(): unexpected channel '%s' detected", ch)
 		} // switch ch
 	} // for true
 
@@ -489,17 +493,17 @@ CHANNEL_LOOP:
 } // runInHg()
 
 // calcDataLength converts a 4-byte slice into an unsigned int
-func calcDataLength(s []byte) (ln uint32, err error) {
-	var i int32
-	i, err = calcIntFromBytes(s)
-	ln = uint32(i)
-	return
+func calcDataLength(s []byte) (uint32, error) {
+	i, err := calcIntFromBytes(s)
+	if err != nil {
+		return 0, err
+	}
+	return uint32(i), nil
 }
 
 // calcReturncode converts a 4-byte slice into a signed int
-func calcReturncode(s []byte) (rc int32, err error) {
-	rc, err = calcIntFromBytes(s)
-	return
+func calcReturncode(s []byte) (int32, error) {
+	return calcIntFromBytes(s)
 }
 
 // calcIntFromBytes performs the real conversion of a 4-byte-slice into an int
