@@ -6,6 +6,11 @@ the nice and simple user experience the current API offers.
 
 Maybe I can experiment with these in a seperate cloned repo.
 
+What about a map (part of the HgClient struct ?) that stores every last call
+per command (and have the command name be the key) ? Could contain the
+passed-in options and the generated commandstring. But the commandstring could
+be regenerated as well.
+
 // ------------------------------------------------------
 
 // Ex.: hg.Exec("identify", "/home/me/DEV/go/myrepo/", Verbose(True))
@@ -31,7 +36,6 @@ func newHgCmd(cmdname string, hgcl *HgClient) ([]byte, error)
 
 func newIdentifyCmd(hgcl *HgClient)
 
-
 // ------------------------------------------------------
 
 // CmdString = "getCmdString"
@@ -44,4 +48,9 @@ func CmdString("identify") (string, error)
 func [(...)] Identify(...) ([]byte, error) {}
 // Is still possible, as a convenience, but then I'll have to pass it
 // an instance of HgCmd I guess.
+
+// ------------------------------------------------------
+
+Or we could send the <command>Opts struct and the generated commandstring
+to a channel, from where it can be fetched by the user ?
 
