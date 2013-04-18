@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type logOpts struct {
 	Config
 	Cwd
@@ -46,7 +42,6 @@ func (cmdOpts *logOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Log provides the 'hg log' command.
 func (hgcl *HgClient) Log(files []string, opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(logOpts)
 	hgcmd, err := hgcl.buildCommand("log", cmdOpts, opts, files)

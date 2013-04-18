@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type statusOpts struct {
 	Config
 	Cwd
@@ -41,7 +37,6 @@ func (cmdOpts *statusOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Status provides the 'hg status' command.
 func (hgcl *HgClient) Status(files []string, opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(statusOpts)
 	hgcmd, err := hgcl.buildCommand("status", cmdOpts, opts, files)

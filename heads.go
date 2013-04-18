@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type headsOpts struct {
 	Config
 	Cwd
@@ -34,7 +30,6 @@ func (cmdOpts *headsOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Heads provides the 'hg heads' command.
 func (hgcl *HgClient) Heads(revs []string, opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(headsOpts)
 	hgcmd, err := hgcl.buildCommand("heads", cmdOpts, opts, revs)

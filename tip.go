@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type tipOpts struct {
 	Config
 	Cwd
@@ -33,7 +29,6 @@ func (cmdOpts *tipOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Tip provides the 'hg tip' command.
 func (hgcl *HgClient) Tip(opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(tipOpts)
 	hgcmd, err := hgcl.buildCommand("tip", cmdOpts, opts, nil)

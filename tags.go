@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type tagsOpts struct {
 	Config
 	Cwd
@@ -31,7 +27,6 @@ func (cmdOpts *tagsOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Tags provides the 'hg tags' command.
 func (hgcl *HgClient) Tags(opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(tagsOpts)
 	hgcmd, err := hgcl.buildCommand("tags", cmdOpts, opts, nil)

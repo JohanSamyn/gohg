@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type branchesOpts struct {
 	Config
 	Cwd
@@ -31,7 +27,6 @@ func (cmdOpts *branchesOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Branches provides the 'hg branches' command.
 func (hgcl *HgClient) Branches(opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(branchesOpts)
 	hgcmd, err := hgcl.buildCommand("branches", cmdOpts, opts, nil)

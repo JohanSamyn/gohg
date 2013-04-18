@@ -38,7 +38,6 @@ func (cmdOpts *identifyOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Identify provides the 'hg identify' command.
 func (hgcl *HgClient) Identify(source string, opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(identifyOpts)
 	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts, []string{source})

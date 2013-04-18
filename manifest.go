@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type manifestOpts struct {
 	Config
 	Cwd
@@ -31,7 +27,6 @@ func (cmdOpts *manifestOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Manifest provides the 'hg manifest' command.
 func (hgcl *HgClient) Manifest(opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(manifestOpts)
 	hgcmd, err := hgcl.buildCommand("manifest", cmdOpts, opts, nil)

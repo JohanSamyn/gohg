@@ -36,12 +36,10 @@ func (cmdOpts *initOpts) String() string {
 
 // TODO	Implement the flags for hg init.
 
-// Init provides the 'hg init' command.
-//
-// Be aware of the fact that it cannot be used to initialize the repo you want
-// the (current) Hg CS to work on, as the Hg CS requires an existing repo.
-// But Init() can be used to create any new repo besides the one the Hg CS is
-// running for.
+// Be aware of the fact that Init() cannot be used to initialize the repo you
+// want the (current) Hg CS to work on, as the Hg CS requires an existing repo
+// before you can connect it. But Init() can be used to create any new repo
+// besides the one the Hg CS is running for.
 func (hgcl *HgClient) Init(destpath string, opts ...optionAdder) error {
 	cmdOpts := new(initOpts)
 	params := []string{destpath}

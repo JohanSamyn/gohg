@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type cloneOpts struct {
 	Config
 	Cwd
@@ -37,7 +33,6 @@ func (cmdOpts *cloneOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Clone provides the 'hg clone' command.
 func (hgcl *HgClient) Clone(source string, dest string, opts ...optionAdder) error {
 	cmdOpts := new(cloneOpts)
 	hgcmd, err := hgcl.buildCommand("clone", cmdOpts, opts, []string{source, dest})

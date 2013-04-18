@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type verifyOpts struct {
 	Config
 	Cwd // makes it possible to verify another repo than hgcl.Reporoot()
@@ -29,7 +25,6 @@ func (cmdOpts *verifyOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Verify provides the 'hg verify' command.
 func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(verifyOpts)
 	hgcmd, err := hgcl.buildCommand("verify", cmdOpts, opts, nil)

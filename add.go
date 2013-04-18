@@ -4,10 +4,6 @@
 
 package gohg
 
-// import (
-// 	"fmt"
-// )
-
 type addOpts struct {
 	Config
 	Cwd
@@ -33,7 +29,6 @@ func (cmdOpts *addOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Add provides the 'hg add' command.
 func (hgcl *HgClient) Add(files []string, opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(addOpts)
 	hgcmd, err := hgcl.buildCommand("add", cmdOpts, opts, files)

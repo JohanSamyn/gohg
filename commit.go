@@ -6,7 +6,6 @@ package gohg
 
 import (
 	"errors"
-	// "fmt"
 )
 
 type commitOpts struct {
@@ -39,7 +38,6 @@ func (cmdOpts *commitOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Commit provides the 'hg commit' command.
 func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) error {
 	cmdOpts := new(commitOpts)
 	hgcmd, err := hgcl.buildCommand("commit", cmdOpts, opts, files)
