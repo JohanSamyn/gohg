@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type statusOpts struct {
 	Config
@@ -37,15 +37,14 @@ type statusOpts struct {
 	Traceback
 }
 
-func (cmd *statusOpts) String() string {
-	return fmt.Sprintf(
-		"statusOpts = {\n    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *statusOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Status provides the 'hg status' command.
 func (hgcl *HgClient) Status(files []string, opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("status", new(statusOpts), opts, files)
+	cmdOpts := new(statusOpts)
+	hgcmd, err := hgcl.buildCommand("status", cmdOpts, opts, files)
 	if err != nil {
 		return nil, err
 	}

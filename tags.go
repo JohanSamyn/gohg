@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type tagsOpts struct {
 	Config
@@ -27,15 +27,14 @@ type tagsOpts struct {
 	Traceback
 }
 
-func (cmd *tagsOpts) String() string {
-	return fmt.Sprintf(
-		"tagsOpts = {\n    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *tagsOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Tags provides the 'hg tags' command.
 func (hgcl *HgClient) Tags(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("tags", new(tagsOpts), opts, nil)
+	cmdOpts := new(tagsOpts)
+	hgcmd, err := hgcl.buildCommand("tags", cmdOpts, opts, nil)
 	if err != nil {
 		return nil, err
 	}

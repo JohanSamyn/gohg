@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type summaryOpts struct {
 	Config
@@ -26,21 +26,17 @@ type summaryOpts struct {
 	Traceback
 }
 
-func (cmd *summaryOpts) String() string {
-	return fmt.Sprintf(
-		// "summaryOpts = {\n    remote: (%T) %t\n    mq: (%T) %t\n"+
-		"summaryOpts = {\n    remote: (%T) %t\n    mq: (%T) %t\n"+
-			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Remote, cmd.Remote,
-		// cmd.Mq, cmd.Mq,
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *summaryOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Summary provides the 'hg summary' command.
 func (hgcl *HgClient) Summary(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("summary", new(summaryOpts), opts, nil)
+	cmdOpts := new(summaryOpts)
+	hgcmd, err := hgcl.buildCommand("summary", cmdOpts, opts, nil)
 	if err != nil {
 		return nil, err
 	}
+	// fmt.Printf("%s", cmdOpts)
 	return hgcl.runcommand(hgcmd)
 }

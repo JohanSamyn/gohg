@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type cloneOpts struct {
 	Config
@@ -34,16 +34,13 @@ type cloneOpts struct {
 }
 
 func (cmdOpts *cloneOpts) String() string {
-	return fmt.Sprintf(
-		"cloneCmd = {\n    Debug: (%T) %t\n    Profile: (%T) %t\n"+
-			"   Time: (%T) %t\n    Traceback: (%T) %t\n}\n",
-		cmdOpts.Debug, cmdOpts.Debug, cmdOpts.Profile, cmdOpts.Profile,
-		cmdOpts.Time, cmdOpts.Time, cmdOpts.Traceback, cmdOpts.Traceback)
+	return sprintfOpts(*cmdOpts)
 }
 
 // Clone provides the 'hg clone' command.
 func (hgcl *HgClient) Clone(source string, dest string, opts ...optionAdder) error {
-	hgcmd, err := hgcl.buildCommand("clone", new(cloneOpts), opts, []string{source, dest})
+	cmdOpts := new(cloneOpts)
+	hgcmd, err := hgcl.buildCommand("clone", cmdOpts, opts, []string{source, dest})
 	if err != nil {
 		return err
 	}

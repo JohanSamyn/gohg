@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type addOpts struct {
 	Config
@@ -29,18 +29,14 @@ type addOpts struct {
 	Traceback
 }
 
-func (cmd *addOpts) String() string {
-	return fmt.Sprintf(
-		// "addOpts = {\n    mq: (%T) %t\n"+
-		"addOpts = {\n"+
-			"    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		// cmd.Mq, cmd.Mq,
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *addOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Add provides the 'hg add' command.
 func (hgcl *HgClient) Add(files []string, opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("add", new(addOpts), opts, files)
+	cmdOpts := new(addOpts)
+	hgcmd, err := hgcl.buildCommand("add", cmdOpts, opts, files)
 	if err != nil {
 		return nil, err
 	}

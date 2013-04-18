@@ -20,6 +20,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"reflect"
 	"strings"
 )
 
@@ -384,6 +385,21 @@ func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 
 	return nil
 } // sendToHg()
+
+func sprintfOpts(opts interface{}) string {
+	s := fmt.Sprintf("%T", opts) + " = {"
+	t := reflect.ValueOf(opts)
+	typeOfT := t.Type()
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+		if i > 0 {
+			s = s + ", "
+		}
+		s = s + fmt.Sprintf("%s=%v", typeOfT.Field(i).Name, f.Interface())
+	}
+	s = s + "}\n"
+	return s
+}
 
 // Method buildCommand builds the command string to pass to the Hg CS.
 //	cmdName:	The name of the command ("log", "status", etc.).

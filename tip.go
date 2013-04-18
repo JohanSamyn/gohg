@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type tipOpts struct {
 	Config
@@ -29,15 +29,14 @@ type tipOpts struct {
 	Traceback
 }
 
-func (cmd *tipOpts) String() string {
-	return fmt.Sprintf(
-		"tipOpts = {\n    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *tipOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Tip provides the 'hg tip' command.
 func (hgcl *HgClient) Tip(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("tip", new(tipOpts), opts, nil)
+	cmdOpts := new(tipOpts)
+	hgcmd, err := hgcl.buildCommand("tip", cmdOpts, opts, nil)
 	if err != nil {
 		return nil, err
 	}

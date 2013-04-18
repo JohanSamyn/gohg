@@ -6,7 +6,7 @@ package gohg
 
 import (
 	"errors"
-	"fmt"
+	// "fmt"
 )
 
 type commitOpts struct {
@@ -36,17 +36,13 @@ type commitOpts struct {
 }
 
 func (cmdOpts *commitOpts) String() string {
-	return fmt.Sprintf(
-		"commitCmd = {\n    Debug: (%T) %t\n    Profile: (%T) %t\n"+
-			"   Time: (%T) %t\n    Traceback: (%T) %t\n}\n",
-		cmdOpts.Debug, cmdOpts.Debug, cmdOpts.Profile, cmdOpts.Profile,
-		cmdOpts.Time, cmdOpts.Time, cmdOpts.Traceback, cmdOpts.Traceback)
+	return sprintfOpts(*cmdOpts)
 }
 
 // Commit provides the 'hg commit' command.
 func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) error {
-	ciOpts := new(commitOpts)
-	hgcmd, err := hgcl.buildCommand("commit", ciOpts, opts, files)
+	cmdOpts := new(commitOpts)
+	hgcmd, err := hgcl.buildCommand("commit", cmdOpts, opts, files)
 	if err != nil {
 		return err
 	}
@@ -54,7 +50,7 @@ func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) error {
 	// Either make sure there is an editor configured for firing up in case
 	// there is no commit message provided, or catch the lack of that message.
 	// For now we catch it.
-	if ciOpts.Message == "" {
+	if cmdOpts.Message == "" {
 		return errors.New("Commit(): please provide a non-empty commit message.")
 	}
 

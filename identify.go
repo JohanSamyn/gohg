@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type identifyOpts struct {
 	Config
@@ -34,25 +34,17 @@ type identifyOpts struct {
 	Traceback
 }
 
-func (cmd *identifyOpts) String() string {
-	return fmt.Sprintf(
-		"identifyOpts = {\n    bookmarks: (%T) %t\n    branch: (%T) %t\n    id: (%T) %t\n"+
-			// "    mq: (%T) %t\n    num: (%T) %t\n    rev: (%T) %t\n    tags: (%T) %t\n"+
-			"    num: (%T) %t\n    rev: (%T) %t\n    tags: (%T) %t\n"+
-			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Bookmarks, cmd.Bookmarks, cmd.Branch, cmd.Branch,
-		cmd.Id, cmd.Id,
-		// cmd.Mq, cmd.Mq,
-		cmd.Num, cmd.Num,
-		cmd.Rev, cmd.Rev, cmd.Tags, cmd.Tags,
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *identifyOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Identify provides the 'hg identify' command.
 func (hgcl *HgClient) Identify(source string, opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("identify", new(identifyOpts), opts, []string{source})
+	cmdOpts := new(identifyOpts)
+	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts, []string{source})
 	if err != nil {
 		return nil, err
 	}
+	// fmt.Printf("%s", cmdOpts)
 	return hgcl.runcommand(hgcmd)
 }

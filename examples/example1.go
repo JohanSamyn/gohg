@@ -47,6 +47,8 @@ func main() {
 	}
 	fmt.Printf("[[identify]]:\n%s", i)
 
+	// fmt.Printf("%s", SprintfOpts(*(new(IdentifyOpts))))
+
 	fmt.Println("--------------------")
 
 	var s []byte
@@ -55,6 +57,8 @@ func main() {
 		return
 	}
 	fmt.Printf("[[summary]]:\n%s", s)
+
+	// fmt.Printf("%s", SprintfOpts(*(new(SummaryOpts))))
 
 	fmt.Println("--------------------")
 

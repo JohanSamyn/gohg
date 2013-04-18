@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type verifyOpts struct {
 	Config
@@ -25,18 +25,14 @@ type verifyOpts struct {
 	Traceback
 }
 
-func (cmd *verifyOpts) String() string {
-	return fmt.Sprintf(
-		// "verifyOpts = {\n    mq: (%T) %t\n"+
-		"verifyOpts = {\n"+
-			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		// cmd.Mq, cmd.Mq,
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *verifyOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Verify provides the 'hg verify' command.
 func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("verify", new(verifyOpts), opts, nil)
+	cmdOpts := new(verifyOpts)
+	hgcmd, err := hgcl.buildCommand("verify", cmdOpts, opts, nil)
 	if err != nil {
 		return nil, err
 	}

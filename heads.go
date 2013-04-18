@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type headsOpts struct {
 	Config
@@ -30,15 +30,14 @@ type headsOpts struct {
 	Traceback
 }
 
-func (cmd *headsOpts) String() string {
-	return fmt.Sprintf(
-		"headsOpts = {\n    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *headsOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Heads provides the 'hg heads' command.
 func (hgcl *HgClient) Heads(revs []string, opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("heads", new(headsOpts), opts, revs)
+	cmdOpts := new(headsOpts)
+	hgcmd, err := hgcl.buildCommand("heads", cmdOpts, opts, revs)
 	if err != nil {
 		return nil, err
 	}

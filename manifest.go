@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type manifestOpts struct {
 	Config
@@ -27,15 +27,14 @@ type manifestOpts struct {
 	Traceback
 }
 
-func (cmd *manifestOpts) String() string {
-	return fmt.Sprintf(
-		"manifestOpts = {\n    debug: (%t) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *manifestOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Manifest provides the 'hg manifest' command.
 func (hgcl *HgClient) Manifest(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("manifest", new(manifestOpts), opts, nil)
+	cmdOpts := new(manifestOpts)
+	hgcmd, err := hgcl.buildCommand("manifest", cmdOpts, opts, nil)
 	if err != nil {
 		return nil, err
 	}

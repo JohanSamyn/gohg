@@ -2,6 +2,13 @@
 
 (in no particular order, and order can change anytime)
 
+* Implement "showconfig --debug" to query detailed configuration info.
+
+* Maybe I'll reorganize commands into less files, combining them according to
+type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
+...), config (showconfig, ...), exchange (push, pull, import, archive, bundle,
+...), etc.
+
 * Turn the commands into a 'command' type ? So we can f.i. add a method to print
 the resulting command string. Maybe I'll have to turn the 'hgcmd []string' into
 a type for that to be possible, so I can give it a

@@ -4,9 +4,9 @@
 
 package gohg
 
-import (
-	"fmt"
-)
+// import (
+// 	"fmt"
+// )
 
 type branchesOpts struct {
 	Config
@@ -27,20 +27,14 @@ type branchesOpts struct {
 	Traceback
 }
 
-func (cmd *branchesOpts) String() string {
-	return fmt.Sprintf(
-		"branchesOpts = {\n    "+
-			// "Active: (%T) %t\n    Closed: (%T) %t\n    Mq: (%T) %t\n"+
-			"Active: (%T) %t\n    Closed: (%T) %t\n"+
-			"debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		cmd.Active, cmd.Active, cmd.Closed, cmd.Closed,
-		// cmd.Mq, cmd.Mq,
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *branchesOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // Branches provides the 'hg branches' command.
 func (hgcl *HgClient) Branches(opts ...optionAdder) ([]byte, error) {
-	hgcmd, err := hgcl.buildCommand("branches", new(branchesOpts), opts, nil)
+	cmdOpts := new(branchesOpts)
+	hgcmd, err := hgcl.buildCommand("branches", cmdOpts, opts, nil)
 	if err != nil {
 		return nil, err
 	}

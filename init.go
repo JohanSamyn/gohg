@@ -30,15 +30,8 @@ type initOpts struct {
 	Traceback
 }
 
-func (cmd *initOpts) String() string {
-	return fmt.Sprintf(
-		// "initOpts = {\n    Mq: (%T) %t\n"+
-		"initOpts = {\n    Mq: (%T) %t\n"+
-			"    Cwd: (%T) %t\n"+
-			"    debug: (%T) %t\n    traceback: (%T) %t\n    profile: (%T) %t\n}\n",
-		// cmd.Mq, cmd.Mq,
-		cmd.Cwd, cmd.Cwd,
-		cmd.Debug, cmd.Debug, cmd.Traceback, cmd.Traceback, cmd.Profile, cmd.Profile)
+func (cmdOpts *initOpts) String() string {
+	return sprintfOpts(*cmdOpts)
 }
 
 // TODO	Implement the flags for hg init.

@@ -93,7 +93,9 @@ starts with a capital letter.
   log, err := hc.Log(Limit(2))
   if err != nil {
       fmt.Printf(err)
+      ...
   }
+  fmt.Printf("%s", log)
 
 Commands normally return a byte slice containing the resulting data, and an
 error type. But there are exceptions (see api docs hereafter). If the
@@ -103,7 +105,7 @@ Mercurial.
 
   log, err := hc.Log()          // log is a byte slice
   err := hc.Init("~/mynewrepo") // only returns an error
-  version , err:= hc.Version()  // version is a string
+  version, err:= hc.Version()   // version is a string
 
 Parameters and Options
 
@@ -118,18 +120,19 @@ revisions, paths or filenames and so.
 Options to commands use the same name as the long form of the Mercurial option
 they represent, and start with a capital letter (as do all exported symbols in
 Go). An option can be of type bool, int or string. You just pass the value as
-the parameter to the option. You can combine any options, just as you can on the
-commandline. Options can be passed in more than once if appropriate (see the
-ones marked with '[+]' in the Mercurial help).
+the parameter to the option. You can pass any number of options, separated with
+commas, just as you can on the commandline. Options can be passed in more than
+once if appropriate (see the ones marked with '[+]' in the Mercurial help).
 
   log, err := hc.Log(Verbose(true))
   log, err := hc.Log(Limit(2))
   log, err := hc.Log(User("John Doe"), User("me"))
 
 In contrast with the typical commandline usage of the Hg commands, all options
-have to be passed after the parameter(s) to the command, because the quantity of
-options is variable. This is just a Go constraint of the implementation making
-it possible to pass a variable number of options.
+have to be passed after the parameter(s) to the command, because the number of
+options is variable, as you don't have to pass them all everytime. This is just
+a Go constraint of the implementation making it possible to pass a variable
+number of arguments to a function.
 
   log, err := hc.Log("myfile", Verbose(true), Limit(2))
 
