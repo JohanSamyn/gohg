@@ -23,6 +23,7 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 
 	// WHEN I call the 'hg identify' command on it
 	got, err := hct.Identify("")
+	// got, err := hct.Id("")
 	if err != nil {
 		t.Error(err)
 	}

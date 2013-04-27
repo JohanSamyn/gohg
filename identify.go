@@ -38,6 +38,10 @@ func (cmdOpts *identifyOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
+// func (hgcl *HgClient) Id(source string, opts ...optionAdder) ([]byte, error) {
+// 	return hgcl.Identify(source, opts...)
+// }
+
 func (hgcl *HgClient) Identify(source string, opts ...optionAdder) ([]byte, error) {
 	cmdOpts := new(identifyOpts)
 	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts, []string{source})
