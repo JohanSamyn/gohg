@@ -76,6 +76,7 @@ type (
 	Topo         bool   // -t --topo
 	Uncompressed bool   //    --uncompressed
 	Unknown      bool   // -u --unknown
+	Untrusted    bool   // -u --untrusted
 	UpdateRev    string // -u --updaterev
 	User         string // -u --user
 
