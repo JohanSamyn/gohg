@@ -84,9 +84,17 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// HGPLAIN: Enabling this also assures Hg itself works in english,
 	// so we can depend on some strings.
 	os.Setenv("HGPLAIN", "True")
+
 	// HGRCPATH: Use only the .hg/hgrc from the repo itself.
 	// This one should perhaps be guarded with a passed-in option.
+
+	// disabled (temporarily?), because otherwise a bunch of test fail
+	// os.Setenv("HGRCPATH", "''")
+
+	// This is only a 'non set' HGRCPATH, as if you do: HGRCPATH=
+	// Result is as if you dd not set it.
 	os.Setenv("HGRCPATH", "")
+
 	os.Setenv("HGENCODING", "UTF-8")
 
 	hgcl.hgExe = hgexe

@@ -81,7 +81,7 @@ it's good working:
   // ensure Hg works in english
   HGPLAIN=True
   // Use only the .hg/hgrc from the repo itself.
-  HGRCPATH=
+  HGRCPATH=''
   HGENCODING=UTF-8
 
 Commands

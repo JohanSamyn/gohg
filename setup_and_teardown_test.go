@@ -32,7 +32,10 @@ func setup(t *testing.T) (hct *HgClient) {
 
 	repo := testdir
 
+	// let's have some config for the new repo
 	hct = NewHgClient()
+	err = createFile(".hg/hgrc", "[ui]\nusername=me-myself\n", hct.RepoRoot())
+
 	cfg := make([]string, 0)
 	err = hct.Connect(hgexe, repo, cfg)
 	if err != nil {
