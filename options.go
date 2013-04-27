@@ -40,7 +40,7 @@ type (
 	Copies      bool   // -C --copies
 	Date        string // -d --date
 	Deleted     bool   // -d --deleted
-	DryRun      bool   // -n --dry-run (<->ShowNum)
+	DryRun      bool   // -n --dry-run
 	Exclude     string // -X --exclude
 	Follow      bool   // -f --follow
 	Git         bool   // -g --git
@@ -58,7 +58,7 @@ type (
 	NoMerges     bool   // -M --no-merges
 	NoStatus     bool   // -n --no-status
 	NoUpdate     bool   // -U --noupdate
-	Num          bool   // -n --num (<->Dryrun)
+	Num          bool   // -n --num
 	Patch        bool   // -p --patch
 	Print0       bool   // -0 --print0
 	Prune        bool   // -P --prune
@@ -71,9 +71,9 @@ type (
 	Stat         bool   //    --stat
 	Style        string //    --style
 	SubRepos     bool   // -S --subrepos
-	Tags         bool   // -t --tags (<->Topo)
+	Tags         bool   // -t --tags
 	Template     string //    --template
-	Topo         bool   // -t --topo (<->Tags)
+	Topo         bool   // -t --topo
 	Uncompressed bool   //    --uncompressed
 	Unknown      bool   // -u --unknown
 	UpdateRev    string // -u --updaterev
