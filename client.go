@@ -433,6 +433,12 @@ func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []o
 // runcommand allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
 func (hgcl *HgClient) runcommand(cmd []string) (data []byte, err error) {
+
+	if !hgcl.IsConnected() {
+		return nil, fmt.Errorf("%s", "runcommand: Cannot execute "+
+			strings.Title(cmd[0])+": no Hg CS connected!")
+	}
+
 	// boilerplate code for all commands
 
 	// fmt.Printf("cmd = %s\nopts = %v\n", (*cmd)[0], (*cmd)[1:])

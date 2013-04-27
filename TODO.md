@@ -2,16 +2,6 @@
 
 (in no particular order, and order can change anytime)
 
-* Add a check in the right place (runCommand() ?) so that if there could not be
-made a connection, but the caller ignored the error returned by Connect(), no
-other command will proceed, but will also return an error indicating there is no
-connection.
-Q: If a showconfig line starts with 'none:', then where exactly did it read that
-config from ?
-A:
-
-* Implement "showconfig --debug" to query detailed configuration info.
-
 * Maybe I'll reorganize commands into less files, combining them according to
 type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
 ...), config (showconfig, ...), exchange (push, pull, import, archive, bundle,
@@ -150,6 +140,11 @@ the result ? This would be a kind of hosting version of gohg.
 * ADVANCED - Add the possibility to switch to another repo then the one used to
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
+
+* DONE - Add a check in the right place (runCommand() ?) so that if there could not be
+made a connection, but the caller ignored the error returned by Connect(), no
+other command will proceed, but will also return an error indicating there is no
+connection.
 
 * DONE - log.Fatal should only be used at the topmost level (and probably even almost
 never in a lib !?)
