@@ -133,6 +133,11 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return fmt.Errorf("Connect(): could not connect StdinPipe: %s", err)
 	}
 
+	// var p, t string
+	// p = os.Getenv("path")
+	// t = os.Getenv("temp")
+	// fmt.Println(p, t)
+
 	if err := hgcl.hgServer.Start(); err != nil {
 		return fmt.Errorf("Connect(): could not start the Hg Command Server: %s", err)
 	}
