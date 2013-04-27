@@ -52,8 +52,8 @@ func teardown(t *testing.T, hct *HgClient) {
 	}
 }
 
-func createFile(file string, data string, hct *HgClient) error {
-	f, err := os.Create(hct.RepoRoot() + "/" + file)
+func createFile(file string, data string, basefolder string) error {
+	f, err := os.Create(basefolder + "/" + file)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func createFile(file string, data string, hct *HgClient) error {
 
 func createAndCommitFile(t *testing.T, hct *HgClient) error {
 
-	err := createFile("/a", "aaa", hct)
+	err := createFile("/a", "aaa", hct.RepoRoot())
 	if err != nil {
 		t.Fatal(err)
 	}

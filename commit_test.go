@@ -14,7 +14,7 @@ func TestHgClient_Commit(t *testing.T) {
 	hct := setup(t)
 	defer teardown(t, hct)
 
-	err1 := createFile("a.txt", "aaa\n", hct)
+	err1 := createFile("a.txt", "aaa\n", hct.RepoRoot())
 	if err1 != nil {
 		t.Error(err1)
 	}
