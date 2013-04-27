@@ -5,9 +5,21 @@
 package gohg
 
 import (
-// "fmt"
-// "testing"
+	"fmt"
+	"log"
+	"testing"
 )
+
+func TestClient_runcommand_IsConnected(t *testing.T) {
+	hct := NewHgClient()
+	// we deliberately do not call Connect()
+	var err error
+	_, err = hct.Identify("")
+	if err == nil {
+		fmt.Printf("error: %s\n", err)
+		log.Fatal(fmt.Errorf("%s", "Did not detect disconnect!?"))
+	}
+}
 
 // func TestConnect(*testing.T) {
 // 	fmt.Printf("Hgclient.Connected = %v\n", Hgclient.Connected)
