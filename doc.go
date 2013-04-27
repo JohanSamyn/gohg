@@ -9,7 +9,8 @@ The gohg client library is created with Go1 (v1.0.3). It is tested against
 Mercurial 2.5.2, both on Windows 7 and Ubuntu 12.04.
 
 Currently there is no mechanism to handle differences in possibilities between
-different Mercurial versions.
+different Mercurial versions. The errors returned by Mercurial are your only
+help here.
 
 Dependencies
 
@@ -60,8 +61,8 @@ Though this is currently not implemented yet.
 
 4. The returnvalue:
 
-The HgClient.Connect() method returns an error, so you can check if the
-connection succeeded, and if it is safe to go on or not.
+The HgClient.Connect() method eventually returns an error, so you can check if
+the connection succeeded, and if it is safe to go on or not.
 
 Once the work is done, you can disconnect the Hg CS. We advise to use a typical
 Go idiom for this:
@@ -85,10 +86,10 @@ it's good working:
 
 Commands
 
-Now that we have a connection to a Hg CS we can do some work with the
-repository. This is done with commands, implemented as methods for the HgClient
-type. Each command has the same name as the corresponding Hg command, except it
-starts with a capital letter.
+Once we have a connection to a Hg CS we can do some work with the repository.
+This is done with commands, implemented as methods for the HgClient type. Each
+command has the same name as the corresponding Hg command, except it starts with
+a capital letter of course.
 
   log, err := hc.Log(Limit(2))
   if err != nil {
@@ -97,15 +98,28 @@ starts with a capital letter.
   }
   fmt.Printf("%s", log)
 
-Commands normally return a byte slice containing the resulting data, and an
-error type. But there are exceptions (see api docs hereafter). If the
+Commands return a byte slice containing the resulting data, and eventually an
+error. But there are a few exceptions (see api docs). If the Mercurial
 returnvalue of the command indicated it did not complete successful, the
-returnvalue is included in the error message. As is any error message from
-Mercurial.
+returnvalue is included in the error message. As is any further error message
+from Mercurial.
 
   log, err := hc.Log()          // log is a byte slice
-  err := hc.Init("~/mynewrepo") // only returns an error
-  version, err:= hc.Version()   // version is a string
+  err := hc.Init("~/mynewrepo") // only returns an error eventually
+  version, err:= hc.Version()   // version is a string of the form '2.4'
+
+TODO: add an example of error return
+
+TODO: make up my mind about the notes below
+
+Note: I could have implemented the command aliases too, but that would cost you
+an extra function call (to go from Ci to Commit f.i.), so I did not do it. And
+having to use the original commands makes your code clearly readable too. (But
+there is an example of how to do it in identify.go.)
+
+Note: All aliases for commands that are mentioned in the Mercurial help will
+work too. So you can call either Commit() or Ci() for example. (But it will cost
+you an extra function call, to call Commit from Ci.)
 
 Parameters and Options
 
@@ -120,7 +134,7 @@ revisions, paths or filenames and so.
 Options to commands use the same name as the long form of the Mercurial option
 they represent, and start with a capital letter (as do all exported symbols in
 Go). An option can be of type bool, int or string. You just pass the value as
-the parameter to the option. You can pass any number of options, separated with
+the parameter to the option. You can pass any number of options, separated by
 commas, just as you can on the commandline. Options can be passed in more than
 once if appropriate (see the ones marked with '[+]' in the Mercurial help).
 
@@ -131,15 +145,15 @@ once if appropriate (see the ones marked with '[+]' in the Mercurial help).
 In contrast with the typical commandline usage of the Hg commands, all options
 have to be passed after the parameter(s) to the command, because the number of
 options is variable, as you don't have to pass them all everytime. This is just
-a Go constraint of the implementation making it possible to pass a variable
+a constraint of this Go implementation, making it possible to pass a variable
 number of arguments to a function.
 
-  log, err := hc.Log("myfile", Verbose(true), Limit(2))
+  log, err := hc.Log("mytool.go", Verbose(true), Limit(2))
 
 The gohg tool only checks if the options the caller gives are valid for that
 command. It does not check if the values are valid for the combination of that
-command and that option, as that is done by Mercurial. No need to do double
-work. If an option is not valid for a command, it is silently ignored, so it is
+command and that option, as that is done by Mercurial. No need to implement that
+again. If an option is not valid for a command, it is silently ignored, so it is
 not passed to the Hg CS.
 
 Some options are not implemented, as they seemed not relevant for use with this
@@ -149,20 +163,20 @@ status).
 Error handling
 
 The gohg tool only returns errors, with an as clear as possible message, and
-never uses log.Fatal() nor panics, even if that may seem appropriate. It leaves
+never uses log.Fatal() nor panics, even if those may seem appropriate. It leaves
 it up to the caller to do that eventually. It's not up to this library to decide
-whether to do a retry or to abort the complete app.
+whether to do a retry or to abort the complete application.
 
 Limitations
 
-The following config settings are fixated in the code (at least for now):
+* The following config settings are fixated in the code (at least for now):
   encoding=utf-8
   ui.interactive=False
   extensions.color=!
 
-As mentioned earlier, passing config info is not implemented yet.
+* As mentioned earlier, passing config info is not implemented yet.
 
-Currently there is no support for any extensions to Mercurial.
+* Currently there is no support for any extensions to Mercurial.
 
 Issues
 
