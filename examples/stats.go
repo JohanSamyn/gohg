@@ -5,6 +5,8 @@
 // This program is an example of how you can use the gohg library.
 // Run it in the working dir of any Mercurial repo, or pass the
 // path of the repo as the second argument to hc.connect().
+// It is my Go implementation of the same Python program that serves as an
+// example for the python-hglib (see http://mercurial.selenic.com/wiki/PythonHglib).
 
 package main
 
