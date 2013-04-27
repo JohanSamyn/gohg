@@ -2,12 +2,28 @@
 
 (in no particular order, and order can change anytime)
 
+* Add a check in the right place (runCommand() ?) so that if there could not be
+made a connection, but the caller ignored the error returned by Connect(), no
+other command will proceed, but will also return an error indicating there is no
+connection.
+Q: If a showconfig line starts with 'none:', then where exactly did it read that
+config from ?
+A:
+
 * Implement "showconfig --debug" to query detailed configuration info.
 
 * Maybe I'll reorganize commands into less files, combining them according to
 type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
 ...), config (showconfig, ...), exchange (push, pull, import, archive, bundle,
 ...), etc.
+
+* If an option is silently dropped, because it is not valid for the command,
+mention that in the logfile.
+
+* Is the forced HGPLAIN=True setting really necessary?
+
+* Should I always add a '--' as the option closer before passing arguments?
+How does TortoiseHg do this?
 
 * Turn the commands into a 'command' type ? So we can f.i. add a method to print
 the resulting command string. Maybe I'll have to turn the 'hgcmd []string' into
