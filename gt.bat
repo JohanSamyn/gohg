@@ -9,6 +9,10 @@ if "%1" == "all" (
   go test %2 %3 %4 %5 %6 %7 %8 %9
   goto end
 )
+if "%1" == "client" (
+  go test %2 %3 %4 %5 %6 %7 %8 %9 options.go version.go identify.go %1.go %1_test.go
+  goto end
+)
 if "%1" == "version" (
   go test %2 %3 %4 %5 %6 %7 %8 %9 client.go options.go add.go setup_and_teardown_test.go %1.go %1_test.go
   goto end
