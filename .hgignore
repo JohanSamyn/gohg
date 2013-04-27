@@ -8,6 +8,7 @@ syntax:glob
 *.diff
 *.hg
 *.exe
+*.stackdump
 build.out
 test.out
 goinstall.log
