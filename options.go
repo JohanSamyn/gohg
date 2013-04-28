@@ -353,12 +353,12 @@ func (opt Verbose) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOpt(bool(opt), "Verbose", "-v", cmdOpts, hgcmd)
 }
 
-func addBoolOpt(opt bool, optname string, cmd string, cmdOpts interface{}, hgcmd *[]string) error {
+func addBoolOpt(optval bool, optname string, optstr string, cmdOpts interface{}, hgcmd *[]string) error {
 	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
 	if fld.IsValid() && fld.CanSet() {
-		fld.SetBool(opt) // add the value to the <cmd>Opts struct
-		if opt {
-			*hgcmd = append(*hgcmd, cmd)
+		fld.SetBool(optval) // add the value to the <cmd>Opts struct
+		if optval {
+			*hgcmd = append(*hgcmd, optstr)
 		}
 	} else {
 		return fmt.Errorf("adBoolOpt(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
@@ -366,13 +366,13 @@ func addBoolOpt(opt bool, optname string, cmd string, cmdOpts interface{}, hgcmd
 	return nil
 }
 
-func addIntOpt(opt int, optname string, cmd string, cmdOpts interface{}, hgcmd *[]string) error {
+func addIntOpt(optval int, optname string, optstr string, cmdOpts interface{}, hgcmd *[]string) error {
 	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
 	if fld.IsValid() && fld.CanSet() {
-		fld.SetInt(int64(opt)) // add the value to the <cmd>Opts struct
-		if opt > 0 {
-			*hgcmd = append(*hgcmd, cmd)
-			*hgcmd = append(*hgcmd, strconv.Itoa(opt))
+		fld.SetInt(int64(optval)) // add the value to the <cmd>Opts struct
+		if optval > 0 {
+			*hgcmd = append(*hgcmd, optstr)
+			*hgcmd = append(*hgcmd, strconv.Itoa(optval))
 		}
 	} else {
 		return fmt.Errorf("addIntOpt(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
@@ -380,15 +380,13 @@ func addIntOpt(opt int, optname string, cmd string, cmdOpts interface{}, hgcmd *
 	return nil
 }
 
-func addStringOpt(opt string, optname string, cmd string, cmdOpts interface{}, hgcmd *[]string) error {
+func addStringOpt(optval string, optname string, optstr string, cmdOpts interface{}, hgcmd *[]string) error {
 	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
 	if fld.IsValid() && fld.CanSet() {
-		fld.SetString(opt) // add the value to the <cmd>Opts struct
-		if cmd != "" {     // think of Destpath f.i.
-			*hgcmd = append(*hgcmd, cmd)
-		}
-		if opt != "" {
-			*hgcmd = append(*hgcmd, opt)
+		fld.SetString(optval) // add the value to the <cmd>Opts struct
+		*hgcmd = append(*hgcmd, optstr)
+		if optval != "" {
+			*hgcmd = append(*hgcmd, optval)
 		}
 	} else {
 		return fmt.Errorf("addStringOpt(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
