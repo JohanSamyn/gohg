@@ -393,3 +393,18 @@ func addStringOpt(optval string, optname string, optstr string, cmdOpts interfac
 	}
 	return nil
 }
+
+func sprintfOpts(opts interface{}) string {
+	s := fmt.Sprintf("%T", opts) + " = {"
+	t := reflect.ValueOf(opts)
+	typeOfT := t.Type()
+	for i := 0; i < t.NumField(); i++ {
+		f := t.Field(i)
+		if i > 0 {
+			s = s + ", "
+		}
+		s = s + fmt.Sprintf("%s=%v", typeOfT.Field(i).Name, f.Interface())
+	}
+	s = s + "}\n"
+	return s
+}
