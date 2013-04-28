@@ -32,7 +32,7 @@ func TestHgClient_Init_New_Should_Succeed(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = hct.Init(nil, []string{path})
+	err = hct.Init(nil, path)
 	if err != nil {
 		t.Error(err)
 	}
@@ -51,12 +51,12 @@ func TestHgClient_Init_Existing_Should_Fail(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = hct.Init(nil, []string{path})
+	err = hct.Init(nil, path)
 	if err != nil {
 		t.Error(err)
 	}
 
-	err = hct.Init(nil, []string{path})
+	err = hct.Init(nil, path)
 	if err == nil {
 		t.Error(errors.New("HgClient.Init() did not fail in an existing Hg working copy"))
 	}
