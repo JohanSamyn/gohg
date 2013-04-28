@@ -32,8 +32,7 @@ func TestHgClient_ShowConfig(t *testing.T) {
 
 	var expected string = hct.RepoRoot() + string(os.PathSeparator) + "the-default-path\n"
 
-	s := []string{"paths.default"}
-	got, err := hct.ShowConfig(s)
+	got, err := hct.ShowConfig(nil, []string{"paths.default"})
 	if err != nil {
 		t.Error(err)
 	}
@@ -65,8 +64,7 @@ func TestHgClient_ShowConfig_Debug(t *testing.T) {
 
 	var expected string = "none: " + hct.RepoRoot() + string(os.PathSeparator) + "the-default-path\n"
 
-	s := []string{"paths.default"}
-	gotraw, err := hct.ShowConfig(s, Debug(true))
+	gotraw, err := hct.ShowConfig([]Option{Debug(true)}, []string{"paths.default"})
 	if err != nil {
 		t.Error(err)
 	}

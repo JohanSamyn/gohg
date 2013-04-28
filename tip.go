@@ -29,9 +29,9 @@ func (cmdOpts *tipOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Tip(opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Tip(opts []Option, params []string) ([]byte, error) {
 	cmdOpts := new(tipOpts)
-	hgcmd, err := hgcl.buildCommand("tip", cmdOpts, opts, nil)
+	hgcmd, err := hgcl.buildCommand("tip", cmdOpts, opts, params)
 	if err != nil {
 		return nil, err
 	}

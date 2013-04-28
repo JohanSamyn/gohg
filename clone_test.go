@@ -22,7 +22,7 @@ func TestHgClient_Clone_To_New_Should_Succeed(t *testing.T) {
 	}
 	defer destroyTempdir(dest)
 
-	err1 := hct.Clone(hct.RepoRoot(), dest)
+	err1 := hct.Clone(nil, []string{hct.RepoRoot(), dest})
 	if err1 != nil {
 		t.Fatalf("Test Clone failed: %s\n but got:\n%s\n", err1)
 	}
@@ -43,14 +43,14 @@ func TestHgClient_Clone_To_Existing_Should_Fail(t *testing.T) {
 	// the source repo was created in setup(), and then used as the repo for
 	// connecting the Hg CS
 
+	path := hct.RepoRoot()
+
 	expected := "runcommand: Clone(): returncode=-1\n" +
-		"cmd: clone " + hct.RepoRoot() + " " + hct.RepoRoot() + "\n" +
+		"cmd: clone " + path + " " + path + "\n" +
 		"hgerr:\n" +
-		"abort: destination '" + hct.RepoRoot() + "' is not empty\n\n"
+		"abort: destination '" + path + "' is not empty\n\n"
 
-	dest := hct.RepoRoot()
-
-	g := hct.Clone(hct.RepoRoot(), dest)
+	g := hct.Clone(nil, []string{path, path})
 	got := fmt.Sprint(g)
 	if got != expected {
 		t.Fatalf("Test Clone: expected:\n%s\n but got:\n%s\n", expected, got)

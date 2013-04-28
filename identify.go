@@ -42,9 +42,9 @@ func (cmdOpts *identifyOpts) String() string {
 // 	return hgcl.Identify(source, opts...)
 // }
 
-func (hgcl *HgClient) Identify(source string, opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Identify(opts []Option, source []string) ([]byte, error) {
 	cmdOpts := new(identifyOpts)
-	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts, []string{source})
+	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts, source)
 	if err != nil {
 		return nil, err
 	}

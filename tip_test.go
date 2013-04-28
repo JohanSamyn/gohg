@@ -18,7 +18,7 @@ func TestHgClient_Tip(t *testing.T) {
 		"date:        Thu Jan 01 00:00:00 1970 +0000\n" +
 		"\n"
 
-	got, err := hct.Tip()
+	got, err := hct.Tip(nil, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -34,7 +34,7 @@ func TestHgClient_Tip_Rev(t *testing.T) {
 
 	var expected string = "-1\n"
 
-	got, err := hct.Tip(Template("{rev}\n"))
+	got, err := hct.Tip([]Option{Template("{rev}\n")}, nil)
 	if err != nil {
 		t.Error(err)
 	}

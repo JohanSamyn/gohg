@@ -33,9 +33,9 @@ func (cmdOpts *cloneOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Clone(source string, dest string, opts ...optionAdder) error {
+func (hgcl *HgClient) Clone(opts []Option, fromto []string) error {
 	cmdOpts := new(cloneOpts)
-	hgcmd, err := hgcl.buildCommand("clone", cmdOpts, opts, []string{source, dest})
+	hgcmd, err := hgcl.buildCommand("clone", cmdOpts, opts, fromto)
 	if err != nil {
 		return err
 	}

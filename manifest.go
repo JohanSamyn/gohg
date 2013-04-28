@@ -27,9 +27,9 @@ func (cmdOpts *manifestOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Manifest(opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Manifest(opts []Option, params []string) ([]byte, error) {
 	cmdOpts := new(manifestOpts)
-	hgcmd, err := hgcl.buildCommand("manifest", cmdOpts, opts, nil)
+	hgcmd, err := hgcl.buildCommand("manifest", cmdOpts, opts, params)
 	if err != nil {
 		return nil, err
 	}

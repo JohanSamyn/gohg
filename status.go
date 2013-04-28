@@ -37,7 +37,7 @@ func (cmdOpts *statusOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Status(files []string, opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Status(opts []Option, files []string) ([]byte, error) {
 	cmdOpts := new(statusOpts)
 	hgcmd, err := hgcl.buildCommand("status", cmdOpts, opts, files)
 	if err != nil {

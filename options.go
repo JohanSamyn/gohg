@@ -88,7 +88,11 @@ type (
 	Traceback bool //    --traceback
 )
 
-type optionAdder interface {
+// type optionAdder interface {
+// 	addOption(interface{}, *[]string) error
+// }
+
+type Option interface {
 	addOption(interface{}, *[]string) error
 }
 

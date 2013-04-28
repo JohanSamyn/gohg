@@ -19,7 +19,7 @@ func TestHgClient_Commit(t *testing.T) {
 		t.Error(err1)
 	}
 
-	t1, err2 := hct.Tip(Template("{rev}"))
+	t1, err2 := hct.Tip([]Option{Template("{rev}")}, nil)
 	if err2 != nil {
 		t.Error(err2)
 	}
@@ -27,13 +27,13 @@ func TestHgClient_Commit(t *testing.T) {
 	revsBefore++
 	// fmt.Printf("revsBefore: %d\n", revsBefore)
 
-	err := hct.Commit([]string{"a.txt"}, AddRemove(true), Message("first commit"), User("me"))
+	err := hct.Commit([]Option{AddRemove(true), Message("first commit"), User("me")}, []string{"a.txt"})
 	if err != nil {
 		t.Error(err)
 	}
 	// fmt.Printf("got: %v\n", got)
 
-	t2, err4 := hct.Tip(Template("{rev}"))
+	t2, err4 := hct.Tip([]Option{Template("{rev}")}, nil)
 	if err4 != nil {
 		t.Error(err4)
 	}

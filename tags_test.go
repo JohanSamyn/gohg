@@ -14,7 +14,7 @@ func TestHgClient_Tags(t *testing.T) {
 
 	var expected string = "tip                               -1:000000000000\n"
 
-	got, err := hct.Tags()
+	got, err := hct.Tags(nil, nil)
 	if err != nil {
 		t.Error(err)
 	}

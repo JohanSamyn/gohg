@@ -24,7 +24,7 @@ func TestHgClient_Verify_Healthy(t *testing.T) {
 		"0 files, 0 changesets, 0 total revisions\n"
 
 	// WHEN I call 'hg verify' on it
-	got, err := hct.Verify()
+	got, err := hct.Verify(nil, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -60,7 +60,7 @@ func TestHgClient_Verify_Sick(t *testing.T) {
 	}
 
 	// WHEN we call 'hg verify' on it
-	_, err = hct.Verify()
+	_, err = hct.Verify(nil, nil)
 
 	// THEN it should return an error
 	if err == nil {

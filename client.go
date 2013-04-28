@@ -401,7 +401,7 @@ func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 //	opts:		The options passed by the caller.
 //	params:		Any filenames, paths or other that the command needs.
 //				These are to be added as the last things of the command.
-func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []optionAdder, params []string) (hgcmd []string, err error) {
+func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []Option, params []string) (hgcmd []string, err error) {
 	hgcmd = []string{cmdName}
 	for _, o := range opts {
 		err = o.addOption(cmdOpts, &hgcmd)
@@ -415,7 +415,7 @@ func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []o
 	}
 	for _, p := range params {
 		if p != "" {
-			hgcmd = append(hgcmd, p)
+			hgcmd = append(hgcmd, string(p))
 		}
 	}
 	return hgcmd, nil

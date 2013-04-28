@@ -14,7 +14,7 @@ func TestClient_runcommand_IsConnected(t *testing.T) {
 	hct := NewHgClient()
 	// we deliberately do not call Connect()
 	var err error
-	_, err = hct.Identify("")
+	_, err = hct.Identify(nil, nil)
 	if err == nil {
 		fmt.Printf("error: %s\n", err)
 		log.Fatal(fmt.Errorf("%s", "Did not detect disconnect!?"))

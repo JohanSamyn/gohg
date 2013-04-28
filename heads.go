@@ -30,7 +30,7 @@ func (cmdOpts *headsOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Heads(revs []string, opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Heads(opts []Option, revs []string) ([]byte, error) {
 	cmdOpts := new(headsOpts)
 	hgcmd, err := hgcl.buildCommand("heads", cmdOpts, opts, revs)
 	if err != nil {

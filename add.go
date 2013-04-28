@@ -29,7 +29,7 @@ func (cmdOpts *addOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Add(files []string, opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Add(opts []Option, files []string) ([]byte, error) {
 	cmdOpts := new(addOpts)
 	hgcmd, err := hgcl.buildCommand("add", cmdOpts, opts, files)
 	if err != nil {

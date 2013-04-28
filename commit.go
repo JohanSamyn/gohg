@@ -38,7 +38,7 @@ func (cmdOpts *commitOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Commit(files []string, opts ...optionAdder) error {
+func (hgcl *HgClient) Commit(opts []Option, files []string) error {
 	cmdOpts := new(commitOpts)
 	hgcmd, err := hgcl.buildCommand("commit", cmdOpts, opts, files)
 	if err != nil {

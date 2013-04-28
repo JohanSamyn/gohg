@@ -24,7 +24,7 @@ func TestHgClient_Summary_NoOptions(t *testing.T) {
 
 	// WHEN I call the 'hg summary' command on it
 	// example 1
-	got, err := hct.Summary()
+	got, err := hct.Summary(nil, nil)
 	// got, err := hct.Summary(Limit(2))
 
 	// example 2

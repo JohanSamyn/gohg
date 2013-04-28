@@ -26,7 +26,7 @@ func TestHgClient_Manifest(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got, err := hct.Manifest()
+	got, err := hct.Manifest(nil, nil)
 	if err != nil {
 		t.Error(err)
 	}

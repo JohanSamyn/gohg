@@ -30,10 +30,9 @@ func (cmdOpts *summaryOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-// Summary provides the 'hg summary' command.
-func (hgcl *HgClient) Summary(opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Summary(opts []Option, params []string) ([]byte, error) {
 	cmdOpts := new(summaryOpts)
-	hgcmd, err := hgcl.buildCommand("summary", cmdOpts, opts, nil)
+	hgcmd, err := hgcl.buildCommand("summary", cmdOpts, opts, params)
 	if err != nil {
 		return nil, err
 	}

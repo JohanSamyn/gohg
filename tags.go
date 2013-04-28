@@ -27,9 +27,9 @@ func (cmdOpts *tagsOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Tags(opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Tags(opts []Option, params []string) ([]byte, error) {
 	cmdOpts := new(tagsOpts)
-	hgcmd, err := hgcl.buildCommand("tags", cmdOpts, opts, nil)
+	hgcmd, err := hgcl.buildCommand("tags", cmdOpts, opts, params)
 	if err != nil {
 		return nil, err
 	}

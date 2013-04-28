@@ -42,7 +42,7 @@ func (cmdOpts *logOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Log(files []string, opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Log(opts []Option, files []string) ([]byte, error) {
 	cmdOpts := new(logOpts)
 	hgcmd, err := hgcl.buildCommand("log", cmdOpts, opts, files)
 	if err != nil {

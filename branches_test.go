@@ -43,7 +43,7 @@ func TestHgClient_Branches(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got1, err := hct.Branches()
+	got1, err := hct.Branches(nil, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -55,7 +55,7 @@ func TestHgClient_Branches(t *testing.T) {
 	// test Active option
 
 	expected = "newbranch                      1:\n"
-	got1, err = hct.Branches(Active(true))
+	got1, err = hct.Branches([]Option{Active(true)}, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -77,7 +77,7 @@ func TestHgClient_Branches(t *testing.T) {
 	}
 	expected = "newbranch                      1:\n" +
 		"default                        2:\n"
-	got1, err = hct.Branches(Closed(true))
+	got1, err = hct.Branches([]Option{Closed(true)}, nil)
 	if err != nil {
 		t.Error(err)
 	}

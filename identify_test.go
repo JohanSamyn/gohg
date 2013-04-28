@@ -22,8 +22,8 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 	var expected string = "000000000000 tip\n"
 
 	// WHEN I call the 'hg identify' command on it
-	got, err := hct.Identify("")
-	// got, err := hct.Id("")
+	got, err := hct.Identify(nil, nil)
+	// got, err := hct.Id(nil, nil)
 	if err != nil {
 		t.Error(err)
 	}

@@ -25,9 +25,9 @@ func (cmdOpts *verifyOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Verify(opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Verify(opts []Option, params []string) ([]byte, error) {
 	cmdOpts := new(verifyOpts)
-	hgcmd, err := hgcl.buildCommand("verify", cmdOpts, opts, nil)
+	hgcmd, err := hgcl.buildCommand("verify", cmdOpts, opts, params)
 	if err != nil {
 		return nil, err
 	}

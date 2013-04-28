@@ -27,9 +27,9 @@ func (cmdOpts *branchesOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func (hgcl *HgClient) Branches(opts ...optionAdder) ([]byte, error) {
+func (hgcl *HgClient) Branches(opts []Option, params []string) ([]byte, error) {
 	cmdOpts := new(branchesOpts)
-	hgcmd, err := hgcl.buildCommand("branches", cmdOpts, opts, nil)
+	hgcmd, err := hgcl.buildCommand("branches", cmdOpts, opts, params)
 	if err != nil {
 		return nil, err
 	}

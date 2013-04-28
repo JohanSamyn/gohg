@@ -7,7 +7,7 @@
 package main
 
 import (
-	. "bitbucket.org/gohg/gohg"
+	hg "bitbucket.org/gohg/gohg"
 	"fmt"
 	"log"
 )
@@ -24,7 +24,7 @@ func main() {
 	fmt.Printf("Using Mercurial repo at: %s\n", repo)
 	fmt.Println("--------------------")
 
-	hc := NewHgClient()
+	hc := hg.NewHgClient()
 	var cfg []string
 	if err = hc.Connect(hgexe, repo, cfg); err != nil {
 		log.Fatal(err)
@@ -41,7 +41,7 @@ func main() {
 	fmt.Println("--------------------")
 
 	var i []byte
-	if i, err = hc.Identify(""); err != nil {
+	if i, err = hc.Identify(nil, []string{""}); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -52,7 +52,7 @@ func main() {
 	fmt.Println("--------------------")
 
 	var s []byte
-	if s, err = hc.Summary(); err != nil {
+	if s, err = hc.Summary(nil, nil); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -62,8 +62,13 @@ func main() {
 
 	fmt.Println("--------------------")
 
+	var limit hg.Limit = 2
+	var verbose hg.Verbose = true
+	opts := []hg.Option{limit, verbose}
+	params := []string{}
 	var l []byte
-	if l, err = hc.Log([]string{"branches_test.go"}, Limit(2), Verbose(true)); err != nil {
+	// if l, err = hc.Log2([]hg.Option{hg.Limit(2), hg.Verbose(true)}, []hg.Param{}); err != nil {
+	if l, err = hc.Log(opts, params); err != nil {
 		fmt.Println(err)
 		return
 	}

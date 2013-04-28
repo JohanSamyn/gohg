@@ -25,14 +25,14 @@ func main() {
 	}
 	defer hc.Disconnect()
 
-	t, err := hc.Tip(Template("{rev}"))
+	t, err := hc.Tip([]Option{Template("{rev}")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	revs, err := strconv.Atoi(string(t))
 
-	m, err := hc.Manifest()
+	m, err := hc.Manifest(nil, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -40,7 +40,7 @@ func main() {
 	// don't count empty value after last \n
 	files := len(strings.Split(string(m), "\n")) - 1
 
-	h, err := hc.Heads(nil, Template("{rev}\n"))
+	h, err := hc.Heads([]Option{Template("{rev}\n")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -48,7 +48,7 @@ func main() {
 	// don't count empty value after last \n
 	heads := len(strings.Split(string(h), "\n")) - 1
 
-	b, err := hc.Branches(Quiet(true))
+	b, err := hc.Branches([]Option{Quiet(true)}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -56,7 +56,7 @@ func main() {
 	// don't count empty value after last \n
 	branches := len(strings.Split(string(b), "\n")) - 1
 
-	tg, err := hc.Tags(Quiet(true))
+	tg, err := hc.Tags([]Option{Quiet(true)}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -65,7 +65,7 @@ func main() {
 	// don't count tip
 	tags := len(strings.Split(string(tg), "\n")) - 1 - 1
 
-	au, err := hc.Log(nil, Template("{author}\n"))
+	au, err := hc.Log([]Option{Template("{author}\n")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -81,7 +81,7 @@ func main() {
 	}
 	authors := len(am)
 
-	mg, err := hc.Log(nil, Rev("merge()"), Template("{rev}\n"))
+	mg, err := hc.Log([]Option{Rev("merge()"), Template("{rev}\n")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
