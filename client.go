@@ -456,8 +456,9 @@ func (hgcl *HgClient) runcommand(cmd []string) (data []byte, err error) {
 	}
 	// Maybe make this 2 checks, to differentiate between ret and hgerr?
 	if ret != 0 || hgerr != nil {
-		return nil, fmt.Errorf("runcommand: %s(): returncode=%d\nhgerr:\n%s\n",
-			strings.Title(cmd[0]), ret, string(hgerr))
+		// if (cmd[0] == "identify" && ret == 0) || ret != 0 || hgerr != nil { // for testing
+		return nil, fmt.Errorf("runcommand: %s(): returncode=%d\ncmd: %s\nhgerr:\n%s\n",
+			strings.Title(cmd[0]), ret, strings.Join(cmd, " "), string(hgerr))
 	}
 	return data, nil
 } // runcommand()

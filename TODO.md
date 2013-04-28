@@ -2,9 +2,7 @@
 
 (in no particular order, and order can change anytime)
 
-* Put the command string (= the result from buildCommand()) into the error
-messages, as follows: 'cmd: log -limit 2'. Prepend this before the 'err:' and
-'hgerr:' lines in the error message.
+* Shouldn't I put (double) quotes around certain string params and arguments ?
 
 * Maybe I'll reorganize commands into less files, combining them according to
 type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
@@ -144,6 +142,10 @@ the result ? This would be a kind of hosting version of gohg.
 * ADVANCED - Add the possibility to switch to another repo then the one used to
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
+
+* DONE - Put the command string (= the result from buildCommand()) into the error
+messages, as follows: 'cmd: log -limit 2'. Prepend this before the 'err:' and
+'hgerr:' lines in the error message.
 
 * DONE - Add a check in the right place (runCommand() ?) so that if there could not be
 made a connection, but the caller ignored the error returned by Connect(), no
