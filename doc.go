@@ -189,10 +189,12 @@ Limitations
 * If multiple Hg CSers are used against the same repo, it is up to Mercurial
 to handle this correctly.
 
+* Mercurial is always run in english. No internationalization yet.
+
 Issues
 
-If you experience any issues using the gohg tool, please register an issue using
-the Bitbucket issue tracker at https://bitbucket.org/gohg/gohg/issues.
+If you experience any problems using the gohg tool, please register an issue
+using the Bitbucket issue tracker at https://bitbucket.org/gohg/gohg/issues.
 
 You can also register any enhancement requests or suggestions for improvement
 there.
