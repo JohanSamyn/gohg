@@ -44,6 +44,7 @@ func TestHgClient_Clone_To_Existing_Should_Fail(t *testing.T) {
 	// connecting the Hg CS
 
 	expected := "runcommand: Clone(): returncode=-1\n" +
+		"cmd: clone " + hct.RepoRoot() + " " + hct.RepoRoot() + "\n" +
 		"hgerr:\n" +
 		"abort: destination '" + hct.RepoRoot() + "' is not empty\n\n"
 
