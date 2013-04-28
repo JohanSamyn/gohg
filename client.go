@@ -548,3 +548,12 @@ func (hgcl *HgClient) Encoding() string {
 func (hgcl *HgClient) IsConnected() bool {
 	return hgcl.hgServer != nil
 }
+
+// Exec() allows to pass in a full commandline for the Hg CS by yourself,
+// though in a less Go-like way. No checks are done however; the command is
+// passed to the Hg CS as is. See client_test.go for an example.
+// This method could come in handy when you want to use a new Hg command for
+// which the gohg tool is not updated yet.
+func (hgcl *HgClient) Exec(hgcmd []string) ([]byte, error) {
+	return hgcl.runcommand(hgcmd)
+}

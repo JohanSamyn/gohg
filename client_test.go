@@ -21,6 +21,22 @@ func TestClient_runcommand_IsConnected(t *testing.T) {
 	}
 }
 
+func TestClient_Exec(t *testing.T) {
+	hct := setup(t)
+	defer teardown(t, hct)
+
+	var expected string = "000000000000 tip\n"
+
+	got, err := hct.Exec([]string{"identify", "-v"})
+	if err != nil {
+		t.Error(err)
+	}
+
+	if string(got) != expected {
+		t.Fatalf("Test Exec: expected:\n%s\n but got:\n%s\n", expected, got)
+	}
+}
+
 // func TestConnect(*testing.T) {
 // 	fmt.Printf("Hgclient.Connected = %v\n", Hgclient.Connected)
 // 	var err error
