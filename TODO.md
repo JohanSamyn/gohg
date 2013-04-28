@@ -25,7 +25,7 @@ command. This should be done right after the call to buildCommand(). (see also
 function sprintfOpts() in client.go)
 
 * Tests should make use of the returncode of commands too. And of the fact that
-function command() returns nil as data when an error was detected.
+function runcommand() returns nil as data when an error was detected.
 
 * The program examples/example1.go is now practicaly the same as the one in the
 README. Change it, so that is is worth keeping, or get rid of it.
@@ -33,7 +33,8 @@ README. Change it, so that is is worth keeping, or get rid of it.
 * Make the return of the commands in gohg a slice-of-strings (separated by the
 linefeed in the Hg output). That way you already avoid having trouble with
 multi-byte chars (runes) when parsing. It will also make tests easier (slice
-only comparable to nil).
+only comparable to nil). After all, that's what the results are: lines of text,
+as they are also printed from the commandline.
 
 * Find out how to handle functionality that belongs to extensions.
 Think of the -mq option for instance. So we'll have to find a way to detect what
@@ -51,12 +52,12 @@ Example:
 
 * Set HGRCPATH (explicitely) to "" and HGPLAIN to "True".
 The first assures that only the hgrc file from the repo itself is used.
-The second assures all Mercurial output is with default values, including
+The second assures all Mercurial output is with default values, excluding
 internationalization. Use HGPLAINEXCEPT="i18n" to keep internationalization,
 what can be useful for error messages f.i.. (see CommandServerFactory.scala in
 [Meutrino](http://code.google.com/p/meutrino))
 DO NOT use HGPLAINEXCEPT for keeping the language, as gohg should shield the
-caller from those mesages, and return "it's own" error messages. Or not ?
+caller from those messages, and return "it's own" error messages. Or not ?
 
 * Assure that Disconnect() cannot terminate the connection when a command is
 still running, unless a kind of --force option is passed-in.
