@@ -2,6 +2,10 @@
 
 (in no particular order, and order can change anytime)
 
+* Put the command string (= the result from buildCommand()) into the error
+messages, as follows: 'cmd: log -limit 2'. Prepend this before the 'err:' and
+'hgerr:' lines in the error message.
+
 * Maybe I'll reorganize commands into less files, combining them according to
 type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
 ...), config (showconfig, ...), exchange (push, pull, import, archive, bundle,

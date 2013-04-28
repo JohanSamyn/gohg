@@ -38,7 +38,7 @@ type HgClient struct {
 	// config       []string
 }
 
-// NewHgClient creates a new instance of the client object for working with the
+// NewHgClient creates a new instance of the client type for working with the
 // Hg Command Server.
 func NewHgClient() *HgClient {
 	return new(HgClient)
@@ -103,7 +103,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		hgcl.hgExe = "hg"
 	}
 
-	// The Hg Command Server needs a repository.
+	// The Hg Command Server needs an existing repository.
 	var err error
 	hgcl.repoRoot, err = locateRepository(reponame)
 	if err != nil {
@@ -117,8 +117,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 		return fmt.Errorf("Connect(): could not find a Hg repository at: %s", dir)
 	}
 
-	var hgServerArgs []string
-	hgServerArgs = composeStartupConfig(hgcl.hgExe, hgcl.repoRoot, config)
+	hgServerArgs := composeStartupConfig(hgcl.hgExe, hgcl.repoRoot, config)
 
 	hgcl.hgServer = exec.Command(hgcl.hgExe)
 	hgcl.hgServer.Args = hgServerArgs
@@ -138,7 +137,7 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 	// t = os.Getenv("temp")
 	// fmt.Println(p, t)
 
-	if err := hgcl.hgServer.Start(); err != nil {
+	if err = hgcl.hgServer.Start(); err != nil {
 		return fmt.Errorf("Connect(): could not start the Hg Command Server: %s", err)
 	}
 
@@ -190,7 +189,6 @@ func locateRepository(reponame string) (string, error) {
 	if repo == "" {
 		repo = "."
 	}
-	sep := string(os.PathSeparator)
 
 	// first make a correct path from repo
 	var err error
@@ -204,7 +202,7 @@ func locateRepository(reponame string) (string, error) {
 	// If we do not find a Hg repo in this dir, we search for one
 	// up the path, in case we're deeper in it's working copy.
 	for {
-		_, err = os.Stat(repo + sep + ".hg")
+		_, err = os.Stat(repo + string(os.PathSeparator) + ".hg")
 		if err == nil && !os.IsExist(err) {
 			break
 		}
@@ -258,9 +256,8 @@ func composeStartupConfig(hgcmd string, repo string, config []string) []string {
 // It has a fixed format, and contains info about the possibilities
 // of the Hg CS at hand. It's also a first proof of a working connection.
 func (hgcl *HgClient) readHelloMessage() error {
-	var err error
 	s := make([]byte, 5)
-	_, err = hgcl.pipeOut.Read(s)
+	_, err := hgcl.pipeOut.Read(s)
 	if err != io.EOF && err != nil {
 		return err
 	}
@@ -318,19 +315,16 @@ func (hgcl *HgClient) validateCapabilities() error {
 // receiveFromHg returns the channel and all the data read from it.
 // Eventually it returns no (or empty) data but an error.
 func (hgcl *HgClient) receiveFromHg() (string, []byte, error) {
-	var err error
-	var ch string
-
 	// get channel and length
 	data := make([]byte, 5)
-	_, err = hgcl.pipeOut.Read(data)
+	_, err := hgcl.pipeOut.Read(data)
 	if err != io.EOF && err != nil {
 		return "", data, err
 	}
 	if data == nil {
 		return "", nil, errors.New("receiveFromHg(): no data read")
 	}
-	ch = string(data[0])
+	ch := string(data[0])
 	if ch == "" {
 		return "", data, errors.New("receiveFromHg(): no channel read")
 	}
