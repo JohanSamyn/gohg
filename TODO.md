@@ -24,15 +24,6 @@ a type for that to be possible, so I can give it a
 command. This should be done right after the call to buildCommand(). (see also
 function sprintfOpts() in client.go)
 
-* Maybe we should make a special "option" for parameters? Then the order (params
-first, options last) wouldn't matter anymore. (But buildCommand() would have to
-take care of their order when composing the Hg command.)
-
-* If a boolean option is passed-in (explicitely), also explicitely set the
-corresponding option to false if that is what is passed in, because that can be
-a way to override a setting from the repo hgrc for instance. So the way
-addBoolOption now handles the passed-in values is not really correct.
-
 * Tests should make use of the returncode of commands too. And of the fact that
 function command() returns nil as data when an error was detected.
 
@@ -142,6 +133,11 @@ the result ? This would be a kind of hosting version of gohg.
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
 
+* DONE - If a boolean option is passed-in (explicitely), also explicitely set the
+corresponding option to false if that is what is passed in, because that can be
+a way to override a setting from the repo hgrc for instance. So the way
+addBoolOption now handles the passed-in values is not really correct.
+
 * DONE - Make an Exec() method for HgClient, to make it possible for the user to pass
 in a full commandline. This could be convenient for if the gohg tool is not
 updated yet, and one wants to use a new Hg command.
@@ -190,6 +186,10 @@ Or even of HgClient, and eliminate HgServer ?
 
 * DONE - Add the possibility to use options with commands.
 
+
+* WONTFIX - Maybe we should make a special option "Params" for parameters? Then the order
+(params first, options last) wouldn't matter anymore. (But buildCommand() would
+have to take care of their order when composing the Hg command.)
 
 * WONTFIX (apparently this is not necessary) - Shouldn't I put (double) quotes
 around certain string params and arguments ?

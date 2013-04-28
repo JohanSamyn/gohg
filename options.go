@@ -357,9 +357,7 @@ func addBoolOpt(optval bool, optname string, optstr string, cmdOpts interface{},
 	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
 	if fld.IsValid() && fld.CanSet() {
 		fld.SetBool(optval) // add the value to the <cmd>Opts struct
-		if optval {
-			*hgcmd = append(*hgcmd, optstr)
-		}
+		*hgcmd = append(*hgcmd, optstr)
 	} else {
 		return fmt.Errorf("adBoolOpt(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
 	}
@@ -370,10 +368,7 @@ func addIntOpt(optval int, optname string, optstr string, cmdOpts interface{}, h
 	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
 	if fld.IsValid() && fld.CanSet() {
 		fld.SetInt(int64(optval)) // add the value to the <cmd>Opts struct
-		if optval > 0 {
-			*hgcmd = append(*hgcmd, optstr)
-			*hgcmd = append(*hgcmd, strconv.Itoa(optval))
-		}
+		*hgcmd = append(*hgcmd, optstr, strconv.Itoa(optval))
 	} else {
 		return fmt.Errorf("addIntOpt(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
 	}
@@ -384,10 +379,7 @@ func addStringOpt(optval string, optname string, optstr string, cmdOpts interfac
 	fld := reflect.ValueOf(cmdOpts).Elem().FieldByName(optname)
 	if fld.IsValid() && fld.CanSet() {
 		fld.SetString(optval) // add the value to the <cmd>Opts struct
-		*hgcmd = append(*hgcmd, optstr)
-		if optval != "" {
-			*hgcmd = append(*hgcmd, optval)
-		}
+		*hgcmd = append(*hgcmd, optstr, optval)
 	} else {
 		return fmt.Errorf("addStringOpt(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
 	}
