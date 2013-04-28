@@ -90,7 +90,7 @@ This is done with commands, implemented as methods for the HgClient type. Each
 command has the same name as the corresponding Hg command, except it starts with
 a capital letter of course.
 
-  log, err := hc.Log(Limit(2))
+  log, err := hc.Log([]Option{Limit(2)}, nil)
   if err != nil {
       fmt.Printf(err)
       ...
@@ -100,9 +100,9 @@ a capital letter of course.
 Commands return a byte slice containing the resulting data, and eventually an
 error. But there are a few exceptions (see api docs).
 
-  log, err := hc.Log()          // log is a byte slice
-  err := hc.Init("~/mynewrepo") // only returns an error eventually
-  version, err:= hc.Version()   // version is a string of the form '2.4'
+  log, err := hc.Log(nil, nil)       // log is a byte slice
+  err := hc.Init(nil, "~/mynewrepo") // only returns an error eventually
+  vers, err:= hc.Version()           // vers is a string of the form '2.4'
 
 If a command fails, the returned error contains 3 elements: 1) the returncode
 by Mercurial, 2) the full command that was passed to the Hg CS, and 3) the
@@ -110,11 +110,11 @@ eventual error message returned by Mercurial.
 
 So the command
 
-  idinfo, err := hct.Identify("C:\\DEV\\myrepo", Verbose(true))
+  idinfo, err := hct.Identify([]Option{Verbose(true)}, []string{"C:\\DEV\\myrepo"})
 
-could return the following in the err variable when it fails:
+could return something like the following in the err variable when it fails:
 
-  runcommand: Identify(): returncode=0
+  runcommand: Identify(): returncode=-1
   cmd: identify -v C:\DEV\myrepo
   hgerr:
 
@@ -123,7 +123,7 @@ could return the following in the err variable when it fails:
 Note: I could have implemented the command aliases too, but that would cost you
 an extra function call (to go from Ci to Commit f.i.), so I did not do it. And
 having to use the original commands makes your code clearly readable too. (But
-there is an example of how to do it in identify.go.)
+there are examples of how to do it in identify.go and showconfig.go.)
 
 Note: All aliases for commands that are mentioned in the Mercurial help will
 work too. So you can call either Commit() or Ci() for example. (But it will cost
@@ -132,23 +132,24 @@ you an extra function call, to call Commit from Ci.)
 Parameters and Options
 
 In the gohg tool, parameters are used to pass-in any arguments for a command
-that are not options. They are passed in first, before any options, as a string
+that are not options. They are passed in last, after any options, as a string
 or a string slice, depending on the command. These parameters typically contain
 revisions, paths or filenames and so.
 
-  log, err := hc.Log("myfile")
-  heads, err := hc.Heads("foobranch")
+  log, err := hc.Log(nil, []string{"myfile"})
+  heads, err := hc.Heads(nil, []string{"foobranch"})
 
 Options to commands use the same name as the long form of the Mercurial option
 they represent, and start with a capital letter (as do all exported symbols in
 Go). An option can be of type bool, int or string. You just pass the value as
-the parameter to the option. You can pass any number of options, separated by
-commas, just as you can on the commandline. Options can be passed in more than
-once if appropriate (see the ones marked with '[+]' in the Mercurial help).
+the parameter to the option (= type conversion of the value to the option type).
+You can pass any number of options, separated by commas, just as you can on the
+commandline. Options can be passed in more than once if appropriate (see the
+ones marked with '[+]' in the Mercurial help).
 
-  log, err := hc.Log(Verbose(true))
-  log, err := hc.Log(Limit(2))
-  log, err := hc.Log(User("John Doe"), User("me"))
+  log, err := hc.Log([]Option{Verbose(true)}, nil)
+  log, err := hc.Log([]Option{Limit(2)}, nil)
+  log, err := hc.Log([]Option{User("John Doe"), User("me")}, nil)
 
 In contrast with the typical commandline usage of the Hg commands, all options
 have to be passed after the parameter(s) to the command, because the number of
@@ -156,7 +157,7 @@ options is variable, as you don't have to pass them all everytime. This is just
 a constraint of this Go implementation, making it possible to pass a variable
 number of arguments to a function.
 
-  log, err := hc.Log("mytool.go", Verbose(true), Limit(2))
+  log, err := hc.Log([]Option{Verbose(true), Limit(2)}, []string{"mytool.go"})
 
 The gohg tool only checks if the options the caller gives are valid for that
 command. It does not check if the values are valid for the combination of that
