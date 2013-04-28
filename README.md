@@ -26,7 +26,6 @@ Only Go and it's standard library. Though I'm using
 At the commandline type:
 
     go get [-u] bitbucket.org/gohg/gohg
-    go install bitbucket.org/gohg/gohg
     go test -v bitbucket.org/gohg/gohg
 
 ### Example
