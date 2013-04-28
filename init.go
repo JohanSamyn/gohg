@@ -41,13 +41,6 @@ func (cmdOpts *initOpts) String() string {
 // before you can connect it. But Init() can be used to create any new repo
 // besides the one the Hg CS is running for.
 func (hgcl *HgClient) Init(destpath string, opts ...optionAdder) error {
-	cmdOpts := new(initOpts)
-	params := []string{destpath}
-	hgcmd, err := hgcl.buildCommand("init", cmdOpts, opts, params)
-	if err != nil {
-		return err
-	}
-
 	fa, err := filepath.Abs(destpath)
 	if err != nil {
 		return fmt.Errorf("Init() -> filepath.Abs(): %s", err)
@@ -55,6 +48,13 @@ func (hgcl *HgClient) Init(destpath string, opts ...optionAdder) error {
 	if destpath == "" || destpath == "." || fa == hgcl.RepoRoot() /*&& cmdOpts.Mq == false*/ {
 		return errors.New("HgClient.Init: path for new repo must be different" +
 			" from the Command Server repo path")
+	}
+
+	cmdOpts := new(initOpts)
+	params := []string{destpath}
+	hgcmd, err := hgcl.buildCommand("init", cmdOpts, opts, params)
+	if err != nil {
+		return err
 	}
 
 	_, err = hgcl.runcommand(hgcmd)
