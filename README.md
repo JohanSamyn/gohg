@@ -53,14 +53,14 @@ along with a few others.)
         defer hc.Disconnect()
 
         var summ []byte
-	if summ, err = hc.Summary(nil, nil); err != nil {
+        if summ, err = hc.Summary(nil, nil); err != nil {
             log.Println(err)
         }
         fmt.Printf("\"summary\" for repo %s:\n%s\n", hc.RepoRoot(), summ)
 
         var l []byte
         files := []string{}
-	if l, err = hc.Log([]Option{Limit(2)}, files); err != nil {
+        if l, err = hc.Log([]Option{Limit(2)}, files); err != nil {
             fmt.Println(err)
         }
         fmt.Printf("\"log -l 2\" for repo %s:\n%s\n", hc.RepoRoot(), l)
