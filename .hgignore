@@ -9,6 +9,7 @@ syntax:glob
 *.hg
 *.exe
 *.stackdump
+*_BAK
 build.out
 test.out
 goinstall.log
