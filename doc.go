@@ -21,7 +21,6 @@ Installation
 
 At the commandline type:
   go get [-u] bitbucket.org/gohg/gohg
-  go install bitbucket.org/gohg/gohg
   go test -v bitbucket.org/gohg/gohg
 
 Import the package
