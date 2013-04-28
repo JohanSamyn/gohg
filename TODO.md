@@ -2,8 +2,6 @@
 
 (in no particular order, and order can change anytime)
 
-* Shouldn't I put (double) quotes around certain string params and arguments ?
-
 * Maybe I'll reorganize commands into less files, combining them according to
 type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
 ...), config (showconfig, ...), exchange (push, pull, import, archive, bundle,
@@ -23,7 +21,8 @@ a type for that to be possible, so I can give it a
 'func (*hgcmd []string) String() string' method.
 
 * Find a way to add a (global ?) option so that we can log/consult the built
-command. This should be done right after the call to buildCommand().
+command. This should be done right after the call to buildCommand(). (see also
+function sprintfOpts() in client.go)
 
 * Maybe we should make a special "option" for parameters? Then the order (params
 first, options last) wouldn't matter anymore. (But buildCommand() would have to
@@ -143,6 +142,10 @@ the result ? This would be a kind of hosting version of gohg.
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
 
+* DONE - Make an Exec() method for HgClient, to make it possible for the user to pass
+in a full commandline. This could be convenient for if the gohg tool is not
+updated yet, and one wants to use a new Hg command.
+
 * DONE - Put the command string (= the result from buildCommand()) into the error
 messages, as follows: 'cmd: log -limit 2'. Prepend this before the 'err:' and
 'hgerr:' lines in the error message.
@@ -187,6 +190,9 @@ Or even of HgClient, and eliminate HgServer ?
 
 * DONE - Add the possibility to use options with commands.
 
+
+* WONTFIX (apparently this is not necessary) - Shouldn't I put (double) quotes
+around certain string params and arguments ?
 
 * WONTFIX - Make sure init() fails gracefuly when no Hg repo avail, and it 'asks' for
 the name of a new (= unexisting) repo in it's failure message, which much

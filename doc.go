@@ -98,18 +98,27 @@ a capital letter of course.
   fmt.Printf("%s", log)
 
 Commands return a byte slice containing the resulting data, and eventually an
-error. But there are a few exceptions (see api docs). If the Mercurial
-returnvalue of the command indicated it did not complete successful, the
-returnvalue is included in the error message. As is any further error message
-from Mercurial.
+error. But there are a few exceptions (see api docs).
 
   log, err := hc.Log()          // log is a byte slice
   err := hc.Init("~/mynewrepo") // only returns an error eventually
   version, err:= hc.Version()   // version is a string of the form '2.4'
 
-TODO: add an example of error return
+If a command fails, the returned error contains 3 elements: 1) the returncode
+by Mercurial, 2) the full command that was passed to the Hg CS, and 3) the
+eventual error message returned by Mercurial.
 
-TODO: make up my mind about the notes below
+So the command
+
+  idinfo, err := hct.Identify("C:\\DEV\\myrepo", Verbose(true))
+
+could return the following in the err variable when it fails:
+
+  runcommand: Identify(): returncode=0
+  cmd: identify -v C:\DEV\myrepo
+  hgerr:
+
+// TODO: make up my mind about the notes below
 
 Note: I could have implemented the command aliases too, but that would cost you
 an extra function call (to go from Ci to Commit f.i.), so I did not do it. And
@@ -176,6 +185,9 @@ Limitations
 * As mentioned earlier, passing config info is not implemented yet.
 
 * Currently there is no support for any extensions to Mercurial.
+
+* If multiple Hg CSers are used against the same repo, it is up to Mercurial
+to handle this correctly.
 
 Issues
 
