@@ -553,7 +553,7 @@ func (hgcl *HgClient) IsConnected() bool {
 // though in a less Go-like way. No checks are done however; the command is
 // passed to the Hg CS as is. See client_test.go for an example.
 // This method could come in handy when you want to use a new Hg command for
-// which the gohg tool is not updated yet.
+// which the gohg tool is not updated yet. Or for using some extension to Hg.
 func (hgcl *HgClient) Exec(hgcmd []string) ([]byte, error) {
 	return hgcl.runcommand(hgcmd)
 }
