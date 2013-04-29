@@ -129,35 +129,32 @@ Note: All aliases for commands that are mentioned in the Mercurial help will
 work too. So you can call either Commit() or Ci() for example. (But it will cost
 you an extra function call, to call Commit from Ci.)
 
-Parameters and Options
+Options and Parameters
 
-In the gohg tool, parameters are used to pass-in any arguments for a command
-that are not options. They are passed in last, after any options, as a string
-or a string slice, depending on the command. These parameters typically contain
-revisions, paths or filenames and so.
+As on the commandline, options come before parameters.
 
-  log, err := hc.Log(nil, []string{"myfile"})
-  heads, err := hc.Heads(nil, []string{"foobranch"})
+  opts := []Option{Verbose(true), Limit(2)}
+  params := []string{"mytool.go"}
+  log, err := hc.Log(opts, params)
 
 Options to commands use the same name as the long form of the Mercurial option
-they represent, and start with a capital letter (as do all exported symbols in
-Go). An option can be of type bool, int or string. You just pass the value as
-the parameter to the option (= type conversion of the value to the option type).
-You can pass any number of options, separated by commas, just as you can on the
-commandline. Options can be passed in more than once if appropriate (see the
-ones marked with '[+]' in the Mercurial help).
+they represent, but start with a capital letter (as do all exported symbols in
+Go). An options value can be of type bool, int or string. You just pass the
+value as the parameter to the option (= type conversion of the value to the
+option type). You can pass any number of options, as the elements of a slice.
+Options can occur more than once if appropriate (see the ones marked with '[+]'
+in the Mercurial help).
 
   log, err := hc.Log([]Option{Verbose(true)}, nil)
   log, err := hc.Log([]Option{Limit(2)}, nil)
   log, err := hc.Log([]Option{User("John Doe"), User("me")}, nil)
 
-In contrast with the typical commandline usage of the Hg commands, all options
-have to be passed after the parameter(s) to the command, because the number of
-options is variable, as you don't have to pass them all everytime. This is just
-a constraint of this Go implementation, making it possible to pass a variable
-number of arguments to a function.
+Parameters are used to provide any arguments for a command that are not options.
+They are passed in as a string or a string slice, depending on the command.
+These parameters typically contain revisions, paths or filenames and so.
 
-  log, err := hc.Log([]Option{Verbose(true), Limit(2)}, []string{"mytool.go"})
+  log, err := hc.Log(nil, []string{"myfile"})
+  heads, err := hc.Heads(nil, []string{"foobranch"})
 
 The gohg tool only checks if the options the caller gives are valid for that
 command. It does not check if the values are valid for the combination of that
