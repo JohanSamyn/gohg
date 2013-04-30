@@ -118,16 +118,8 @@ could return something like the following in the err variable when it fails:
   cmd: identify -v C:\DEV\myrepo
   hgerr:
 
-// TODO: make up my mind about the notes below
-
-Note: I could have implemented the command aliases too, but that would cost you
-an extra function call (to go from Ci to Commit f.i.), so I did not do it. And
-having to use the original commands makes your code clearly readable too. (But
-there are examples of how to do it in identify.go and showconfig.go.)
-
-Note: All aliases for commands that are mentioned in the Mercurial help will
-work too. So you can call either Commit() or Ci() for example. (But it will cost
-you an extra function call, to call Commit from Ci.)
+The command aliases are not implemented. But there are examples of how
+you can easily implement them in identify.go and showconfig.go.
 
 Options and Parameters
 
