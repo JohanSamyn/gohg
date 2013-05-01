@@ -34,6 +34,7 @@ type HgClient struct {
 	encoding     string         // as per the hello message
 	repoRoot     string         // the full path to the Hg repo
 	hgversion    string         // the version number only
+	lastCmd      []string       // the elements of the command last executed
 	// config       []string
 }
 
@@ -421,6 +422,15 @@ func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []O
 	return hgcmd, nil
 }
 
+// ShowLastCmd produces the commandline for the last command that was submitted
+// to the Hg CS until then. It is a convenience for if you use the hgcl.Identify()
+// way of issuing commands (so not via a HgCmd.Exec(), or via ExecCmd()), and you
+// want to know the exact commandline that was passed to Hg.
+// This one works after all 3 possibilities to pass commands to Hg.
+func (hgcl *HgClient) ShowLastCmd() string {
+	return strings.Join(hgcl.lastCmd, " ")
+}
+
 // runcommand allows to run a Mercurial command in the Hg Command Server.
 // You can only run 'hg' commands that are available in this library.
 func (hgcl *HgClient) runcommand(cmd []string) (data []byte, err error) {
@@ -428,6 +438,7 @@ func (hgcl *HgClient) runcommand(cmd []string) (data []byte, err error) {
 		return nil, fmt.Errorf("%s", "runcommand: Cannot execute "+
 			strings.Title(cmd[0])+": no Hg CS connected!")
 	}
+	hgcl.lastCmd = cmd
 	data, hgerr, ret, err := hgcl.runInHg("runcommand", cmd)
 	if err != nil {
 		return nil, fmt.Errorf("runcommand: %s", err)
@@ -549,11 +560,119 @@ func (hgcl *HgClient) IsConnected() bool {
 	return hgcl.hgServer != nil
 }
 
-// Exec() allows to pass in a full commandline for the Hg CS by yourself,
+// ExecCmd allows to pass in a full commandline for the Hg CS by yourself,
 // though in a less Go-like way. No checks are done however; the command is
-// passed to the Hg CS as is. See client_test.go for an example.
+// directly passed to the Hg CS as is. See client_test.go for an example.
 // This method could come in handy when you want to use a new Hg command for
 // which the gohg tool is not updated yet. Or for using some extension to Hg.
-func (hgcl *HgClient) Exec(hgcmd []string) ([]byte, error) {
+// Be sure to add an  option and its value separately in hgcmd.
+// (not ok: ' hgcmd[1] = "--limit 2" ', not ok: ' hgcmd[1] = "--limit"; hgcmd[2] = "2" ')
+func (hgcl *HgClient) ExecCmd(hgcmd []string) ([]byte, error) {
 	return hgcl.runcommand(hgcmd)
+}
+
+// // BuildCmd allows to construct the complete commandline version of a command.
+// // This can be handy to show the executed command to the user of some GUI tool
+// // for example.
+// func BuildCmd(cmd string, opts []Option, params []string) string {
+// 	hgcmd := []string{cmd}
+
+// 	for _, o := range opts {
+// 		co := new(struct{ o Option })
+// 		_ = o.addOption(co, &hgcmd)
+// 	}
+
+// 	for _, p := range params {
+// 		if p != "" {
+// 			hgcmd = append(hgcmd, string(p))
+// 		}
+// 	}
+// 	return strings.Join(hgcmd, " ")
+// }
+
+// HgCmd is the type through which you can create and execute Mercurial commands.
+type HgCmd struct {
+	Name    string
+	Opts    []Option
+	Params  []string
+	cmdOpts interface{} // what opts are valid for the command?
+	cmd     []string
+}
+
+// NewHgCmd creates a new HgCmd instance for working with Mercurial commands.
+func NewHgCmd(name string) (*HgCmd, error) {
+	if name == "" {
+		return nil, fmt.Errorf("give a name for the command")
+	}
+	hgcmd := new(HgCmd)
+	hgcmd.Name = name
+
+	switch hgcmd.Name {
+	case "add":
+		hgcmd.cmdOpts = new(addOpts)
+	case "branches":
+		hgcmd.cmdOpts = new(branchesOpts)
+	case "clone":
+		hgcmd.cmdOpts = new(cloneOpts)
+	case "commit":
+		hgcmd.cmdOpts = new(commitOpts)
+	case "heads":
+		hgcmd.cmdOpts = new(headsOpts)
+	case "identify":
+		hgcmd.cmdOpts = new(identifyOpts)
+	case "init":
+		hgcmd.cmdOpts = new(initOpts)
+	case "log":
+		hgcmd.cmdOpts = new(logOpts)
+	case "manifest":
+		hgcmd.cmdOpts = new(manifestOpts)
+	case "status":
+		hgcmd.cmdOpts = new(statusOpts)
+	case "summary":
+		hgcmd.cmdOpts = new(summaryOpts)
+	case "tags":
+		hgcmd.cmdOpts = new(tagsOpts)
+	case "tip":
+		hgcmd.cmdOpts = new(tipOpts)
+	case "verify":
+		hgcmd.cmdOpts = new(verifyOpts)
+	}
+	return hgcmd, nil
+}
+
+func (hc *HgCmd) SetOptions(opts []Option) {
+	// Checking for double opts is a bit useless, as some options can indeed
+	// be passed more than once to a Hg command.
+	hc.Opts = append(hc.Opts, opts...)
+}
+
+func (hc *HgCmd) SetParams(params []string) {
+	hc.Params = append(hc.Params, params...)
+}
+
+// Exec builds the commandline with the data in the HgCmd instance,
+// and then passes the command to the Mercurial Command Server for execution,
+// returning the result or an error.
+func (hc *HgCmd) Exec(hgcl *HgClient) ([]byte, error) {
+	if hc.Name == "" {
+		return nil, fmt.Errorf("HgCmd.Exec(): no command specified")
+	}
+	var err error
+	hc.cmd, err = hgcl.buildCommand(hc.Name, hc.cmdOpts, hc.Opts, hc.Params)
+	if err != nil {
+		return nil, err
+	}
+	return hgcl.runcommand(hc.cmd)
+}
+
+// CmdLine gives you the exact commandline as it will be passed to Mercurial,
+// generated with the data in the HgCmd instance. Handy for logging or showing
+// in a GUI.
+func (hc *HgCmd) CmdLine(hgcl *HgClient) (string, error) {
+	var err error
+	hc.cmd, err = hgcl.buildCommand(hc.Name, hc.cmdOpts, hc.Opts, hc.Params)
+	if err != nil {
+		return "", err
+	}
+	return strings.Join(hc.cmd, " "), nil
 }

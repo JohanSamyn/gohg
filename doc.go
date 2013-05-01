@@ -158,6 +158,46 @@ Some options are not implemented, as they seemed not relevant for use with this
 tool (for instance: the global --color option, or the --print0 option for
 status).
 
+Alternative ways for issuing commands
+
+Besides the way described above, the gohg tool offers two other ways for working
+with commands.
+
+The first one uses the HgCmd type, a struct that you can instantiate for any new
+command, and for which you can set elements Name, Options and Params (see the
+api docs hereafter for more details).
+
+A pro of this second method is that it allwos you to obtain and know the exact
+commandline that will be passed to Mercurial. This could be handy for logging,
+or for showing feedback to the user in a GUI program.
+
+An example (also see examples/example2.go):
+
+  hc, _ := NewHgCmd("log")
+  opts := make([]Option, 2)
+  var lim Limit = 2
+  opts[0] = lim
+  var verb Verbose = true
+  opts[1] = verb
+  hc.SetOptions(opts)
+  cl, _ := hc.CmdLine(hgcl)
+  fmt.Printf("%s\n", cl) // output: log --limit 2 -v
+  hc.Exec(hgcl)
+
+The second alternative is by calling the ExecCmd() method on the HgClient
+instance. It accepts a string slice that is supposed to contain the complete
+command, as you would type it at the command line.
+
+This way could come in handy for issuing new Mercurial commands that are not yet
+implemented in gohg, or for working with extensions, as those are not supported
+by gohg neither.
+
+An example:
+
+  // hgcl is a HgClient instance that has a connection to the Hg CS
+  hgcmd := []string{"log", "--limit", "2"}
+  result, err := hgcl.ExecCmd(hgcmd)
+
 Error handling
 
 The gohg tool only returns errors, with an as clear as possible message, and

@@ -27,7 +27,7 @@ func TestClient_Exec(t *testing.T) {
 
 	var expected string = "000000000000 tip\n"
 
-	got, err := hct.Exec([]string{"identify", "-v"})
+	got, err := hct.ExecCmd([]string{"identify", "-v"})
 	if err != nil {
 		t.Error(err)
 	}

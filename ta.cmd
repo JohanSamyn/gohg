@@ -24,3 +24,15 @@ echo ----------------------------------------
 echo running: go run examples\example1.go
 echo ----------------------------------------
 go run examples\example1.go
+pause
+
+echo ----------------------------------------
+echo running: go run examples\example2.go
+echo ----------------------------------------
+go run examples\example2.go
+pause
+
+echo ----------------------------------------
+echo running: go run examples\example3.go
+echo ----------------------------------------
+go run examples\example3.go
