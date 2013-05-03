@@ -25,7 +25,7 @@ func main() {
 	}
 	defer hgcl.Disconnect()
 
-	hc, _ := NewHgCmd("log")
+	hc, _ := NewHgCmd("log", nil, nil)
 	o := make([]Option, 2)
 	var lim Limit = 2
 	o[0] = lim
