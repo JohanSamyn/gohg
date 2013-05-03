@@ -31,10 +31,6 @@ func (cmdOpts *headsOpts) String() string {
 }
 
 func (hgcl *HgClient) Heads(opts []Option, revs []string) ([]byte, error) {
-	cmdOpts := new(headsOpts)
-	hgcmd, err := hgcl.buildCommand("heads", cmdOpts, opts, revs)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("heads", opts, revs)
+	return cmd.Exec(hgcl)
 }

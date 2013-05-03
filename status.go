@@ -38,10 +38,6 @@ func (cmdOpts *statusOpts) String() string {
 }
 
 func (hgcl *HgClient) Status(opts []Option, files []string) ([]byte, error) {
-	cmdOpts := new(statusOpts)
-	hgcmd, err := hgcl.buildCommand("status", cmdOpts, opts, files)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("status", opts, files)
+	return cmd.Exec(hgcl)
 }

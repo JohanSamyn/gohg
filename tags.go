@@ -28,10 +28,6 @@ func (cmdOpts *tagsOpts) String() string {
 }
 
 func (hgcl *HgClient) Tags(opts []Option, params []string) ([]byte, error) {
-	cmdOpts := new(tagsOpts)
-	hgcmd, err := hgcl.buildCommand("tags", cmdOpts, opts, params)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("tags", opts, params)
+	return cmd.Exec(hgcl)
 }

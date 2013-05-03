@@ -30,10 +30,6 @@ func (cmdOpts *addOpts) String() string {
 }
 
 func (hgcl *HgClient) Add(opts []Option, files []string) ([]byte, error) {
-	cmdOpts := new(addOpts)
-	hgcmd, err := hgcl.buildCommand("add", cmdOpts, opts, files)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("add", opts, files)
+	return cmd.Exec(hgcl)
 }

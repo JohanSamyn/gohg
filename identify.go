@@ -43,11 +43,6 @@ func (cmdOpts *identifyOpts) String() string {
 // }
 
 func (hgcl *HgClient) Identify(opts []Option, source []string) ([]byte, error) {
-	cmdOpts := new(identifyOpts)
-	hgcmd, err := hgcl.buildCommand("identify", cmdOpts, opts, source)
-	if err != nil {
-		return nil, err
-	}
-	// fmt.Printf("%s", cmdOpts)
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("identify", opts, source)
+	return cmd.Exec(hgcl)
 }

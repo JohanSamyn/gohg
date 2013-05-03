@@ -26,10 +26,6 @@ func (cmdOpts *verifyOpts) String() string {
 }
 
 func (hgcl *HgClient) Verify(opts []Option, params []string) ([]byte, error) {
-	cmdOpts := new(verifyOpts)
-	hgcmd, err := hgcl.buildCommand("verify", cmdOpts, opts, params)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("verify", opts, params)
+	return cmd.Exec(hgcl)
 }

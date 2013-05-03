@@ -43,10 +43,7 @@ func (cmdOpts *logOpts) String() string {
 }
 
 func (hgcl *HgClient) Log(opts []Option, files []string) ([]byte, error) {
-	cmdOpts := new(logOpts)
-	hgcmd, err := hgcl.buildCommand("log", cmdOpts, opts, files)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+
+	cmd, _ := NewHgCmd("log", opts, files)
+	return cmd.Exec(hgcl)
 }

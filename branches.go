@@ -28,10 +28,6 @@ func (cmdOpts *branchesOpts) String() string {
 }
 
 func (hgcl *HgClient) Branches(opts []Option, params []string) ([]byte, error) {
-	cmdOpts := new(branchesOpts)
-	hgcmd, err := hgcl.buildCommand("branches", cmdOpts, opts, params)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("branches", opts, params)
+	return cmd.Exec(hgcl)
 }

@@ -28,10 +28,6 @@ func (cmdOpts *manifestOpts) String() string {
 }
 
 func (hgcl *HgClient) Manifest(opts []Option, params []string) ([]byte, error) {
-	cmdOpts := new(manifestOpts)
-	hgcmd, err := hgcl.buildCommand("manifest", cmdOpts, opts, params)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("manifest", opts, params)
+	return cmd.Exec(hgcl)
 }

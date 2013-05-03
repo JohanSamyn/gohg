@@ -34,11 +34,7 @@ func (cmdOpts *cloneOpts) String() string {
 }
 
 func (hgcl *HgClient) Clone(opts []Option, fromto []string) error {
-	cmdOpts := new(cloneOpts)
-	hgcmd, err := hgcl.buildCommand("clone", cmdOpts, opts, fromto)
-	if err != nil {
-		return err
-	}
-	_, err = hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("clone", opts, fromto)
+	_, err := cmd.Exec(hgcl)
 	return err
 }

@@ -394,18 +394,18 @@ func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 } // sendToHg()
 
 // Method buildCommand builds the command string to pass to the Hg CS.
-//	cmdName:	The name of the command ("log", "status", etc.).
-//	cmdOpts:	A type based on struct with the valid options for the command
-//				at hand. Also contains the (gohg) default value for each option
-//				for that particular command.
-//				Used to filter only the options supported by the command.
-//	opts:		The options passed by the caller.
-//	params:		Any filenames, paths or other that the command needs.
+//	cmd.Name: The name of the command ("log", "status", etc.).
+//	cmd.cmdOpts: A type based on struct with the valid options for the command
+//				 at hand. Also contains the (gohg) default value for each option
+//				 for that particular command.
+//				 Used to filter only the options supported by the command.
+//	cmd.Options: The options passed by the caller.
+//	cmd.Params:	Any filenames, paths or other that the command needs.
 //				These are to be added as the last things of the command.
-func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []Option, params []string) (hgcmd []string, err error) {
-	hgcmd = []string{cmdName}
-	for _, o := range opts {
-		err = o.addOption(cmdOpts, &hgcmd)
+func (hgcl *HgClient) buildCommand(cmd *HgCmd) (hgcmd []string, err error) {
+	hgcmd = []string{cmd.Name}
+	for _, o := range cmd.Options {
+		err = o.addOption(cmd.cmdOpts, &hgcmd)
 		// Silently skip invalid options for now.
 		// if err != nil {
 		// 	fmt.Logf("err = %s", err)
@@ -414,7 +414,7 @@ func (hgcl *HgClient) buildCommand(cmdName string, cmdOpts interface{}, opts []O
 		// 	return nil, err
 		// }
 	}
-	for _, p := range params {
+	for _, p := range cmd.Params {
 		if p != "" {
 			hgcmd = append(hgcmd, string(p))
 		}
@@ -571,41 +571,29 @@ func (hgcl *HgClient) ExecCmd(hgcmd []string) ([]byte, error) {
 	return hgcl.runcommand(hgcmd)
 }
 
-// // BuildCmd allows to construct the complete commandline version of a command.
-// // This can be handy to show the executed command to the user of some GUI tool
-// // for example.
-// func BuildCmd(cmd string, opts []Option, params []string) string {
-// 	hgcmd := []string{cmd}
-
-// 	for _, o := range opts {
-// 		co := new(struct{ o Option })
-// 		_ = o.addOption(co, &hgcmd)
-// 	}
-
-// 	for _, p := range params {
-// 		if p != "" {
-// 			hgcmd = append(hgcmd, string(p))
-// 		}
-// 	}
-// 	return strings.Join(hgcmd, " ")
-// }
-
 // HgCmd is the type through which you can create and execute Mercurial commands.
 type HgCmd struct {
 	Name    string
-	Opts    []Option
+	Options []Option
 	Params  []string
 	cmdOpts interface{} // what opts are valid for the command?
 	cmd     []string
 }
 
 // NewHgCmd creates a new HgCmd instance for working with Mercurial commands.
-func NewHgCmd(name string) (*HgCmd, error) {
+func NewHgCmd(name string, opts []Option, params []string) (*HgCmd, error) {
 	if name == "" {
 		return nil, fmt.Errorf("give a name for the command")
 	}
 	hgcmd := new(HgCmd)
 	hgcmd.Name = name
+
+	if opts != nil {
+		hgcmd.Options = opts
+	}
+	if params != nil {
+		hgcmd.Params = params
+	}
 
 	switch hgcmd.Name {
 	case "add":
@@ -626,6 +614,8 @@ func NewHgCmd(name string) (*HgCmd, error) {
 		hgcmd.cmdOpts = new(logOpts)
 	case "manifest":
 		hgcmd.cmdOpts = new(manifestOpts)
+	case "showconfig":
+		hgcmd.cmdOpts = new(showconfigOpts)
 	case "status":
 		hgcmd.cmdOpts = new(statusOpts)
 	case "summary":
@@ -636,14 +626,17 @@ func NewHgCmd(name string) (*HgCmd, error) {
 		hgcmd.cmdOpts = new(tipOpts)
 	case "verify":
 		hgcmd.cmdOpts = new(verifyOpts)
+	default:
+		return nil, fmt.Errorf("could not find the cmdOpts for command %s", hgcmd.Name)
 	}
+
 	return hgcmd, nil
 }
 
 func (hc *HgCmd) SetOptions(opts []Option) {
 	// Checking for double opts is a bit useless, as some options can indeed
 	// be passed more than once to a Hg command.
-	hc.Opts = append(hc.Opts, opts...)
+	hc.Options = append(hc.Options, opts...)
 }
 
 func (hc *HgCmd) SetParams(params []string) {
@@ -655,10 +648,10 @@ func (hc *HgCmd) SetParams(params []string) {
 // returning the result or an error.
 func (hc *HgCmd) Exec(hgcl *HgClient) ([]byte, error) {
 	if hc.Name == "" {
-		return nil, fmt.Errorf("HgCmd.Exec(): no command specified")
+		return nil, fmt.Errorf("HgCmd.Exec(): no command name specified")
 	}
 	var err error
-	hc.cmd, err = hgcl.buildCommand(hc.Name, hc.cmdOpts, hc.Opts, hc.Params)
+	hc.cmd, err = hgcl.buildCommand(hc)
 	if err != nil {
 		return nil, err
 	}
@@ -670,7 +663,7 @@ func (hc *HgCmd) Exec(hgcl *HgClient) ([]byte, error) {
 // in a GUI.
 func (hc *HgCmd) CmdLine(hgcl *HgClient) (string, error) {
 	var err error
-	hc.cmd, err = hgcl.buildCommand(hc.Name, hc.cmdOpts, hc.Opts, hc.Params)
+	hc.cmd, err = hgcl.buildCommand(hc)
 	if err != nil {
 		return "", err
 	}

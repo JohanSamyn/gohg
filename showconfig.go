@@ -31,11 +31,6 @@ func (cmdOpts *showconfigOpts) String() string {
 // }
 
 func (hgcl *HgClient) ShowConfig(opts []Option, configitems []string) ([]byte, error) {
-	cmdOpts := new(showconfigOpts)
-
-	hgcmd, err := hgcl.buildCommand("showconfig", cmdOpts, opts, configitems)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("showconfig", opts, configitems)
+	return cmd.Exec(hgcl)
 }

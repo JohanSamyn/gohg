@@ -51,12 +51,7 @@ func (hgcl *HgClient) Init(opts []Option, destpath string) error {
 			" from the Command Server repo path")
 	}
 
-	cmdOpts := new(initOpts)
-	hgcmd, err := hgcl.buildCommand("init", cmdOpts, opts, []string{destpath})
-	if err != nil {
-		return err
-	}
-
-	_, err = hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("init", opts, []string{destpath})
+	_, err = cmd.Exec(hgcl)
 	return err
 }

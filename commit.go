@@ -39,19 +39,22 @@ func (cmdOpts *commitOpts) String() string {
 }
 
 func (hgcl *HgClient) Commit(opts []Option, files []string) error {
-	cmdOpts := new(commitOpts)
-	hgcmd, err := hgcl.buildCommand("commit", cmdOpts, opts, files)
-	if err != nil {
-		return err
-	}
+	cmd, _ := NewHgCmd("commit", opts, files)
 
 	// Either make sure there is an editor configured for firing up in case
 	// there is no commit message provided, or catch the lack of that message.
 	// For now we catch it.
-	if cmdOpts.Message == "" {
+	var err error
+	// We have to build the command to have any values in cmd.cmdOpts.
+	cmd.cmd, err = hgcl.buildCommand(cmd)
+	if err != nil {
+		return err
+	}
+	// Maybe this would be easier if commitOpts was a map ?
+	if cmd.cmdOpts.(*commitOpts).Message == "" {
 		return errors.New("Commit(): please provide a non-empty commit message.")
 	}
 
-	_, err = hgcl.runcommand(hgcmd)
+	_, err = cmd.Exec(hgcl)
 	return err
 }

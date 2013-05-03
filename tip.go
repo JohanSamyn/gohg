@@ -30,10 +30,6 @@ func (cmdOpts *tipOpts) String() string {
 }
 
 func (hgcl *HgClient) Tip(opts []Option, params []string) ([]byte, error) {
-	cmdOpts := new(tipOpts)
-	hgcmd, err := hgcl.buildCommand("tip", cmdOpts, opts, params)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hgcmd)
+	cmd, _ := NewHgCmd("tip", opts, params)
+	return cmd.Exec(hgcl)
 }

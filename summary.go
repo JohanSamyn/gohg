@@ -31,11 +31,10 @@ func (cmdOpts *summaryOpts) String() string {
 }
 
 func (hgcl *HgClient) Summary(opts []Option, params []string) ([]byte, error) {
-	cmdOpts := new(summaryOpts)
-	hgcmd, err := hgcl.buildCommand("summary", cmdOpts, opts, params)
-	if err != nil {
-		return nil, err
-	}
+
+	// See commit.go for how to obtain a value from cmd.cmdOpts.
 	// fmt.Printf("%s", cmdOpts)
-	return hgcl.runcommand(hgcmd)
+
+	cmd, _ := NewHgCmd("summary", opts, params)
+	return cmd.Exec(hgcl)
 }
