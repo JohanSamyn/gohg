@@ -15,15 +15,6 @@ mention that in the logfile.
 * Should I always add a '--' as the option closer before passing arguments?
 How does TortoiseHg do this?
 
-* Turn the commands into a 'command' type ? So we can f.i. add a method to print
-the resulting command string. Maybe I'll have to turn the 'hgcmd []string' into
-a type for that to be possible, so I can give it a
-'func (*hgcmd []string) String() string' method.
-
-* Find a way to add a (global ?) option so that we can log/consult the built
-command. This should be done right after the call to buildCommand(). (see also
-function sprintfOpts() in client.go)
-
 * Tests should make use of the returncode of commands too. And of the fact that
 function runcommand() returns nil as data when an error was detected.
 
@@ -39,14 +30,6 @@ as they are also printed from the commandline.
 * Find out how to handle functionality that belongs to extensions.
 Think of the -mq option for instance. So we'll have to find a way to detect what
 extensions are active, and conditionaly allow their options.
-
-* Maybe I should make it possible for callers to set options directly in the
-<cmd>Opts struct ? That would require those structs to be made public, and they
-would need to be coupled to their command too, which seems less obvious at the
-moment. Maybe a method injectOpts(cmdOpts interface{}) to receiver 'func Log()'
-f.i. could be a solution ?
-Example:
-  hc.Log.logOpts.Limit = 2
 
 * Encoding (in the hellomessage) should be UTF-8.
 
@@ -134,6 +117,15 @@ the result ? This would be a kind of hosting version of gohg.
 start the Hg CS. If possible, that is. Maybe this should be solved by adding a pool?
 
 
+* DONE - Turn the commands into a 'command' type ? So we can f.i. add a method to print
+the resulting command string. Maybe I'll have to turn the 'hgcmd []string' into
+a type for that to be possible, so I can give it a
+'func (*hgcmd []string) String() string' method.
+
+* DONE - Find a way to add a (global ?) option so that we can log/consult the built
+command. This should be done right after the call to buildCommand(). (see also
+function sprintfOpts() in client.go)
+
 * DONE - If a boolean option is passed-in (explicitely), also explicitely set the
 corresponding option to false if that is what is passed in, because that can be
 a way to override a setting from the repo hgrc for instance. So the way
@@ -187,6 +179,14 @@ Or even of HgClient, and eliminate HgServer ?
 
 * DONE - Add the possibility to use options with commands.
 
+
+* DONE/WONTFIX - Maybe I should make it possible for callers to set options directly in the
+<cmd>Opts struct ? That would require those structs to be made public, and they
+would need to be coupled to their command too, which seems less obvious at the
+moment. Maybe a method injectOpts(cmdOpts interface{}) to receiver 'func Log()'
+f.i. could be a solution ?
+Example:
+  hc.Log.logOpts.Limit = 2
 
 * WONTFIX - Maybe we should make a special option "Params" for parameters? Then the order
 (params first, options last) wouldn't matter anymore. (But buildCommand() would

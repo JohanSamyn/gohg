@@ -30,8 +30,8 @@ Start with importing the gohg package:
 
 Connecting the Mercurial Command Server
 
-All interaction with the Hg CS happens through the HgClient type, of which you
-have to create an instance:
+All interaction with the Mercurial Command Server (Hg CS from now on) happens
+through the HgClient type, of which you have to create an instance:
 
   hc :=  NewHgClient()
 
@@ -86,16 +86,15 @@ it's good working:
 Commands
 
 Once we have a connection to a Hg CS we can do some work with the repository.
-This is done with commands, implemented as methods for the HgClient type. Each
-command has the same name as the corresponding Hg command, except it starts with
-a capital letter of course.
+This is done with commands, and gohg offers 3 ways for issuing them.
 
-  log, err := hc.Log([]Option{Limit(2)}, nil)
-  if err != nil {
-      fmt.Printf(err)
-      ...
-  }
-  fmt.Printf("%s", log)
+1. The command methods of the HgClient type.
+
+2. The HgCmd type.
+
+3. The ExecCmd() method of the HgClient type.
+
+Each of which has its own reason of existance.
 
 Commands return a byte slice containing the resulting data, and eventually an
 error. But there are a few exceptions (see api docs).
@@ -110,7 +109,7 @@ eventual error message returned by Mercurial.
 
 So the command
 
-  idinfo, err := hct.Identify([]Option{Verbose(true)}, []string{"C:\\DEV\\myrepo"})
+  idinfo, err := hc.Identify([]Option{Verbose(true)}, []string{"C:\\DEV\\myrepo"})
 
 could return something like the following in the err variable when it fails:
 
@@ -121,9 +120,87 @@ could return something like the following in the err variable when it fails:
 The command aliases are not implemented. But there are examples of how
 you can easily implement them in identify.go and showconfig.go.
 
+Commands - HgClient command methods
+
+This is the easiest way, a kind of convenience. And the most readable too.
+A con is that as a user you cannot know the exact command that was passed to Hg,
+without some extra mechanics.
+
+Each command has the same name as the corresponding Hg command, except it starts
+with a capital letter of course.
+
+An example:
+
+  log, err := hc.Log([]Option{Limit(2)}, []string("my-file"))
+  if err != nil {
+      fmt.Printf(err)
+      ...
+  }
+  fmt.Printf("%s", log)
+
+Note that these methods all use the HgCmd type internally. As such they are
+convenience wrappers around that type. You could also call them a kind of
+syntactic sugar. If you just want to simply issue a command, nothing more, they
+are the way to go.
+
+The only way to obtain the commandstring sent to Hg when using these command
+methods, is by calling the HgClient.ShowLastCmd() method:
+
+  log, err := hc.Log([]Option{Limit(2)}, []string("my-file"))
+  fmt.Printf("%s", hc.ShowLastCmd()) // prints: log --limit 2 -v my-file
+
+But you have to do this before issuing any other command, as the name of the
+method already suggests.
+
+Commands - the HgCmd type
+
+Using the HgCmd type is kind of the standard way. It is a struct that you can
+instantiate for any new command, and for which you can set elements Name,
+Options and Params (see the api docs hereafter for more details). It allows for
+building the command step by step, and also to query the exact command that will
+be sent to the Hg CS.
+
+A pro of this method is that it allows you to obtain the exact command string
+that will be passed to Mercurial, as you would type it on the commandline. This
+could be handy for logging, or for showing feedback to the user in a GUI program.
+
+An example (also see examples/example2.go):
+
+  opts := make([]Option, 2)
+  var lim Limit = 2
+  opts[0] = lim
+  var verb Verbose = true
+  opts[1] = verb
+  hc.SetOptions(opts)
+  hc, _ := NewHgCmd("log", opts, nil, new(logOpts))
+  cmdline, _ := hc.CmdLine(hgcl)
+  fmt.Printf("%s\n", cmdline) // output: log --limit 2 -v
+  hc.Exec(hgcl)
+
+As you can see, this way requires some more coding.
+
+The api docs will also show you the HgCmd type has a convenient constructor for
+each command, allowing for easy and correct initialization of the new command
+type.
+
+Commands - ExecCmd
+
+The HgClient type has an extra method ExecCmd(), allowing you to pass a fully
+custom build command to Hg. It accepts a string slice that is supposed to
+contain the complete command, as you would type it at the command line.
+
+It could be a convenient way for issuing commands that are not yet implemented
+in gohg, or to make use of extensions to Hg (for which gohg offers no support).
+
+An example:
+
+  // hgcl is a HgClient instance that has a connection to the Hg CS
+  hgcmd := []string{"log", "--limit", "2"}
+  result, err := hgcl.ExecCmd(hgcmd)
+
 Options and Parameters
 
-As on the commandline, options come before parameters.
+Just like on the commandline, options come before parameters.
 
   opts := []Option{Verbose(true), Limit(2)}
   params := []string{"mytool.go"}
@@ -157,46 +234,6 @@ not passed to the Hg CS.
 Some options are not implemented, as they seemed not relevant for use with this
 tool (for instance: the global --color option, or the --print0 option for
 status).
-
-Alternative ways for issuing commands
-
-Besides the way described above, the gohg tool offers two other ways for working
-with commands.
-
-The first one uses the HgCmd type, a struct that you can instantiate for any new
-command, and for which you can set elements Name, Options and Params (see the
-api docs hereafter for more details).
-
-A pro of this second method is that it allwos you to obtain and know the exact
-commandline that will be passed to Mercurial. This could be handy for logging,
-or for showing feedback to the user in a GUI program.
-
-An example (also see examples/example2.go):
-
-  hc, _ := NewHgCmd("log")
-  opts := make([]Option, 2)
-  var lim Limit = 2
-  opts[0] = lim
-  var verb Verbose = true
-  opts[1] = verb
-  hc.SetOptions(opts)
-  cl, _ := hc.CmdLine(hgcl)
-  fmt.Printf("%s\n", cl) // output: log --limit 2 -v
-  hc.Exec(hgcl)
-
-The second alternative is by calling the ExecCmd() method on the HgClient
-instance. It accepts a string slice that is supposed to contain the complete
-command, as you would type it at the command line.
-
-This way could come in handy for issuing new Mercurial commands that are not yet
-implemented in gohg, or for working with extensions, as those are not supported
-by gohg neither.
-
-An example:
-
-  // hgcl is a HgClient instance that has a connection to the Hg CS
-  hgcmd := []string{"log", "--limit", "2"}
-  result, err := hgcl.ExecCmd(hgcmd)
 
 Error handling
 
