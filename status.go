@@ -37,7 +37,12 @@ func (cmdOpts *statusOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
+func NewStatusCmd(opts []Option, files []string) HgCmd {
+	cmd, _ := NewHgCmd("status", opts, files, new(statusOpts))
+	return *cmd
+}
+
 func (hgcl *HgClient) Status(opts []Option, files []string) ([]byte, error) {
-	cmd, _ := NewHgCmd("status", opts, files)
+	cmd := NewStatusCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

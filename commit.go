@@ -38,15 +38,20 @@ func (cmdOpts *commitOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
+func NewCommitCmd(opts []Option, files []string) HgCmd {
+	cmd, _ := NewHgCmd("commit", opts, files, new(commitOpts))
+	return *cmd
+}
+
 func (hgcl *HgClient) Commit(opts []Option, files []string) error {
-	cmd, _ := NewHgCmd("commit", opts, files)
+	cmd := NewCommitCmd(opts, files)
 
 	// Either make sure there is an editor configured for firing up in case
 	// there is no commit message provided, or catch the lack of that message.
 	// For now we catch it.
 	var err error
 	// We have to build the command to have any values in cmd.cmdOpts.
-	cmd.cmd, err = hgcl.buildCommand(cmd)
+	cmd.cmd, err = hgcl.buildCommand(&cmd)
 	if err != nil {
 		return err
 	}

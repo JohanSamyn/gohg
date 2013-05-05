@@ -41,13 +41,13 @@ func main() {
 	fmt.Println("--------------------")
 
 	var i []byte
-	if i, err = hc.Identify(nil, []string{""}); err != nil {
+	if i, err = hc.Identify(nil /*[]hg.Option{hg.Verbose(true)}*/, []string{""}); err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Printf("[[identify]]:\n%s", i)
 
-	// fmt.Printf("%s", SprintfOpts(*(new(IdentifyOpts))))
+	// fmt.Printf("%s", hg.SprintfOpts(*(new(hg.IdentifyOpts))))
 
 	fmt.Println("--------------------")
 

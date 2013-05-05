@@ -34,6 +34,11 @@ func (cmdOpts *initOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
+func NewInitCmd(opts []Option, destpath []string) HgCmd {
+	cmd, _ := NewHgCmd("init", opts, destpath, new(initOpts))
+	return *cmd
+}
+
 // TODO	Implement the flags for hg init.
 
 // Be aware of the fact that Init() cannot be used to initialize the repo you
@@ -51,7 +56,7 @@ func (hgcl *HgClient) Init(opts []Option, destpath string) error {
 			" from the Command Server repo path")
 	}
 
-	cmd, _ := NewHgCmd("init", opts, []string{destpath})
+	cmd := NewInitCmd(opts, []string{destpath})
 	_, err = cmd.Exec(hgcl)
 	return err
 }

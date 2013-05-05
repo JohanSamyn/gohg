@@ -27,7 +27,12 @@ func (cmdOpts *manifestOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
+func NewManifestCmd(opts []Option, files []string) HgCmd {
+	cmd, _ := NewHgCmd("manifest", opts, files, new(manifestOpts))
+	return *cmd
+}
+
 func (hgcl *HgClient) Manifest(opts []Option, params []string) ([]byte, error) {
-	cmd, _ := NewHgCmd("manifest", opts, params)
+	cmd := NewManifestCmd(opts, params)
 	return cmd.Exec(hgcl)
 }

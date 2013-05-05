@@ -25,6 +25,8 @@ import (
 
 // Type HgClient will act as the entrypoint through which all interaction
 // with the Mercurial Command Server will take place.
+// If you want to keep a pool of connections to multiple repos, you can create
+// multiple HgClient instances, each connecting to its own Hg CS.
 type HgClient struct {
 	hgServer     *exec.Cmd
 	pipeIn       io.WriteCloser // the pipe that gets commands into the Hg CS
@@ -576,12 +578,16 @@ type HgCmd struct {
 	Name    string
 	Options []Option
 	Params  []string
-	cmdOpts interface{} // what opts are valid for the command?
-	cmd     []string
+
+	// I keep this field private, so it is not possible to tamper with the
+	// series fo options that is valid for a command.
+	cmdOpts interface{}
+
+	cmd []string
 }
 
 // NewHgCmd creates a new HgCmd instance for working with Mercurial commands.
-func NewHgCmd(name string, opts []Option, params []string) (*HgCmd, error) {
+func NewHgCmd(name string, opts []Option, params []string, cmdopts interface{}) (*HgCmd, error) {
 	if name == "" {
 		return nil, fmt.Errorf("give a name for the command")
 	}
@@ -594,42 +600,9 @@ func NewHgCmd(name string, opts []Option, params []string) (*HgCmd, error) {
 	if params != nil {
 		hgcmd.Params = params
 	}
-
-	switch hgcmd.Name {
-	case "add":
-		hgcmd.cmdOpts = new(addOpts)
-	case "branches":
-		hgcmd.cmdOpts = new(branchesOpts)
-	case "clone":
-		hgcmd.cmdOpts = new(cloneOpts)
-	case "commit":
-		hgcmd.cmdOpts = new(commitOpts)
-	case "heads":
-		hgcmd.cmdOpts = new(headsOpts)
-	case "identify":
-		hgcmd.cmdOpts = new(identifyOpts)
-	case "init":
-		hgcmd.cmdOpts = new(initOpts)
-	case "log":
-		hgcmd.cmdOpts = new(logOpts)
-	case "manifest":
-		hgcmd.cmdOpts = new(manifestOpts)
-	case "showconfig":
-		hgcmd.cmdOpts = new(showconfigOpts)
-	case "status":
-		hgcmd.cmdOpts = new(statusOpts)
-	case "summary":
-		hgcmd.cmdOpts = new(summaryOpts)
-	case "tags":
-		hgcmd.cmdOpts = new(tagsOpts)
-	case "tip":
-		hgcmd.cmdOpts = new(tipOpts)
-	case "verify":
-		hgcmd.cmdOpts = new(verifyOpts)
-	default:
-		return nil, fmt.Errorf("could not find the cmdOpts for command %s", hgcmd.Name)
+	if cmdopts != nil {
+		hgcmd.cmdOpts = cmdopts
 	}
-
 	return hgcmd, nil
 }
 

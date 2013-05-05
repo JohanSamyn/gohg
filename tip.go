@@ -29,7 +29,12 @@ func (cmdOpts *tipOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
+func NewTipCmd(opts []Option, params []string) HgCmd {
+	cmd, _ := NewHgCmd("tip", opts, params, new(tipOpts))
+	return *cmd
+}
+
 func (hgcl *HgClient) Tip(opts []Option, params []string) ([]byte, error) {
-	cmd, _ := NewHgCmd("tip", opts, params)
+	cmd := NewTipCmd(opts, params)
 	return cmd.Exec(hgcl)
 }
