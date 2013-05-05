@@ -129,7 +129,7 @@ without some extra mechanics.
 Each command has the same name as the corresponding Hg command, except it starts
 with a capital letter of course.
 
-An example:
+An example (also see examples/example1.go):
 
   log, err := hc.Log([]Option{Limit(2)}, []string("my-file"))
   if err != nil {
@@ -192,7 +192,7 @@ contain the complete command, as you would type it at the command line.
 It could be a convenient way for issuing commands that are not yet implemented
 in gohg, or to make use of extensions to Hg (for which gohg offers no support).
 
-An example:
+An example (also see examples/example3.go):
 
   // hgcl is a HgClient instance that has a connection to the Hg CS
   hgcmd := []string{"log", "--limit", "2"}
