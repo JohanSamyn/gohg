@@ -5,22 +5,13 @@
 package gohg
 
 type manifestOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	All
 	// Mq
 	Rev
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *manifestOpts) String() string {

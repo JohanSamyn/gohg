@@ -11,23 +11,14 @@ import (
 )
 
 type initOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Insecure
 	// Mq
 	Remote
 	Ssh
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *initOpts) String() string {

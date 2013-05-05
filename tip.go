@@ -5,13 +5,7 @@
 package gohg
 
 type tipOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Patch
 	Git
@@ -19,10 +13,7 @@ type tipOpts struct {
 	Style
 	Template
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *tipOpts) String() string {

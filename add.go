@@ -5,13 +5,7 @@
 package gohg
 
 type addOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	DryRun
 	Exclude
@@ -19,10 +13,7 @@ type addOpts struct {
 	// Mq
 	SubRepos
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *addOpts) String() string {

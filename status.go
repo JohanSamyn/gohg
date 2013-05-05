@@ -5,13 +5,7 @@
 package gohg
 
 type statusOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Added
 	All
@@ -27,10 +21,7 @@ type statusOpts struct {
 	SubRepos
 	Unknown
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *statusOpts) String() string {

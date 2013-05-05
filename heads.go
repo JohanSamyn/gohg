@@ -5,13 +5,7 @@
 package gohg
 
 type headsOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Closed
 	// Mq
@@ -20,10 +14,7 @@ type headsOpts struct {
 	Template
 	Topo
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *headsOpts) String() string {

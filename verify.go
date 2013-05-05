@@ -5,20 +5,13 @@
 package gohg
 
 type verifyOpts struct {
-	Config
-	Cwd // makes it possible to verify another repo than hgcl.Reporoot()
-	Hidden
-	NonInteractive
-	Quiet
-	Repository // makes it possible to verify another repo than hgcl.Reporoot()
-	Verbose
+	globalOpts
+	// Cwd : makes it possible to verify another repo than hgcl.Reporoot()
+	// Repository : makes it possible to verify another repo than hgcl.Reporoot()
 
 	// Mq
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *verifyOpts) String() string {

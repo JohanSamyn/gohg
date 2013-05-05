@@ -5,13 +5,7 @@
 package gohg
 
 type logOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Branch
 	Copies
@@ -32,10 +26,7 @@ type logOpts struct {
 	Template
 	User
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *logOpts) String() string {

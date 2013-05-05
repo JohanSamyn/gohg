@@ -5,13 +5,7 @@
 package gohg
 
 type cloneOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Branch
 	Insecure
@@ -23,10 +17,7 @@ type cloneOpts struct {
 	Uncompressed
 	UpdateRev
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *cloneOpts) String() string {

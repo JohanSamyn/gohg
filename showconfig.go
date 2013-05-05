@@ -5,21 +5,12 @@
 package gohg
 
 type showconfigOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	// Mq
 	Untrusted
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *showconfigOpts) String() string {

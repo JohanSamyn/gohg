@@ -5,22 +5,13 @@
 package gohg
 
 type branchesOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Active
 	Closed
 	// Mq
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *branchesOpts) String() string {

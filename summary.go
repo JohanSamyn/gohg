@@ -9,21 +9,12 @@ package gohg
 // )
 
 type summaryOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	Remote
 	// Mq
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *summaryOpts) String() string {

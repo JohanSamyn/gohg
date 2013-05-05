@@ -9,13 +9,7 @@ import (
 )
 
 type commitOpts struct {
-	Config
-	Cwd
-	Hidden
-	NonInteractive
-	Quiet
-	Repository
-	Verbose
+	globalOpts
 
 	AddRemove
 	Amend
@@ -28,10 +22,7 @@ type commitOpts struct {
 	SubRepos
 	User
 
-	Debug
-	Profile
-	Time
-	Traceback
+	debugOpts
 }
 
 func (cmdOpts *commitOpts) String() string {

@@ -88,6 +88,23 @@ type (
 	Traceback bool //    --traceback
 )
 
+type globalOpts struct {
+	Config
+	Cwd
+	Hidden
+	NonInteractive
+	Quiet
+	Repository
+	Verbose
+}
+
+type debugOpts struct {
+	Debug
+	Profile
+	Time
+	Traceback
+}
+
 // Option is an interface that allows adding options to a command in a more or
 // less controlled way.
 type Option interface {
@@ -397,8 +414,23 @@ func sprintfOpts(opts interface{}) string {
 		if i > 0 {
 			s = s + ", "
 		}
-		s = s + fmt.Sprintf("%s=%v", typeOfT.Field(i).Name, f.Interface())
+		typeOfF := f.Type()
+		typeOfFS := fmt.Sprintf("%s", f.Type())
+		if strings.Contains(typeOfFS, "gohg.globalOpts") || strings.Contains(typeOfFS, "gohg.debugOpts") {
+			for j := 0; j < f.NumField(); j++ {
+				g := f.Field(j)
+				if j == 0 {
+					// s = s + typeOfFS + " = {"
+				} else {
+					s = s + ", "
+				}
+				s = s + fmt.Sprintf("%s=%v", typeOfF.Field(j).Name, g.Interface())
+			}
+			// s = s + "}"
+		} else {
+			s = s + fmt.Sprintf("%s=%v", typeOfT.Field(i).Name, f.Interface())
+		}
 	}
-	s = s + "}\n"
+	s = s + "}"
 	return s
 }
