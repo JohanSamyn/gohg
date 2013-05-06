@@ -26,39 +26,48 @@ type (
 
 	// command-specific options
 
-	Active      bool   // -a --active
-	Added       bool   // -a --added
-	AddRemove   bool   // -A  --addremove
-	All         bool   //    --all
-	Amend       bool   //    --ammend
-	Bookmarks   bool   // -B --bookmarks
-	Branch      bool   // -b --branch
-	Change      bool   //    --change
-	Clean       bool   // -c --clean
-	CloseBranch bool   //    --close-branch
-	Closed      bool   // -c --closed
-	Copies      bool   // -C --copies
-	Date        string // -d --date
-	Deleted     bool   // -d --deleted
-	DryRun      bool   // -n --dry-run
-	Exclude     string // -X --exclude
-	Follow      bool   // -f --follow
-	Git         bool   // -g --git
-	Graph       bool   // -G --graph
-	Id          bool   // -i --id
-	Ignored     bool   // -i --ignored
-	Include     string // -I --include
-	Insecure    bool   //    --insecure
-	Keyword     string // -k --keyword
-	Limit       int    // -l --limit
-	Logfile     string // -l --logfile
-	Message     string // -m --message
-	Modified    bool   // -m --modified
+	Active            bool   // -a --active
+	Added             bool   // -a --added
+	AddRemove         bool   // -A  --addremove
+	All               bool   //    --all
+	Amend             bool   //    --ammend
+	Bookmarks         bool   // -B --bookmarks
+	Branch            bool   // -b --branch
+	Change            bool   //    --change
+	Changeset         bool   // -c --changeset
+	Check             bool   // -c --check
+	Clean             bool   // -c --clean // -C --clean (update)
+	CloseBranch       bool   //    --close-branch
+	Closed            bool   // -c --closed
+	Copies            bool   // -C --copies
+	Date              string // -d --date
+	Deleted           bool   // -d --deleted
+	DryRun            bool   // -n --dry-run
+	Exclude           string // -X --exclude
+	File              bool   // -f --file
+	Follow            bool   // -f --follow
+	Git               bool   // -g --git
+	Graph             bool   // -G --graph
+	Id                bool   // -i --id
+	IgnoreAllSpace    bool   // -w --ignore-all-space
+	IgnoreBlankLines  bool   // -B --ignore-blank-lines
+	Ignored           bool   // -i --ignored
+	IgnoreSpaceChange bool   // -b --ignore-space-change
+	Include           string // -I --include
+	Insecure          bool   //    --insecure
+	Keyword           string // -k --keyword
+	Limit             int    // -l --limit
+	LineNumber        bool   // -l --line-number
+	Logfile           string // -l --logfile
+	Message           string // -m --message
+	Modified          bool   // -m --modified
 	// Mq          bool   //    --mq
+	NoFollow     bool   //    --no-follow
 	NoMerges     bool   // -M --no-merges
 	NoStatus     bool   // -n --no-status
 	NoUpdate     bool   // -U --noupdate
 	Num          bool   // -n --num
+	Number       bool   // -n --number
 	Patch        bool   // -p --patch
 	Print0       bool   // -0 --print0
 	Prune        bool   // -P --prune
@@ -73,6 +82,7 @@ type (
 	SubRepos     bool   // -S --subrepos
 	Tags         bool   // -t --tags
 	Template     string //    --template
+	Text         bool   // -a --text
 	Topo         bool   // -t --topo
 	Uncompressed bool   //    --uncompressed
 	Unknown      bool   // -u --unknown
