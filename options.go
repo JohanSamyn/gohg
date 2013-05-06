@@ -153,6 +153,14 @@ func (opt Change) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Change", "--change", cmdOpts, hgcmd)
 }
 
+func (opt Changeset) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Changeset", "--changeset", cmdOpts, hgcmd)
+}
+
+func (opt Check) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Check", "--check", cmdOpts, hgcmd)
+}
+
 func (opt Clean) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Clean", "--clean", cmdOpts, hgcmd)
 }
@@ -201,6 +209,10 @@ func (opt Exclude) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Exclude", "--exclude", cmdOpts, hgcmd)
 }
 
+func (opt File) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "File", "--file", cmdOpts, hgcmd)
+}
+
 func (opt Git) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Git", "--git", cmdOpts, hgcmd)
 }
@@ -221,6 +233,18 @@ func (opt Ignored) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Ignored", "--ignored", cmdOpts, hgcmd)
 }
 
+func (opt IgnoreAllSpace) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "IgnoreAllSpace", "--ignore-all-space", cmdOpts, hgcmd)
+}
+
+func (opt IgnoreSpaceChange) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "IgnoreSpaceChange", "--ignore-space-change", cmdOpts, hgcmd)
+}
+
+func (opt IgnoreBlankLines) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "IgnoreBlankLines", "--ignore-blank-lines", cmdOpts, hgcmd)
+}
+
 func (opt Include) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Include", "--include", cmdOpts, hgcmd)
 }
@@ -235,6 +259,10 @@ func (opt Keyword) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Limit) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addIntOption(int(opt), "Limit", "--limit", cmdOpts, hgcmd)
+}
+
+func (opt LineNumber) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "LineNumber", "--line-number", cmdOpts, hgcmd)
 }
 
 func (opt Logfile) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -252,6 +280,10 @@ func (opt Modified) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 // func (opt Mq) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 // 	return addBoolOption(bool(opt), "Mq", "--mq", cmdOpts, hgcmd)
 // }
+
+func (opt NoFollow) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "NoFollow", "--no-follow", cmdOpts, hgcmd)
+}
 
 func (opt NoMerges) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "NoMerges", "--no-merges", cmdOpts, hgcmd)
@@ -271,6 +303,10 @@ func (opt NoUpdate) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Num) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Num", "--num", cmdOpts, hgcmd)
+}
+
+func (opt Number) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Number", "--number", cmdOpts, hgcmd)
 }
 
 func (opt Patch) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -339,6 +375,10 @@ func (opt Tags) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Template) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Template", "--template", cmdOpts, hgcmd)
+}
+
+func (opt Text) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Text", "--text", cmdOpts, hgcmd)
 }
 
 func (opt Time) addOption(cmdOpts interface{}, hgcmd *[]string) error {
