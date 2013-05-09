@@ -78,6 +78,7 @@ type (
 	Name         string // -n --name NAME
 	NewBranch    bool   //    --new-branch
 	NoDates      bool   //    --nodates
+	NoDecode     bool   //    --no-decode
 	NoFollow     bool   //    --no-follow
 	NoMerges     bool   // -M --no-merges
 	NoStatus     bool   // -n --no-status
@@ -88,7 +89,7 @@ type (
 	Patch        bool   // -p --patch
 	PidFile      string //    --pid-file FILE
 	Port         int    // -p --port PORT
-	Prefix       string //    --prefix PREFIX
+	Prefix       string // [-p] --prefix PREFIX
 	Preview      bool   // -P --preview
 	Print0       bool   // -0 --print0
 	Prune        bool   // -P --prune
@@ -100,6 +101,7 @@ type (
 	Rev          string // -r --rev REV [+] //    --rev REV [+]
 	Reverse      bool   //    --reverse
 	ShowFunction bool   // -p --show-fuction
+	Similarity   int    // -s --similarity SIMILARITY
 	Ssh          string // -e --ssh CMD
 	Stat         bool   //    --stat
 	Stdio        bool   //    --stdio
@@ -112,6 +114,7 @@ type (
 	Text         bool   // -a --text
 	Tool         string // -t --tool VALUE
 	Topo         bool   // -t --topo
+	Type         string // -t --type TYPE
 	Uncompressed bool   //    --uncompressed
 	Unified      int    // -U --unified NUM
 	Unknown      bool   // -u --unknown
@@ -372,6 +375,10 @@ func (opt NoDates) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "NoDates", "--nodates", cmdOpts, hgcmd)
 }
 
+func (opt NoDecode) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "NoDecode", "--no-decode", cmdOpts, hgcmd)
+}
+
 func (opt NoFollow) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "NoFollow", "--no-follow", cmdOpts, hgcmd)
 }
@@ -476,6 +483,10 @@ func (opt ShowFunction) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "ShowFunction", "--show-function", cmdOpts, hgcmd)
 }
 
+func (opt Similarity) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addIntOption(int(opt), "Similarity", "--similarity", cmdOpts, hgcmd)
+}
+
 func (opt Ssh) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Ssh", "--ssh", cmdOpts, hgcmd)
 }
@@ -523,12 +534,17 @@ func (opt Time) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 func (opt Tool) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Tool", "--tool", cmdOpts, hgcmd)
 }
+
 func (opt Topo) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Topo", "--topo", cmdOpts, hgcmd)
 }
 
 func (opt Traceback) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Traceback", "--traceback", cmdOpts, hgcmd)
+}
+
+func (opt Type) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Type", "--type", cmdOpts, hgcmd)
 }
 
 func (opt Uncompressed) addOption(cmdOpts interface{}, hgcmd *[]string) error {
