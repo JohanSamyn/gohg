@@ -201,16 +201,16 @@ func (opt DryRun) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "DryRun", "--dry-run", cmdOpts, hgcmd)
 }
 
-func (opt Follow) addOption(cmdOpts interface{}, hgcmd *[]string) error {
-	return addBoolOption(bool(opt), "Fowwol", "--follow", cmdOpts, hgcmd)
-}
-
 func (opt Exclude) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Exclude", "--exclude", cmdOpts, hgcmd)
 }
 
 func (opt File) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "File", "--file", cmdOpts, hgcmd)
+}
+
+func (opt Follow) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Follow", "--follow", cmdOpts, hgcmd)
 }
 
 func (opt Git) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -237,12 +237,12 @@ func (opt IgnoreAllSpace) addOption(cmdOpts interface{}, hgcmd *[]string) error 
 	return addBoolOption(bool(opt), "IgnoreAllSpace", "--ignore-all-space", cmdOpts, hgcmd)
 }
 
-func (opt IgnoreSpaceChange) addOption(cmdOpts interface{}, hgcmd *[]string) error {
-	return addBoolOption(bool(opt), "IgnoreSpaceChange", "--ignore-space-change", cmdOpts, hgcmd)
-}
-
 func (opt IgnoreBlankLines) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "IgnoreBlankLines", "--ignore-blank-lines", cmdOpts, hgcmd)
+}
+
+func (opt IgnoreSpaceChange) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "IgnoreSpaceChange", "--ignore-space-change", cmdOpts, hgcmd)
 }
 
 func (opt Include) addOption(cmdOpts interface{}, hgcmd *[]string) error {
