@@ -26,26 +26,38 @@ type (
 
 	// command-specific options
 
+	AccessLog         string // -A --accesslog FILE
 	Active            bool   // -a --active
 	Added             bool   // -a --added
 	AddRemove         bool   // -A  --addremove
+	Address           string // -a --address ADDR
+	After             bool   // -A --after
 	All               bool   //    --all
+	AllTasks          bool   //    --all-tasks
 	Amend             bool   //    --ammend
+	Bookmark          string // -B --bookmark BOOKMARK [+]
 	Bookmarks         bool   // -B --bookmarks
-	Branch            bool   // -b --branch
+	Branch            bool   // -b --branch BRANCH [+]
+	Certificate       string //    --certificate FILE
 	Change            bool   // [-c] --change REV
 	Changeset         bool   // -c --changeset
 	Check             bool   // -c --check
 	Clean             bool   // -c --clean // -C --clean (update)
 	CloseBranch       bool   //    --close-branch
 	Closed            bool   // -c --closed
+	CmdServer         string //    --cmdserver MODE
+	CompletedTasks    bool   //    --completed-tasks
 	Copies            bool   // -C --copies
 	Date              string // -d --date
+	Daemon            bool   // -d --daemon
+	DaemonPipefds     int    //    --daemon-pipefds NUM
 	Deleted           bool   // -d --deleted
 	DryRun            bool   // -n --dry-run
 	Exclude           string // -X --exclude PATTERN [+]
+	ErrorLog          string // -E --errorlog FILE
 	File              bool   // -f --file
 	Follow            bool   // -f --follow
+	Force             bool   // -f --force
 	Git               bool   // -g --git
 	Graph             bool   // -G --graph
 	Id                bool   // -i --id
@@ -55,6 +67,7 @@ type (
 	IgnoreSpaceChange bool   // -b --ignore-space-change
 	Include           string // -I --include PATTERN [+]
 	Insecure          bool   //    --insecure
+	Ipv6              bool   // -6 --ipv6
 	Keyword           string // -k --keyword
 	Limit             int    // -l --limit
 	LineNumber        bool   // -l --line-number
@@ -62,6 +75,8 @@ type (
 	Message           string // -m --message
 	Modified          bool   // -m --modified
 	// Mq          bool   //    --mq
+	Name         string // -n --name NAME
+	NewBranch    bool   //    --new-branch
 	NoDates      bool   //    --nodates
 	NoFollow     bool   //    --no-follow
 	NoMerges     bool   // -M --no-merges
@@ -69,30 +84,42 @@ type (
 	NoUpdate     bool   // -U --noupdate
 	Num          bool   // -n --num
 	Number       bool   // -n --number
+	Output       string // -o --output FORMAT
 	Patch        bool   // -p --patch
+	PidFile      string //    --pid-file FILE
+	Port         int    // -p --port PORT
+	Prefix       string //    --prefix PREFIX
+	Preview      bool   // -P --preview
 	Print0       bool   // -0 --print0
 	Prune        bool   // -P --prune
 	Pull         bool   //    --pull
+	Rebase       bool   //    --rebase
 	Remote       bool   //    --remote
-	RemoteCmd    string //    --remotecmd
+	RemoteCmd    string //    --remotecmd CMD
 	Removed      bool   // (-r) --removed
-	Rev          string // -r --rev REV //    --rev REV [+]
+	Rev          string // -r --rev REV [+] //    --rev REV [+]
 	Reverse      bool   //    --reverse
 	ShowFunction bool   // -p --show-fuction
-	Ssh          string // -e --ssh
+	Ssh          string // -e --ssh CMD
 	Stat         bool   //    --stat
-	Style        string //    --style
+	Stdio        bool   //    --stdio
+	Style        string //    --style STYLE
 	SubRepos     bool   // -S --subrepos
+	SwitchParent bool   //    --switch-parent
 	Tags         bool   // -t --tags
 	Template     string //    --template
+	Templates    string // -t --templates TEMPLATE
 	Text         bool   // -a --text
+	Tool         string // -t --tool VALUE
 	Topo         bool   // -t --topo
 	Uncompressed bool   //    --uncompressed
 	Unified      int    // -U --unified NUM
 	Unknown      bool   // -u --unknown
 	Untrusted    bool   // -u --untrusted
+	Update       bool   // -u --update
 	UpdateRev    string // -u --updaterev
 	User         string // -u --user
+	WebConf      string //    --web-conf FILE
 
 	// debugging and profiling options
 
@@ -125,6 +152,14 @@ type Option interface {
 	addOption(interface{}, *[]string) error
 }
 
+func (opt AccessLog) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "AccessLog", "--accesslog", cmdOpts, hgcmd)
+}
+
+func (opt Address) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Address", "--address", cmdOpts, hgcmd)
+}
+
 func (opt Active) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Active", "--active", cmdOpts, hgcmd)
 }
@@ -137,12 +172,24 @@ func (opt AddRemove) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "AddRemove", "--addremove", cmdOpts, hgcmd)
 }
 
+func (opt After) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "After", "--after", cmdOpts, hgcmd)
+}
+
 func (opt All) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "All", "--all", cmdOpts, hgcmd)
 }
 
+func (opt AllTasks) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "AllTasks", "--all-tasks", cmdOpts, hgcmd)
+}
+
 func (opt Amend) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Amend", "--amend", cmdOpts, hgcmd)
+}
+
+func (opt Bookmark) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Bookmark", "--bookmark", cmdOpts, hgcmd)
 }
 
 func (opt Bookmarks) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -177,6 +224,14 @@ func (opt Closed) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Closed", "--closed", cmdOpts, hgcmd)
 }
 
+func (opt CmdServer) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "CmdServer", "--cmdserver", cmdOpts, hgcmd)
+}
+
+func (opt CompletedTasks) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "CompletedTasks", "--completed-tasks", cmdOpts, hgcmd)
+}
+
 func (opt Config) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Config", "--config", cmdOpts, hgcmd)
 }
@@ -193,6 +248,14 @@ func (opt Date) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Date", "--date", cmdOpts, hgcmd)
 }
 
+func (opt Daemon) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Daemon", "--daemon", cmdOpts, hgcmd)
+}
+
+func (opt DaemonPipefds) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addIntOption(int(opt), "DaemonPipefds", "--daemon-pipefds", cmdOpts, hgcmd)
+}
+
 func (opt Debug) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Debug", "--debug", cmdOpts, hgcmd)
 }
@@ -205,6 +268,10 @@ func (opt DryRun) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "DryRun", "--dry-run", cmdOpts, hgcmd)
 }
 
+func (opt ErrorLog) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "ErrorLog", "--errorlog", cmdOpts, hgcmd)
+}
+
 func (opt Exclude) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Exclude", "--exclude", cmdOpts, hgcmd)
 }
@@ -215,6 +282,10 @@ func (opt File) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Follow) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Follow", "--follow", cmdOpts, hgcmd)
+}
+
+func (opt Force) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Force", "--force", cmdOpts, hgcmd)
 }
 
 func (opt Git) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -257,6 +328,10 @@ func (opt Insecure) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Insecure", "--insecure", cmdOpts, hgcmd)
 }
 
+func (opt Ipv6) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Ipv6", "--ipv6", cmdOpts, hgcmd)
+}
+
 func (opt Keyword) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Keyword", "--keyword", cmdOpts, hgcmd)
 }
@@ -284,6 +359,14 @@ func (opt Modified) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 // func (opt Mq) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 // 	return addBoolOption(bool(opt), "Mq", "--mq", cmdOpts, hgcmd)
 // }
+
+func (opt Name) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Name", "--name", cmdOpts, hgcmd)
+}
+
+func (opt NewBranch) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "NewBranch", "--new-branch", cmdOpts, hgcmd)
+}
 
 func (opt NoDates) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "NoDates", "--nodates", cmdOpts, hgcmd)
@@ -317,8 +400,28 @@ func (opt Number) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Number", "--number", cmdOpts, hgcmd)
 }
 
+func (opt Output) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Output", "--output", cmdOpts, hgcmd)
+}
+
 func (opt Patch) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Patch", "--patch", cmdOpts, hgcmd)
+}
+
+func (opt PidFile) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "PidFile", "--pid-file", cmdOpts, hgcmd)
+}
+
+func (opt Port) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addIntOption(int(opt), "Port", "--port", cmdOpts, hgcmd)
+}
+
+func (opt Prefix) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Prefix", "--prefix", cmdOpts, hgcmd)
+}
+
+func (opt Preview) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Preview", "--preview", cmdOpts, hgcmd)
 }
 
 func (opt Print0) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -339,6 +442,10 @@ func (opt Pull) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Quiet) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Quite", "-q", cmdOpts, hgcmd)
+}
+
+func (opt Rebase) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Rebase", "--rebase", cmdOpts, hgcmd)
 }
 
 func (opt Remote) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -377,12 +484,20 @@ func (opt Stat) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Stat", "--stat", cmdOpts, hgcmd)
 }
 
+func (opt Stdio) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Stdio", "--stdio", cmdOpts, hgcmd)
+}
+
 func (opt Style) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Style", "--style", cmdOpts, hgcmd)
 }
 
 func (opt SubRepos) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "SubRepos", "--subrepos", cmdOpts, hgcmd)
+}
+
+func (opt SwitchParent) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "SwitchParent", "--switch-parent", cmdOpts, hgcmd)
 }
 
 func (opt Tags) addOption(cmdOpts interface{}, hgcmd *[]string) error {
@@ -393,6 +508,10 @@ func (opt Template) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Template", "--template", cmdOpts, hgcmd)
 }
 
+func (opt Templates) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Templates", "--templates", cmdOpts, hgcmd)
+}
+
 func (opt Text) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Text", "--text", cmdOpts, hgcmd)
 }
@@ -401,6 +520,9 @@ func (opt Time) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Time", "--time", cmdOpts, hgcmd)
 }
 
+func (opt Tool) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "Tool", "--tool", cmdOpts, hgcmd)
+}
 func (opt Topo) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Topo", "--topo", cmdOpts, hgcmd)
 }
@@ -417,6 +539,10 @@ func (opt Unknown) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Unknown", "--unknown", cmdOpts, hgcmd)
 }
 
+func (opt Update) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Update", "--update", cmdOpts, hgcmd)
+}
+
 func (opt UpdateRev) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "UpdateRev", "--updaterev", cmdOpts, hgcmd)
 }
@@ -431,6 +557,10 @@ func (opt User) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt Verbose) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "Verbose", "-v", cmdOpts, hgcmd)
+}
+
+func (opt WebConf) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addStringOption(string(opt), "WebConf", "--web-conf", cmdOpts, hgcmd)
 }
 
 // An add<Type>Option method does 2 things:
