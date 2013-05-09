@@ -33,7 +33,7 @@ type (
 	Amend             bool   //    --ammend
 	Bookmarks         bool   // -B --bookmarks
 	Branch            bool   // -b --branch
-	Change            bool   //    --change
+	Change            bool   // [-c] --change REV
 	Changeset         bool   // -c --changeset
 	Check             bool   // -c --check
 	Clean             bool   // -c --clean // -C --clean (update)
@@ -43,7 +43,7 @@ type (
 	Date              string // -d --date
 	Deleted           bool   // -d --deleted
 	DryRun            bool   // -n --dry-run
-	Exclude           string // -X --exclude
+	Exclude           string // -X --exclude PATTERN [+]
 	File              bool   // -f --file
 	Follow            bool   // -f --follow
 	Git               bool   // -g --git
@@ -53,7 +53,7 @@ type (
 	IgnoreBlankLines  bool   // -B --ignore-blank-lines
 	Ignored           bool   // -i --ignored
 	IgnoreSpaceChange bool   // -b --ignore-space-change
-	Include           string // -I --include
+	Include           string // -I --include PATTERN [+]
 	Insecure          bool   //    --insecure
 	Keyword           string // -k --keyword
 	Limit             int    // -l --limit
@@ -62,6 +62,7 @@ type (
 	Message           string // -m --message
 	Modified          bool   // -m --modified
 	// Mq          bool   //    --mq
+	NoDates      bool   //    --nodates
 	NoFollow     bool   //    --no-follow
 	NoMerges     bool   // -M --no-merges
 	NoStatus     bool   // -n --no-status
@@ -75,7 +76,9 @@ type (
 	Remote       bool   //    --remote
 	RemoteCmd    string //    --remotecmd
 	Removed      bool   // (-r) --removed
-	Rev          string // -r --rev REV
+	Rev          string // -r --rev REV //    --rev REV [+]
+	Reverse      bool   //    --reverse
+	ShowFunction bool   // -p --show-fuction
 	Ssh          string // -e --ssh
 	Stat         bool   //    --stat
 	Style        string //    --style
@@ -85,6 +88,7 @@ type (
 	Text         bool   // -a --text
 	Topo         bool   // -t --topo
 	Uncompressed bool   //    --uncompressed
+	Unified      int    // -U --unified NUM
 	Unknown      bool   // -u --unknown
 	Untrusted    bool   // -u --untrusted
 	UpdateRev    string // -u --updaterev
@@ -281,6 +285,10 @@ func (opt Modified) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 // 	return addBoolOption(bool(opt), "Mq", "--mq", cmdOpts, hgcmd)
 // }
 
+func (opt NoDates) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "NoDates", "--nodates", cmdOpts, hgcmd)
+}
+
 func (opt NoFollow) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addBoolOption(bool(opt), "NoFollow", "--no-follow", cmdOpts, hgcmd)
 }
@@ -353,6 +361,14 @@ func (opt Rev) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Rev", "--rev", cmdOpts, hgcmd)
 }
 
+func (opt Reverse) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "Reverse", "--reverse", cmdOpts, hgcmd)
+}
+
+func (opt ShowFunction) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addBoolOption(bool(opt), "ShowFunction", "--show-function", cmdOpts, hgcmd)
+}
+
 func (opt Ssh) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "Ssh", "--ssh", cmdOpts, hgcmd)
 }
@@ -403,6 +419,10 @@ func (opt Unknown) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 
 func (opt UpdateRev) addOption(cmdOpts interface{}, hgcmd *[]string) error {
 	return addStringOption(string(opt), "UpdateRev", "--updaterev", cmdOpts, hgcmd)
+}
+
+func (opt Unified) addOption(cmdOpts interface{}, hgcmd *[]string) error {
+	return addIntOption(int(opt), "Unified", "--unified", cmdOpts, hgcmd)
 }
 
 func (opt User) addOption(cmdOpts interface{}, hgcmd *[]string) error {
