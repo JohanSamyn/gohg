@@ -16,7 +16,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -163,25 +162,19 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) er
 } // Connect()
 
 // Disconnect ends the connection with the Mercurial Command Server.
-//
-// In fact it's closing the stdin of the Hg CS that disconnects,
-// as per the Hg CS documentation.
 func (hgcl *HgClient) Disconnect() error {
 	if hgcl.hgServer == nil {
-		log.Println("Disconnect(): no connected hgServer.")
-		return nil
+		return fmt.Errorf("Disconnect(): no connected hgServer.")
 	}
-
+	// Though Wait() closes the StdinPipe automatically, we have to close it
+	// explicitely, to end the command started with Start(). Otherwise Wait()
+	// keeps waiting forever.
+	// This is so because ending the connection is really done by closing the
+	// stdin of the Mercurial Command Server, as per its documentation.
 	hgcl.pipeIn.Close()
-	hgcl.pipeOut.Close()
-
-	defer func() { hgcl.hgServer = nil }()
-
 	err := hgcl.hgServer.Wait()
-	if err != nil {
-		return err
-	}
-	return nil
+	hgcl.hgServer = nil
+	return err
 } // Disconnect()
 
 // locateRepository assures we have a Mercurial repository available,

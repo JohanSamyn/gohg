@@ -2,10 +2,27 @@
 
 (in no particular order, and order can change anytime)
 
-* Maybe I'll reorganize commands into less files, combining them according to
-type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
-...), config (showconfig, ...), exchange (push, pull, import, archive, bundle,
-...), etc.
+* Deal with the output of the Update() command (see python-hglib).
+This could be useful info. In fact, I should deal with all results returned by
+any Hg command, beyond the error returns.
+
+* Deal with the possible prompting Hg does for Update() (see test-update.py in
+python-hglib).
+
+* Return the results of commands like Log() in a more user friendly way (a slice
+or map of csets, ...). Maybe even in a special format via an extra option
+Json[Out](true) or Xml[Out](true)?
+
+* Use the short options instead of the long ones. Could become of importance
+when commands get rather long, and they start to hit the boundaries of the OS.
+PROBLEM: this is not always possible, cause certain options are used for
+different commands, and do not always have the same short option. So that would
+require us to still use the long option for those. It would have to be commented
+in the code too.
+
+* Panic when we cannot find a Mercurial version >= 1.9.
+Or maybe make those situation a dedicated ConnectionError, making it clear to
+the caller _he_ should panic.
 
 * If an option is silently dropped, because it is not valid for the command,
 mention that in the logfile.
@@ -13,7 +30,7 @@ mention that in the logfile.
 * Is the forced HGPLAIN=True setting really necessary?
 
 * Should I always add a '--' as the option closer before passing arguments?
-How does TortoiseHg do this?
+How does TortoiseHg do this? And how do the other client libs do this ?
 
 * Tests should make use of the returncode of commands too. And of the fact that
 function runcommand() returns nil as data when an error was detected.
@@ -179,6 +196,13 @@ Or even of HgClient, and eliminate HgServer ?
 
 * DONE - Add the possibility to use options with commands.
 
+
+* WONTFIX - Maybe I'll reorganize commands into less files, combining them according to
+type: query/info (log, branches, heads, grep, ...), updates (init, add, commit,
+...), config (showconfig, ...), exchange (push, pull, import, archive, bundle,
+...), etc.
+Wontfix: because it comes much more difficult if not impossible to test a single
+command with the gt.bat script, as I experienced.
 
 * DONE/WONTFIX - Maybe I should make it possible for callers to set options directly in the
 <cmd>Opts struct ? That would require those structs to be made public, and they
