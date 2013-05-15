@@ -24,7 +24,7 @@ func TestHgClient_Clone_To_New_Should_Succeed(t *testing.T) {
 
 	err1 := hct.Clone(nil, []string{hct.RepoRoot(), dest})
 	if err1 != nil {
-		t.Fatalf("Test Clone failed: %s\n but got:\n%s\n", err1)
+		t.Fatalf("Test Clone failed: %s\n", err1)
 	}
 
 	hc2 := NewHgClient()
@@ -32,7 +32,7 @@ func TestHgClient_Clone_To_New_Should_Succeed(t *testing.T) {
 	err2 := hc2.Connect(hct.HgExe(), dest, cfg)
 	_ = hc2.Disconnect()
 	if err1 != nil || err2 != nil {
-		t.Fatalf("Test Clone failed: %s\n but got:\n%s\n", err2)
+		t.Fatalf("Test Clone failed: %s\n", err2)
 	}
 }
 
