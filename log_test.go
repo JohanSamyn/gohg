@@ -17,22 +17,22 @@ func TestHgClient_Log_NewRepo(t *testing.T) {
 		t.Error(err)
 	}
 	if data != nil {
-		t.Fatal("Empty repo should have empty log")
+		t.Fatal("Newly created repo should have empty log")
 	}
 }
 
-func TestHgClient_Log_Empty(t *testing.T) {
-	hct := setup(t)
-	defer teardown(t, hct)
+// func TestHgClient_Log_Empty(t *testing.T) {
+// 	hct := setup(t)
+// 	defer teardown(t, hct)
 
-	data, err := hct.Log([]Option{Rev("tip:0")}, nil)
-	if err != nil {
-		t.Error(err)
-	}
-	if data != nil {
-		t.Fatal("Empty repo should have empty log")
-	}
-}
+// 	data, err := hct.Log([]Option{Rev("tip:0")}, nil)
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
+// 	if data != nil {
+// 		t.Fatal("Empty repo should have empty log")
+// 	}
+// }
 
 func TestHgClient_Log_NotEmpty(t *testing.T) {
 	hct := setup(t)
