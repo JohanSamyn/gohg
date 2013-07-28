@@ -1,6 +1,6 @@
 // Copyright 2012, The gohg Authors. All rights reserved.
 // Use of this source code is governed by a BSD style license
-// that can be found in the LICENSE file.
+// that can be found in the LICENSE.md file.
 
 // Package gohg is a Go client library for using the Mercurial dvcs
 // via it's Command Server.

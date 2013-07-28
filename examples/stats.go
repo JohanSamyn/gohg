@@ -1,10 +1,10 @@
 // Copyright 2012, The gohg Authors. All rights reserved.
 // Use of this source code is governed by a BSD style license
-// that can be found in the LICENSE.txt file.
+// that can be found in the LICENSE.md file.
 
 // This program is an example of how you can use the gohg library.
 // Run it in the working dir of any Mercurial repo, or pass the
-// path of the repo as the second argument to hc.connect().
+// path of the repo as the second argument to hc.Connect().
 // It is my Go implementation of the same Python program that serves as an
 // example for the python-hglib (see http://mercurial.selenic.com/wiki/PythonHglib).
 
