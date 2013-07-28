@@ -12,7 +12,7 @@ import (
 // and only returns the version number.
 func (hgcl *HgClient) Version() (string, error) {
 	var err error
-	if hgcl.hgversion == "" {
+	if hgcl.hgVersion() == "" {
 		var data []byte
 		data, err = hgcl.runcommand([]string{"version", "-q"})
 		if err == nil {
@@ -21,5 +21,5 @@ func (hgcl *HgClient) Version() (string, error) {
 			hgcl.hgversion = ver
 		}
 	}
-	return hgcl.hgversion, err
+	return hgcl.hgVersion(), err
 }
