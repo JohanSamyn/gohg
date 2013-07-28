@@ -34,7 +34,7 @@ func TestHgClient_Tip_Rev(t *testing.T) {
 
 	var expected string = "-1\n"
 
-	got, err := hct.Tip([]Option{Template("{rev}\n")}, nil)
+	got, err := hct.Tip([]HgOption{Template("{rev}\n")}, nil)
 	if err != nil {
 		t.Error(err)
 	}

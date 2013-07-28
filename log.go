@@ -33,12 +33,12 @@ func (cmdOpts *logOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewLogCmd(opts []Option, files []string) HgCmd {
+func NewLogCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("log", opts, files, new(logOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Log(opts []Option, files []string) ([]byte, error) {
+func (hgcl *HgClient) Log(opts []HgOption, files []string) ([]byte, error) {
 	cmd := NewLogCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

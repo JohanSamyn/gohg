@@ -25,12 +25,12 @@ func (cmdOpts *pullOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewPullCmd(opts []Option, source []string) HgCmd {
+func NewPullCmd(opts []HgOption, source []string) HgCmd {
 	cmd, _ := NewHgCmd("pull", opts, source, new(pullOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Pull(opts []Option, source []string) ([]byte, error) {
+func (hgcl *HgClient) Pull(opts []HgOption, source []string) ([]byte, error) {
 	cmd := NewPullCmd(opts, source)
 	return cmd.Exec(hgcl)
 }

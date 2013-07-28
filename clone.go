@@ -24,12 +24,12 @@ func (cmdOpts *cloneOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewCloneCmd(opts []Option, fromto []string) HgCmd {
+func NewCloneCmd(opts []HgOption, fromto []string) HgCmd {
 	cmd, _ := NewHgCmd("clone", opts, fromto, new(cloneOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Clone(opts []Option, fromto []string) error {
+func (hgcl *HgClient) Clone(opts []HgOption, fromto []string) error {
 	cmd := NewCloneCmd(opts, fromto)
 	_, err := cmd.Exec(hgcl)
 	return err

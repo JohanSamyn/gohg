@@ -30,12 +30,12 @@ func (cmdOpts *annotateOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewAnnotateCmd(opts []Option, files []string) HgCmd {
+func NewAnnotateCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("annotate", opts, files, new(annotateOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Annotate(opts []Option, files []string) ([]byte, error) {
+func (hgcl *HgClient) Annotate(opts []HgOption, files []string) ([]byte, error) {
 	cmd := NewAnnotateCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

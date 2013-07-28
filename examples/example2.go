@@ -26,7 +26,7 @@ func main() {
 	defer hgcl.Disconnect()
 
 	hc := NewLogCmd(nil, nil)
-	o := make([]Option, 2)
+	o := make([]HgOption, 2)
 	var lim Limit = 2
 	o[0] = lim
 	var verb Verbose = true

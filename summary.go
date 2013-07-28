@@ -21,12 +21,12 @@ func (cmdOpts *summaryOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewSummaryCmd(opts []Option, params []string) HgCmd {
+func NewSummaryCmd(opts []HgOption, params []string) HgCmd {
 	cmd, _ := NewHgCmd("summary", opts, params, new(summaryOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Summary(opts []Option, params []string) ([]byte, error) {
+func (hgcl *HgClient) Summary(opts []HgOption, params []string) ([]byte, error) {
 
 	// See commit.go for how to obtain a value from cmd.cmdOpts.
 	// fmt.Printf("%s", cmdOpts)

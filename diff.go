@@ -31,12 +31,12 @@ func (cmdOpts *diffOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewDiffCmd(opts []Option, files []string) HgCmd {
+func NewDiffCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("diff", opts, files, new(diffOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Diff(opts []Option, files []string) ([]byte, error) {
+func (hgcl *HgClient) Diff(opts []HgOption, files []string) ([]byte, error) {
 	cmd := NewDiffCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

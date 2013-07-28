@@ -23,12 +23,12 @@ func (cmdOpts *archiveOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewArchiveCmd(opts []Option, dest []string) HgCmd {
+func NewArchiveCmd(opts []HgOption, dest []string) HgCmd {
 	cmd, _ := NewHgCmd("archive", opts, dest, new(archiveOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Archive(opts []Option, dest []string) ([]byte, error) {
+func (hgcl *HgClient) Archive(opts []HgOption, dest []string) ([]byte, error) {
 	cmd := NewArchiveCmd(opts, dest)
 	return cmd.Exec(hgcl)
 }

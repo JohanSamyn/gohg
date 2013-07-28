@@ -29,12 +29,12 @@ func (cmdOpts *commitOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewCommitCmd(opts []Option, files []string) HgCmd {
+func NewCommitCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("commit", opts, files, new(commitOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Commit(opts []Option, files []string) error {
+func (hgcl *HgClient) Commit(opts []HgOption, files []string) error {
 	cmd := NewCommitCmd(opts, files)
 
 	// Either make sure there is an editor configured for firing up in case

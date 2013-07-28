@@ -29,7 +29,7 @@ func main() {
 
 	var l []byte
 	files := []string{}
-	if l, err = hc.Log([]Option{Limit(2)}, files); err != nil {
+	if l, err = hc.Log([]HgOption{Limit(2)}, files); err != nil {
 		fmt.Println(err)
 	}
 	fmt.Printf("\"log -l 2\" for repo %s:\n%s\n", hc.RepoRoot(), l)

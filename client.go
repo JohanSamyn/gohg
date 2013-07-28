@@ -42,7 +42,7 @@ type HgClient struct {
 // HgCmd is the type through which you can create and execute Mercurial commands.
 type HgCmd struct {
 	Name    string
-	Options []Option
+	Options []HgOption
 	Params  []string
 
 	// I keep this field private to make prohibit tampering with the series
@@ -59,7 +59,7 @@ func NewHgClient() *HgClient {
 }
 
 // NewHgCmd creates a new HgCmd instance for working with Mercurial commands.
-func NewHgCmd(name string, opts []Option, params []string, cmdopts interface{}) (*HgCmd, error) {
+func NewHgCmd(name string, opts []HgOption, params []string, cmdopts interface{}) (*HgCmd, error) {
 	if name == "" {
 		return nil, fmt.Errorf("give a name for the command")
 	}
@@ -599,7 +599,7 @@ func (hgcl *HgClient) ExecCmd(hgcmd []string) ([]byte, error) {
 	return hgcl.runcommand(hgcmd)
 }
 
-func (hc *HgCmd) SetOptions(opts []Option) {
+func (hc *HgCmd) SetOptions(opts []HgOption) {
 	// Checking for double opts is a bit useless, as some options can indeed
 	// be passed more than once to a Hg command.
 	hc.Options = append(hc.Options, opts...)

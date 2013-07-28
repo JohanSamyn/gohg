@@ -18,12 +18,12 @@ func (cmdOpts *verifyOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewVerifyCmd(opts []Option, params []string) HgCmd {
+func NewVerifyCmd(opts []HgOption, params []string) HgCmd {
 	cmd, _ := NewHgCmd("verify", opts, params, new(verifyOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Verify(opts []Option, params []string) ([]byte, error) {
+func (hgcl *HgClient) Verify(opts []HgOption, params []string) ([]byte, error) {
 	cmd := NewVerifyCmd(opts, params)
 	return cmd.Exec(hgcl)
 }

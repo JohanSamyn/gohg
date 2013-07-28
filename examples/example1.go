@@ -41,7 +41,7 @@ func main() {
 	fmt.Println("--------------------")
 
 	var i []byte
-	if i, err = hc.Identify(nil /*[]hg.Option{hg.Verbose(true)}*/, []string{""}); err != nil {
+	if i, err = hc.Identify(nil /*[]hg.HgOption{hg.Verbose(true)}*/, []string{""}); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -64,10 +64,10 @@ func main() {
 
 	var limit hg.Limit = 2
 	var verbose hg.Verbose = true
-	opts := []hg.Option{limit, verbose}
+	opts := []hg.HgOption{limit, verbose}
 	params := []string{}
 	var l []byte
-	// if l, err = hc.Log2([]hg.Option{hg.Limit(2), hg.Verbose(true)}, []hg.Param{}); err != nil {
+	// if l, err = hc.Log2([]hg.HgOption{hg.Limit(2), hg.Verbose(true)}, []hg.Param{}); err != nil {
 	if l, err = hc.Log(opts, params); err != nil {
 		fmt.Println(err)
 		return

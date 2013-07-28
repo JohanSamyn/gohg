@@ -5,8 +5,8 @@
 /*
 Compatibility
 
-The gohg client library is created with Go1 (v1.0.3). It is tested against
-Mercurial 2.5.2, both on Windows 7 and Ubuntu 12.04.
+The gohg client library is created with Go1 (v1.0.1, v1.0.2, v1.0.3, v1.1.1).
+It is tested against Mercurial 2.5.2, both on Windows 7 and Ubuntu 12.04.
 
 Currently there is no mechanism to handle differences in possibilities between
 different Mercurial versions. The errors returned by Mercurial are your only
@@ -14,19 +14,22 @@ help here.
 
 Dependencies
 
-Only Go and it's standard library. Though I'm using gocov for checking test
-coverage (see https://github.com/axw/gocov).
+Only Go and it's standard library. (Just using https://github.com/axw/gocov for
+checking test coverage.)
 
 Installation
 
 At the commandline type:
   go get [-u] bitbucket.org/gohg/gohg
-  go test -v bitbucket.org/gohg/gohg
+  go test [-v] bitbucket.org/gohg/gohg
 
 Import the package
 
 Start with importing the gohg package:
   import . "bitbucket.org/gohg/gohg"
+
+No real need to import as 'gohg', as the only two types needed have a name that
+starts with 'Hg': HgClient and HgCmd. (Notable exceptions are the Option types).
 
 Connecting the Mercurial Command Server
 

@@ -20,7 +20,7 @@ func (cmdOpts *mergeOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewMergeCmd(opts []Option, rev []string) HgCmd {
+func NewMergeCmd(opts []HgOption, rev []string) HgCmd {
 	cmd, _ := NewHgCmd("merge", opts, rev, new(mergeOpts))
 	return *cmd
 }
@@ -29,7 +29,7 @@ func NewMergeCmd(opts []Option, rev []string) HgCmd {
 // - there can only be one rev in the slice
 // - if rev is not nil then there should not be a Rev option
 
-func (hgcl *HgClient) Merge(opts []Option, rev []string) ([]byte, error) {
+func (hgcl *HgClient) Merge(opts []HgOption, rev []string) ([]byte, error) {
 	cmd := NewMergeCmd(opts, rev)
 	return cmd.Exec(hgcl)
 }

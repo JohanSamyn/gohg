@@ -18,12 +18,12 @@ func (cmdOpts *manifestOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewManifestCmd(opts []Option, files []string) HgCmd {
+func NewManifestCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("manifest", opts, files, new(manifestOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Manifest(opts []Option, params []string) ([]byte, error) {
+func (hgcl *HgClient) Manifest(opts []HgOption, params []string) ([]byte, error) {
 	cmd := NewManifestCmd(opts, params)
 	return cmd.Exec(hgcl)
 }

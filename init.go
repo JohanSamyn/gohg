@@ -25,7 +25,7 @@ func (cmdOpts *initOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewInitCmd(opts []Option, destpath []string) HgCmd {
+func NewInitCmd(opts []HgOption, destpath []string) HgCmd {
 	cmd, _ := NewHgCmd("init", opts, destpath, new(initOpts))
 	return *cmd
 }
@@ -36,7 +36,7 @@ func NewInitCmd(opts []Option, destpath []string) HgCmd {
 // want the (current) Hg CS to work on, as the Hg CS requires an existing repo
 // before you can connect it. But Init() can be used to create any new repo
 // besides the one the Hg CS is running for.
-func (hgcl *HgClient) Init(opts []Option, destpath string) error {
+func (hgcl *HgClient) Init(opts []HgOption, destpath string) error {
 	dest := string(destpath[0])
 	fa, err := filepath.Abs(dest)
 	if err != nil {

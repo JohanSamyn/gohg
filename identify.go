@@ -29,7 +29,7 @@ func (cmdOpts *identifyOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewIdentifyCmd(opts []Option, source []string) HgCmd {
+func NewIdentifyCmd(opts []HgOption, source []string) HgCmd {
 	cmd, _ := NewHgCmd("identify", opts, source, new(identifyOpts))
 	return *cmd
 }
@@ -38,7 +38,7 @@ func NewIdentifyCmd(opts []Option, source []string) HgCmd {
 // 	return hgcl.Identify(source, opts...)
 // }
 
-func (hgcl *HgClient) Identify(opts []Option, source []string) ([]byte, error) {
+func (hgcl *HgClient) Identify(opts []HgOption, source []string) ([]byte, error) {
 	cmd := NewIdentifyCmd(opts, source)
 
 	// fmt.Printf("cmdOpts = %v\n", cmd.cmdOpts)

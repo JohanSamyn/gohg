@@ -17,7 +17,7 @@ func (cmdOpts *showconfigOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewShowConfigCmd(opts []Option, configitems []string) HgCmd {
+func NewShowConfigCmd(opts []HgOption, configitems []string) HgCmd {
 	cmd, _ := NewHgCmd("showconfig", opts, configitems, new(showconfigOpts))
 	return *cmd
 }
@@ -26,7 +26,7 @@ func NewShowConfigCmd(opts []Option, configitems []string) HgCmd {
 // 	return hgcl.ShowConfig(configitems, opts...)
 // }
 
-func (hgcl *HgClient) ShowConfig(opts []Option, configitems []string) ([]byte, error) {
+func (hgcl *HgClient) ShowConfig(opts []HgOption, configitems []string) ([]byte, error) {
 	cmd := NewShowConfigCmd(opts, configitems)
 	return cmd.Exec(hgcl)
 }

@@ -20,12 +20,12 @@ func (cmdOpts *addOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewAddCmd(opts []Option, files []string) HgCmd {
+func NewAddCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("add", opts, files, new(addOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Add(opts []Option, files []string) ([]byte, error) {
+func (hgcl *HgClient) Add(opts []HgOption, files []string) ([]byte, error) {
 	cmd := NewAddCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

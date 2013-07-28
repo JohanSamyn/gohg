@@ -18,12 +18,12 @@ func (cmdOpts *tagsOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewTagCmd(opts []Option, params []string) HgCmd {
+func NewTagCmd(opts []HgOption, params []string) HgCmd {
 	cmd, _ := NewHgCmd("tags", opts, params, new(tagsOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Tags(opts []Option, params []string) ([]byte, error) {
+func (hgcl *HgClient) Tags(opts []HgOption, params []string) ([]byte, error) {
 	cmd := NewTagCmd(opts, params)
 	return cmd.Exec(hgcl)
 }

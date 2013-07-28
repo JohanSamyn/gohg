@@ -28,12 +28,12 @@ func (cmdOpts *statusOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewStatusCmd(opts []Option, files []string) HgCmd {
+func NewStatusCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("status", opts, files, new(statusOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Status(opts []Option, files []string) ([]byte, error) {
+func (hgcl *HgClient) Status(opts []HgOption, files []string) ([]byte, error) {
 	cmd := NewStatusCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

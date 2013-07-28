@@ -20,12 +20,12 @@ func (cmdOpts *tipOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewTipCmd(opts []Option, params []string) HgCmd {
+func NewTipCmd(opts []HgOption, params []string) HgCmd {
 	cmd, _ := NewHgCmd("tip", opts, params, new(tipOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Tip(opts []Option, params []string) ([]byte, error) {
+func (hgcl *HgClient) Tip(opts []HgOption, params []string) ([]byte, error) {
 	cmd := NewTipCmd(opts, params)
 	return cmd.Exec(hgcl)
 }

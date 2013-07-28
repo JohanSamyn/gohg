@@ -20,12 +20,12 @@ func (cmdOpts *removeOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewRemoveCmd(opts []Option, files []string) HgCmd {
+func NewRemoveCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("remove", opts, files, new(removeOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Remove(opts []Option, files []string) ([]byte, error) {
+func (hgcl *HgClient) Remove(opts []HgOption, files []string) ([]byte, error) {
 	cmd := NewRemoveCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

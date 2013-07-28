@@ -26,12 +26,12 @@ func (cmdOpts *pushOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewPushCmd(opts []Option, dest []string) HgCmd {
+func NewPushCmd(opts []HgOption, dest []string) HgCmd {
 	cmd, _ := NewHgCmd("push", opts, dest, new(pushOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Push(opts []Option, dest []string) ([]byte, error) {
+func (hgcl *HgClient) Push(opts []HgOption, dest []string) ([]byte, error) {
 	cmd := NewPushCmd(opts, dest)
 	return cmd.Exec(hgcl)
 }

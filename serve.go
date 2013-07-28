@@ -32,13 +32,13 @@ func (cmdOpts *serveOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewServeCmd(opts []Option, params []string) HgCmd {
+func NewServeCmd(opts []HgOption, params []string) HgCmd {
 	// We can safely ignore any passed-in params, as 'serve' does not take any.
 	cmd, _ := NewHgCmd("serve", opts, nil, new(serveOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Serve(opts []Option, params []string) ([]byte, error) {
+func (hgcl *HgClient) Serve(opts []HgOption, params []string) ([]byte, error) {
 	cmd := NewServeCmd(opts, params)
 	return cmd.Exec(hgcl)
 }

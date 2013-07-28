@@ -18,12 +18,12 @@ func (cmdOpts *forgetOpts) String() string {
 	return sprintfOpts(*cmdOpts)
 }
 
-func NewForgetCmd(opts []Option, files []string) HgCmd {
+func NewForgetCmd(opts []HgOption, files []string) HgCmd {
 	cmd, _ := NewHgCmd("forget", opts, files, new(forgetOpts))
 	return *cmd
 }
 
-func (hgcl *HgClient) Forget(opts []Option, files []string) ([]byte, error) {
+func (hgcl *HgClient) Forget(opts []HgOption, files []string) ([]byte, error) {
 	cmd := NewForgetCmd(opts, files)
 	return cmd.Exec(hgcl)
 }

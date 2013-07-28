@@ -149,9 +149,9 @@ type debugOpts struct {
 	Traceback
 }
 
-// Option is an interface that allows adding options to a command in a more or
+// HgOption is an interface that allows adding options to a command in a more or
 // less controlled way.
-type Option interface {
+type HgOption interface {
 	addOption(interface{}, *[]string) error
 }
 
