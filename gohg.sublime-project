@@ -1,4 +1,11 @@
 {
+    "settings": {
+        "GoSublime": {
+            "env": {
+            	"GOPATH": "$GOPATH;/C/DEV/go"
+            }
+        }
+    },
 	"folders":
 	[
 		{
