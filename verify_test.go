@@ -42,7 +42,7 @@ func TestHgClient_Verify_Sick(t *testing.T) {
 	defer teardown(t, hct)
 
 	// AND at least one cset in the repo
-	err := createAndCommitFile(t, hct)
+	err := createAndCommitFile(t, hct, "/a", "aaa")
 	if err != nil {
 		t.Fatal(err)
 	}

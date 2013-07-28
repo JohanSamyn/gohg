@@ -66,9 +66,9 @@ func createFile(file string, data string, basefolder string) error {
 	return err
 }
 
-func createAndCommitFile(t *testing.T, hct *HgClient) error {
+func createAndCommitFile(t *testing.T, hct *HgClient, testfile string, filecontent string) error {
 
-	err := createFile("/a", "aaa", hct.RepoRoot())
+	err := createFile(testfile, filecontent, hct.RepoRoot())
 	if err != nil {
 		t.Fatal(err)
 	}
