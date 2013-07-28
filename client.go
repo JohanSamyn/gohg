@@ -39,10 +39,43 @@ type HgClient struct {
 	// config       []string
 }
 
+// HgCmd is the type through which you can create and execute Mercurial commands.
+type HgCmd struct {
+	Name    string
+	Options []Option
+	Params  []string
+
+	// I keep this field private to make prohibit tampering with the series
+	// of options that is valid for a command.
+	cmdOpts interface{}
+
+	cmd []string
+}
+
 // NewHgClient creates a new instance of the client type for working with the
 // Hg Command Server.
 func NewHgClient() *HgClient {
 	return new(HgClient)
+}
+
+// NewHgCmd creates a new HgCmd instance for working with Mercurial commands.
+func NewHgCmd(name string, opts []Option, params []string, cmdopts interface{}) (*HgCmd, error) {
+	if name == "" {
+		return nil, fmt.Errorf("give a name for the command")
+	}
+	hgcmd := new(HgCmd)
+	hgcmd.Name = name
+
+	if opts != nil {
+		hgcmd.Options = opts
+	}
+	if params != nil {
+		hgcmd.Params = params
+	}
+	if cmdopts != nil {
+		hgcmd.cmdOpts = cmdopts
+	}
+	return hgcmd, nil
 }
 
 // Connect establishes the connection with the Mercurial Command Server.
@@ -560,43 +593,10 @@ func (hgcl *HgClient) IsConnected() bool {
 // directly passed to the Hg CS as is. See client_test.go for an example.
 // This method could come in handy when you want to use a new Hg command for
 // which the gohg tool is not updated yet. Or for using some extension to Hg.
-// Be sure to add an  option and its value separately in hgcmd.
-// (not ok: ' hgcmd[1] = "--limit 2" ', not ok: ' hgcmd[1] = "--limit"; hgcmd[2] = "2" ')
+// Be sure to add an option and its value separately to hgcmd.
+// (is not ok: ' hgcmd[1] = "--limit 2" ', is ok: ' hgcmd[1] = "--limit"; hgcmd[2] = "2" ')
 func (hgcl *HgClient) ExecCmd(hgcmd []string) ([]byte, error) {
 	return hgcl.runcommand(hgcmd)
-}
-
-// HgCmd is the type through which you can create and execute Mercurial commands.
-type HgCmd struct {
-	Name    string
-	Options []Option
-	Params  []string
-
-	// I keep this field private, so it is not possible to tamper with the
-	// series fo options that is valid for a command.
-	cmdOpts interface{}
-
-	cmd []string
-}
-
-// NewHgCmd creates a new HgCmd instance for working with Mercurial commands.
-func NewHgCmd(name string, opts []Option, params []string, cmdopts interface{}) (*HgCmd, error) {
-	if name == "" {
-		return nil, fmt.Errorf("give a name for the command")
-	}
-	hgcmd := new(HgCmd)
-	hgcmd.Name = name
-
-	if opts != nil {
-		hgcmd.Options = opts
-	}
-	if params != nil {
-		hgcmd.Params = params
-	}
-	if cmdopts != nil {
-		hgcmd.cmdOpts = cmdopts
-	}
-	return hgcmd, nil
 }
 
 func (hc *HgCmd) SetOptions(opts []Option) {
