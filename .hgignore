@@ -26,6 +26,7 @@ testiface.go
 testiface2.go_BAK
 testiface.go_BAK
 covdata/*.*
+GOHG.tasks
 
 syntax:regexp
 ^bin/
