@@ -5,10 +5,10 @@
 if [ "$1" == "" ]
 then
   echo
-  echo "  usage:    'gtc <command> [-v]' or 'gtc all [-v]'"
+  echo "  usage:    'gt.sh <command> [-v]' or 'gt.sh all [-v]'"
   echo
-  echo "  examples:    gtc summary"
-  echo "               gtc all"
+  echo "  examples:    gt.sh summary"
+  echo "               gt.sh all"
   echo
 else
   if [ "$1" == "all" ]

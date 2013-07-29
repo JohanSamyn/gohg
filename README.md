@@ -79,7 +79,7 @@ along with a few others.)
 ### Documentation
 
 For more details launch a godoc server by running the serverdoc.bat (Windows)
-or serverdoc (Linux) script, and enter
+or serverdoc.sh (Linux) script, and enter
 
     http://localhost:6161/pkg/bitbucket.org/gohg/gohg
 

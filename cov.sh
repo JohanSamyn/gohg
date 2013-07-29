@@ -10,11 +10,11 @@ regex=$3
 if [ "$package" == "" -o "$ceiling" == "" -o "$regex" == "" ]
 then
   echo
-  echo    Usage: cov "<package> -ceiling=<nn> <regex-to-filter-functions>"
+  echo    Usage: cov.sh "<package> -ceiling=<nn> <regex-to-filter-functions>"
   echo
   echo           -ceiling=nn    Only annotate functions with coverage % below nn.
   echo
-  echo    Example:  cov bitbucket.org/gohg/gohg -ceiling=50 .*addOption
+  echo    Example:  cov.sh bitbucket.org/gohg/gohg -ceiling=50 .*addOption
   echo
   echo    Run this script from the package folder.
   echo
