@@ -23,7 +23,7 @@ func main() {
 
 	var summ []byte
 	if summ, err = hc.Summary(nil, nil); err != nil {
-		log.Println(err)
+		fmt.Println(err)
 	}
 	fmt.Printf("\"summary\" for repo %s:\n%s\n", hc.RepoRoot(), summ)
 
