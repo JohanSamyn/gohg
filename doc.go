@@ -5,23 +5,38 @@
 /*
 Compatibility
 
-The gohg client library is created with Go1 (v1.0.1, v1.0.2, v1.0.3, v1.1.1).
-It is tested against Mercurial 2.5.2, both on Windows 7 and Ubuntu 12.04.
+▪ Mercurial
 
-Currently there is no mechanism to handle differences in possibilities between
-different Mercurial versions. The errors returned by Mercurial are your only
-help here.
+For Mercurial any version starting with 1.9 should be ok, cause that's the one
+where the Command Server was introduced. If you send wrong options to it through
+gohg, or commands not yet supported in your Hg version, you'll simply get back
+an error from Hg, as gohg does not check them.
+But on the other hand gohg allows issuing new commands, not yet implemented by
+gohg; see further.
+
+▪ Go
+
+Currently gohg is developed with Go1.1.1. Though I started with the Go1.0
+versions, I can't remember having had to change one or two minor things when
+moving to Go1.1.1.
+
+▪ Platform
+
+I'm developing and testing both on Windows 7 and Ubuntu 12.04. But I suppose
+it should work on any other platform that supports Hg and Go.
 
 Dependencies
 
-Only Go and it's standard library. (Just using https://github.com/axw/gocov for
-checking test coverage.)
+Only Go and it's standard library. And Mercurial should be installed of course.
 
 Installation
 
 At the commandline type:
+
   go get [-u] bitbucket.org/gohg/gohg
   go test [-v] bitbucket.org/gohg/gohg
+
+to have gohg available in your GOPATH.
 
 Import the package
 
@@ -68,8 +83,7 @@ Though this is currently not implemented yet.
 The HgClient.Connect() method eventually returns an error, so you can check if
 the connection succeeded, and if it is safe to go on.
 
-Once the work is done, you can disconnect the Hg CS. We advise to use the
-typical Go idiom for this:
+Once the work is done, you can disconnect the Hg CS using a typical Go idiom:
 
   err := hgcl.Connect("hg", "~/myrepo", nil)
   if err != nil {
@@ -123,8 +137,9 @@ could return something like the following in the err variable when it fails:
   cmd: identify -v C:\DEV\myrepo
   hgerr:
 
-The command aliases are not implemented. But there are examples of how
-you can easily implement them in identify.go and showconfig.go.
+The command aliases (like 'id' for 'identify') are not implemented. But there
+are examples in identify.go and showconfig.go of how you can easily implement
+them.
 
 Commands - HgClient command methods
 
@@ -259,20 +274,20 @@ Limitations
 
 ▪ As mentioned earlier, passing config info is not implemented yet.
 
-▪ Currently there is no support for any extensions to Mercurial.
+▪ Currently the only  support for extensions to Mercurial is through
+the ExecCmd method.
 
-▪ If multiple Hg CSers are used against the same repo, it is up to Mercurial
+▪ If multiple Hg CSs are used against the same repo, it is up to Mercurial
 to handle this correctly.
 
 ▪ Mercurial is always run in english. No internationalization yet.
 
-Issues
+Feedback
 
-If you experience any problems using the gohg tool, please register an issue
-using the Bitbucket issue tracker at https://bitbucket.org/gohg/gohg/issues.
-
-You can also register any enhancement requests or suggestions for improvement
-there.
+Please note that this tool is still in it's very early stages.
+If you have suggestions or requests, or experience any problems, please use the
+issue tracker at https://bitbucket.org/gohg/gohg/issues?status=new&status=open.
+Or you could send a patch or a pull request.
 
 License
 
