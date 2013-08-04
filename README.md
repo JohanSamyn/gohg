@@ -15,6 +15,18 @@ changeset info for instance.
 
 It is as much an occasion for me to experience working with Go :) .
 
+### Features
+
+- Choice of what hg command/version to use (default: 'hg').
+- Choice of repo to work on.
+- Possibility to provide a path for creating a new repo first and then connect to it. _TODO_
+- Commands implemented so far: add, addremove, annotate, archive, branches, clone, commit, diff, export, forget, heads, identify, init, log, manifest, merge, pull, push, remove, serve, showconfig, status, summary, tags, tip, update, verify, version.
+- All options implemented for all implemented commands (except global --color and --print0 for status).
+- Possibility to obtain the full commandstring that was passed to Mercurial.
+- Possibility to pass _any_ command to Hg, allowing for use of extensions, and future commands when they are not yet implemented by gohg.
+- Commands returning changeset info do that in a go-like way, using a slice of structs, where each element is a changeset. _TODO_
+- Possibility to ask for 'raw' Hg output. _TODO_
+
 ### Compatibility
 
 ###### Mercurial
