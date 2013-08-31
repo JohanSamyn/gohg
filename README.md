@@ -25,7 +25,7 @@ It is as much an occasion for me to experience working with Go :) .
 - Possibility to obtain the full commandstring that was passed to Mercurial.
 - Possibility to pass _any_ command to Hg, allowing for use of extensions, and future commands when they are not yet implemented by gohg.
 - Commands returning changeset info do that in a go-like way, using a slice of structs, where each element is a changeset. _TODO_
-- Possibility to ask for 'raw' Hg output. _TODO_
+- Possibility to ask for 'raw' Hg output (as shown on stdout when issuing a hg command from a terminal). _TODO_
 
 ### Compatibility
 
