@@ -39,43 +39,10 @@ type HgClient struct {
 	// config       []string
 }
 
-// HgCmd is the type through which you can create and execute Mercurial commands.
-type HgCmd struct {
-	Name    string
-	Options []HgOption
-	Params  []string
-
-	// I keep this field private to make prohibit tampering with the series
-	// of options that is valid for a command.
-	cmdOpts interface{}
-
-	cmd []string
-}
-
 // NewHgClient creates a new instance of the client type for working with the
 // Hg Command Server.
 func NewHgClient() *HgClient {
 	return new(HgClient)
-}
-
-// NewHgCmd creates a new HgCmd instance for working with Mercurial commands.
-func NewHgCmd(name string, opts []HgOption, params []string, cmdopts interface{}) (*HgCmd, error) {
-	if name == "" {
-		return nil, fmt.Errorf("give a name for the command")
-	}
-	hgcmd := new(HgCmd)
-	hgcmd.Name = name
-
-	if opts != nil {
-		hgcmd.Options = opts
-	}
-	if params != nil {
-		hgcmd.Params = params
-	}
-	if cmdopts != nil {
-		hgcmd.cmdOpts = cmdopts
-	}
-	return hgcmd, nil
 }
 
 // Connect establishes the connection with the Mercurial Command Server.
@@ -218,7 +185,7 @@ func locateRepository(reponame string) (string, error) {
 		repo = "."
 	}
 
-	// first make a correct path from repo
+	// first get the absolute path for the repo
 	var err error
 	repo, err = filepath.Abs(repo)
 	if err != nil {
@@ -597,41 +564,4 @@ func (hgcl *HgClient) IsConnected() bool {
 // (is not ok: ' hgcmd[1] = "--limit 2" ', is ok: ' hgcmd[1] = "--limit"; hgcmd[2] = "2" ')
 func (hgcl *HgClient) ExecCmd(hgcmd []string) ([]byte, error) {
 	return hgcl.runcommand(hgcmd)
-}
-
-func (hc *HgCmd) SetOptions(opts []HgOption) {
-	// Checking for double opts is a bit useless, as some options can indeed
-	// be passed more than once to a Hg command.
-	hc.Options = append(hc.Options, opts...)
-}
-
-func (hc *HgCmd) SetParams(params []string) {
-	hc.Params = append(hc.Params, params...)
-}
-
-// Exec builds the commandline with the data in the HgCmd instance,
-// and then passes the command to the Mercurial Command Server for execution,
-// returning the result or an error.
-func (hc *HgCmd) Exec(hgcl *HgClient) ([]byte, error) {
-	if hc.Name == "" {
-		return nil, fmt.Errorf("HgCmd.Exec(): no command name specified")
-	}
-	var err error
-	hc.cmd, err = hgcl.buildCommand(hc)
-	if err != nil {
-		return nil, err
-	}
-	return hgcl.runcommand(hc.cmd)
-}
-
-// CmdLine gives you the exact commandline as it will be passed to Mercurial,
-// generated with the data in the HgCmd instance. Handy for logging or showing
-// in a GUI.
-func (hc *HgCmd) CmdLine(hgcl *HgClient) (string, error) {
-	var err error
-	hc.cmd, err = hgcl.buildCommand(hc)
-	if err != nil {
-		return "", err
-	}
-	return strings.Join(hc.cmd, " "), nil
 }
