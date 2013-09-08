@@ -43,7 +43,7 @@ func (hgcl *HgClient) Identify(opts []HgOption, source []string) ([]byte, error)
 
 	// fmt.Printf("cmdOpts = %v\n", cmd.cmdOpts)
 
-	// cmd.cmd, _ = hgcl.buildCommand(cmd)
+	// cmd.cmd, _ = cmd.buildCommand()
 	// fmt.Printf("opts -> %s\ncmd.Options -> %s\ncmd.cmdOpts -> %s\n", opts, cmd.Options, cmd.cmdOpts)
 	// fmt.Printf("cmd.cmd = %s\n", cmd.cmd)
 	return cmd.Exec(hgcl)

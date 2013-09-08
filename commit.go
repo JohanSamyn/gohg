@@ -42,7 +42,7 @@ func (hgcl *HgClient) Commit(opts []HgOption, files []string) error {
 	// For now we catch it.
 	var err error
 	// We have to build the command to have any values in cmd.cmdOpts.
-	cmd.cmd, err = hgcl.buildCommand(&cmd)
+	cmd.cmd, err = cmd.buildCommand()
 	if err != nil {
 		return err
 	}

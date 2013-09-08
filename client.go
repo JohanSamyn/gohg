@@ -388,35 +388,6 @@ func (hgcl *HgClient) sendToHg(cmd string, args []byte) error {
 	return nil
 } // sendToHg()
 
-// Method buildCommand builds the command string to pass to the Hg CS.
-//	cmd.Name: The name of the command ("log", "status", etc.).
-//	cmd.cmdOpts: A type based on struct with the valid options for the command
-//				 at hand. Also contains the (gohg) default value for each option
-//				 for that particular command.
-//				 Used to filter only the options supported by the command.
-//	cmd.Options: The options passed by the caller.
-//	cmd.Params:	Any filenames, paths or other that the command needs.
-//				These are to be added as the last things of the command.
-func (hgcl *HgClient) buildCommand(cmd *HgCmd) (hgcmd []string, err error) {
-	hgcmd = []string{cmd.Name}
-	for _, o := range cmd.Options {
-		err = o.addOption(cmd.cmdOpts, &hgcmd)
-		// Silently skip invalid options for now.
-		// if err != nil {
-		// 	fmt.Logf("err = %s", err)
-		// 	// Or work out some logging system for gohg, and write the error message inthere.
-		// 	log.Printf("err = %s", err)
-		// 	return nil, err
-		// }
-	}
-	for _, p := range cmd.Params {
-		if p != "" {
-			hgcmd = append(hgcmd, string(p))
-		}
-	}
-	return hgcmd, nil
-}
-
 // ShowLastCmd produces the commandline for the last command that was submitted
 // to the Hg CS until then. It is a convenience for if you use the hgcl.Identify()
 // way of issuing commands (so not via a HgCmd.Exec(), or via ExecCmd()), and you
@@ -559,7 +530,7 @@ func (hgcl *HgClient) IsConnected() bool {
 // though in a less Go-like way. No checks are done however; the command is
 // directly passed to the Hg CS as is. See client_test.go for an example.
 // This method could come in handy when you want to use a new Hg command for
-// which the gohg tool is not updated yet. Or for using some extension to Hg.
+// which the gohg tool is not yet updated. Or for using some extension to Hg.
 // Be sure to add an option and its value separately to hgcmd.
 // (is not ok: ' hgcmd[1] = "--limit 2" ', is ok: ' hgcmd[1] = "--limit"; hgcmd[2] = "2" ')
 func (hgcl *HgClient) ExecCmd(hgcmd []string) ([]byte, error) {
