@@ -11,7 +11,6 @@
 package gohg
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 	"time"
