@@ -28,7 +28,7 @@ func TestHgClient_ShowConfig(t *testing.T) {
 	f.Close()
 
 	// Now we reconnect again, now that there is a config file for the testrepo.
-	hct.Connect(he, rr, nil)
+	hct.Connect(he, rr, nil, false)
 
 	var expected string = hct.RepoRoot() + string(os.PathSeparator) + "the-default-path\n"
 
@@ -60,7 +60,7 @@ func TestHgClient_ShowConfig_Debug(t *testing.T) {
 	f.Close()
 
 	// Now we reconnect again, now that there is a config file for the testrepo.
-	hct.Connect(he, rr, nil)
+	hct.Connect(he, rr, nil, false)
 
 	var expected string = "none: " + hct.RepoRoot() + string(os.PathSeparator) + "the-default-path\n"
 

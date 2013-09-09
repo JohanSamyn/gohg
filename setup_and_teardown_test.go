@@ -37,7 +37,7 @@ func setup(t *testing.T) (hct *HgClient) {
 	err = createFile(".hg/hgrc", "[ui]\nusername=me-myself\n", hct.RepoRoot())
 
 	cfg := make([]string, 0)
-	err = hct.Connect(hgexe, repo, cfg)
+	err = hct.Connect(hgexe, repo, cfg, false)
 	if err != nil {
 		t.Fatal(err)
 	}

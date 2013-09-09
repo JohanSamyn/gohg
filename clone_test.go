@@ -29,7 +29,7 @@ func TestHgClient_Clone_To_New_Should_Succeed(t *testing.T) {
 
 	hc2 := NewHgClient()
 	var cfg []string
-	err2 := hc2.Connect(hct.HgExe(), dest, cfg)
+	err2 := hc2.Connect(hct.HgExe(), dest, cfg, false)
 	_ = hc2.Disconnect()
 	if err1 != nil || err2 != nil {
 		t.Fatalf("Test Clone failed: %s\n", err2)

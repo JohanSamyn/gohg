@@ -59,9 +59,15 @@ func NewHgClient() *HgClient {
 //	config
 //		Configuration settings that will be added to the necessary
 //		fixed settings (see composeStartupConfig() for more). Optional.
+//	initrepo
+//		When a repo exitsts for reponame, then initrepo is ignored.
+//		When no repo is found for reponame, and initrepo is true,
+//		then Connect() will first create the repository before connecting.
+//		When no repo is found for reponame, and initrepo is false,
+//		then Connect() will return an error.
 //
 // Returns an error if the connection could not be established properly.
-func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string) error {
+func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string, initrepo bool) error {
 
 	// for example:
 	// hgcl.hgServer =

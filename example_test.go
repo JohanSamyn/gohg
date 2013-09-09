@@ -12,7 +12,7 @@ import (
 
 func ExampleHgClient_Connect() {
 	hc := NewHgClient()
-	if err := hc.Connect("hg", ".", []string{""}); err != nil {
+	if err := hc.Connect("hg", ".", []string{""}, false); err != nil {
 		log.Fatal(err)
 	}
 	defer hc.Disconnect()
