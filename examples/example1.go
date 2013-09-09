@@ -26,7 +26,7 @@ func main() {
 
 	hc := hg.NewHgClient()
 	var cfg []string
-	if err = hc.Connect(hgexe, repo, cfg); err != nil {
+	if err = hc.Connect(hgexe, repo, cfg, false); err != nil {
 		log.Fatal(err)
 	}
 	defer hc.Disconnect()

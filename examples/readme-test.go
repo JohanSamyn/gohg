@@ -16,7 +16,7 @@ import (
 func main() {
 	var err error
 	hc := NewHgClient()
-	if err = hc.Connect("", "", nil); err != nil {
+	if err = hc.Connect("", "", nil, false); err != nil {
 		log.Fatal(err)
 	}
 	defer hc.Disconnect()
