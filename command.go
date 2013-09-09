@@ -2,12 +2,6 @@
 // Use of this source code is governed by a BSD style license
 // that can be found in the LICENSE.md file.
 
-// Package gohg is a Go client library for using the Mercurial dvcs
-// via it's Command Server.
-//
-// For Mercurial see: http://mercurial.selenic.com.
-//
-// For the Hg Command Server see: http://mercurial.selenic.com/wiki/CommandServer.
 package gohg
 
 import (
