@@ -30,7 +30,7 @@ func TestHgClient_Identify_EmptyRepo(t *testing.T) {
 
 	// THEN the resulting info should be as expected
 	if string(got) != expected {
-		// if string(got) == expected {
+		// if string(got) == expected {	// to force an error, for testing
 		t.Fatalf("Test Identify: expected:\n%s\n but got:\n%s\n", expected, got)
 	}
 }
