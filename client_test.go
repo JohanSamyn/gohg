@@ -100,6 +100,8 @@ func TestShouldSucceedWhenRepoFoundAndInitrepoFalse(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer destroyTempdir(repo)
+	hct := NewHgClient()
+	defer hct.Disconnect()
 
 	hgexe := "hg"
 
@@ -109,7 +111,6 @@ func TestShouldSucceedWhenRepoFoundAndInitrepoFalse(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	hct := NewHgClient()
 	cfg := make([]string, 0)
 	err = hct.Connect(hgexe, repo, cfg, false)
 	if err != nil {
@@ -123,8 +124,9 @@ func TestShouldSucceedWhenNoRepoFoundAndInitrepoTrue(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer destroyTempdir(repo)
-
 	hct := NewHgClient()
+	defer hct.Disconnect()
+
 	cfg := make([]string, 0)
 	err = hct.Connect("hg", repo, cfg, true)
 	if err != nil {
@@ -138,6 +140,8 @@ func TestShouldSucceedWhenRepoFoundAndInitrepoTrue(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer destroyTempdir(repo)
+	hct := NewHgClient()
+	defer hct.Disconnect()
 
 	hgexe := "hg"
 
@@ -147,7 +151,6 @@ func TestShouldSucceedWhenRepoFoundAndInitrepoTrue(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	hct := NewHgClient()
 	cfg := make([]string, 0)
 	err = hct.Connect(hgexe, repo, cfg, true)
 	if err != nil {
