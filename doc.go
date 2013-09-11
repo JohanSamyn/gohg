@@ -7,10 +7,10 @@ Compatibility
 
 ▪ Mercurial
 
-For Mercurial any version starting with 1.9 should be ok, cause that's the one
+For Mercurial any version starting from 1.9 should be ok, cause that's the one
 where the Command Server was introduced. If you send wrong options to it through
-gohg, or commands not yet supported in your Hg version, you'll simply get back
-an error from Hg, as gohg does not check them.
+gohg, or commands or options not yet supported in your Hg version, you'll simply
+get back an error from Hg itself, as gohg does not check them.
 But on the other hand gohg allows issuing new commands, not yet implemented by
 gohg; see further.
 
@@ -57,8 +57,8 @@ through the HgClient type, of which you have to create an instance:
 
 Then you can connect the Hg CS as follows:
 
-  err := hgcl.Connect("hg", "~/myrepo", nil)
-   4                   1        2        3
+  err := hgcl.Connect("hg", "~/myrepo", nil, false)
+   5                   1        2        3     4
 
 1. The Hg executable:
 
@@ -78,7 +78,13 @@ you are running the program in (searching upward in the folder tree eventually).
 The third parameter allows to provide extra configuration for the session.
 Though this is currently not implemented yet.
 
-4. The returnvalue:
+4. Should gohg create a new repo before connecting?
+
+This fourth parameter allows you to indicate that you want gohg to first create
+a new Mercurial repo if it does not already exist in the path given by the
+second parameter. See the API documentation for more detailed info.
+
+5. The returnvalue:
 
 The HgClient.Connect() method eventually returns an error, so you can check if
 the connection succeeded, and if it is safe to go on.
@@ -139,7 +145,7 @@ could return something like the following in the err variable when it fails:
 
 The command aliases (like 'id' for 'identify') are not implemented. But there
 are examples in identify.go and showconfig.go of how you can easily implement
-them.
+them yourself.
 
 Commands - HgClient command methods
 
@@ -204,12 +210,12 @@ As you can see, this way requires some more coding.
 
 The source code will also show you that the HgCmd type is indeed used as the
 underlying type for the convenience HgClient commands, in all the
-New<Hgcommand>Cmd() constructors.
+New<hg-command>Cmd() constructors.
 
 Commands - ExecCmd
 
 The HgClient type has an extra method ExecCmd(), allowing you to pass a fully
-custom build command to Hg. It accepts a string slice that is supposed to
+custom built command to Hg. It accepts a string slice that is supposed to
 contain all the elements of the complete command, as you would type it at the
 command line.
 
