@@ -239,7 +239,6 @@ func locateRepository(reponame string) (string, error) {
 		}
 	}
 	if err != nil && !os.IsExist(err) {
-		// e := fmt.Errorf("locateRepository(): finfo: %v\nerr: %s\nrepo: %s\nfile: %s", finfo, err, repo, file)
 		e := fmt.Errorf("locateRepository(): no Hg repo found for %s", reponame)
 		return "", e
 	}
