@@ -7,6 +7,7 @@ package gohg
 import (
 	"fmt"
 	"log"
+	"os/exec"
 	"testing"
 )
 
@@ -75,3 +76,81 @@ func TestClient_Exec(t *testing.T) {
 // 		t.Errorf("from Disconnect(): %s", string(err.Error()))
 // 	}
 // }
+
+func TestShouldFailWhenNoRepoFoundAndInitrepoFalse(t *testing.T) {
+	repo, err := createTempdir(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer destroyTempdir(repo)
+
+	hct := NewHgClient()
+	cfg := make([]string, 0)
+	err = hct.Connect("hg", repo, cfg, false)
+	// Maybe I should turn this into its own error type RepoNotFound,
+	// so I don't have to repeat the string from the Connect() method?
+	if err.Error() != "Connect(): could not find a Hg repository at: "+repo {
+		t.Fatal(err)
+	}
+}
+
+func TestShouldSucceedWhenRepoFoundAndInitrepoFalse(t *testing.T) {
+	repo, err := createTempdir(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer destroyTempdir(repo)
+
+	hgexe := "hg"
+
+	var cmd *exec.Cmd
+	cmd = exec.Command(hgexe, "--cwd", repo, "init")
+	if err = cmd.Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	hct := NewHgClient()
+	cfg := make([]string, 0)
+	err = hct.Connect(hgexe, repo, cfg, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestShouldSucceedWhenNoRepoFoundAndInitrepoTrue(t *testing.T) {
+	repo, err := createTempdir(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer destroyTempdir(repo)
+
+	hct := NewHgClient()
+	cfg := make([]string, 0)
+	err = hct.Connect("hg", repo, cfg, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestShouldSucceedWhenRepoFoundAndInitrepoTrue(t *testing.T) {
+	repo, err := createTempdir(t)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer destroyTempdir(repo)
+
+	hgexe := "hg"
+
+	var cmd *exec.Cmd
+	cmd = exec.Command(hgexe, "--cwd", repo, "init")
+	if err = cmd.Run(); err != nil {
+		t.Fatal(err)
+	}
+
+	hct := NewHgClient()
+	cfg := make([]string, 0)
+	err = hct.Connect(hgexe, repo, cfg, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+}

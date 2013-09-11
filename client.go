@@ -111,17 +111,29 @@ func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string, in
 	}
 
 	// The Hg Command Server needs an existing repository.
-	var err error
-	hgcl.repoRoot, err = locateRepository(reponame)
+	// var err error
+	repopath, err := absoluteRepopath(reponame)
 	if err != nil {
 		return err
 	}
+	hgcl.repoRoot, err = locateRepository(repopath)
 	if hgcl.repoRoot == "" {
-		dir := reponame
-		if dir == "" {
-			dir = "."
+		// no repo found, act according to param initrepo
+		// return fmt.Errorf("Connect(): could not find a Hg repository at: %s", repopath)
+		if !initrepo {
+			dir := repopath
+			if dir == "" {
+				dir = "."
+			}
+			return fmt.Errorf("Connect(): could not find a Hg repository at: %s", dir)
 		}
-		return fmt.Errorf("Connect(): could not find a Hg repository at: %s", dir)
+		if err = createRepo(repopath, hgcl.hgExe); err != nil {
+			return fmt.Errorf("Connect(): could not create Hg repository: %s", repopath)
+		}
+		hgcl.repoRoot, err = locateRepository(repopath)
+		if err != nil {
+			return err
+		}
 	}
 
 	hgServerArgs := composeStartupConfig(hgcl.hgExe, hgcl.repoRoot, config)
@@ -183,43 +195,73 @@ func (hgcl *HgClient) Disconnect() error {
 	return err
 } // Disconnect()
 
-// locateRepository assures we have a Mercurial repository available,
-// which is required for working with the Hg Command Server.
-func locateRepository(reponame string) (string, error) {
-	repo := reponame
-	if repo == "" {
-		repo = "."
+func absoluteRepopath(reponame string) (string, error) {
+	repopath := reponame
+	if repopath == "" {
+		repopath = "."
 	}
 
-	// first get the absolute path for the repo
 	var err error
-	repo, err = filepath.Abs(repo)
+	repopath, err = filepath.Abs(repopath)
 	if err != nil {
 		return "", fmt.Errorf("%s\ncould not determine absolute path for: %s",
-			err.Error(), repo)
+			err.Error(), repopath)
 	}
-	repo = filepath.Clean(repo)
+	repopath = filepath.Clean(repopath)
 
+	return repopath, nil
+} // absoluteRepopath()
+
+// locateRepository checks we if have a Mercurial repository available.
+func locateRepository(reponame string) (string, error) {
+	repo := reponame
+	sep := string(os.PathSeparator)
+	var finfo os.FileInfo
+	var err error
+	var file string
+	var dir string
 	// If we do not find a Hg repo in this dir, we search for one
 	// up the path, in case we're deeper in it's working copy.
 	for {
-		_, err = os.Stat(repo + string(os.PathSeparator) + ".hg")
-		if err == nil && !os.IsExist(err) {
+		if strings.HasSuffix(repo, sep) {
+			dir = ".hg"
+		} else {
+			dir = sep + ".hg"
+		}
+		finfo, err = os.Stat(repo + dir)
+		if finfo != nil && finfo.IsDir() && err == nil {
+			// found a Hg repo
 			break
 		}
-		var file string
 		repo, file = filepath.Split(repo)
 		if repo == "" || file == "" {
 			break
 		}
 	}
-	if err != nil {
-		return "", err
+	if err != nil && !os.IsExist(err) {
+		// e := fmt.Errorf("locateRepository(): finfo: %v\nerr: %s\nrepo: %s\nfile: %s", finfo, err, repo, file)
+		e := fmt.Errorf("locateRepository(): no Hg repo found for %s", reponame)
+		return "", e
 	}
 
+	repo = strings.TrimSuffix(repo, sep)
 	return repo, nil
 
 } // locateRepository()
+
+func createRepo(path, hgexe string) error {
+	// create a new repo at hgcl.repoRoot
+	// (the 'hg init' command creates the path itself if necessary)
+	var cmd *exec.Cmd
+	// cmd = exec.Command(hgexe, "--cwd", path, "init")
+	cmd = exec.Command(hgexe, "--cwd", path, "init")
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("createRepo(): error from cmd.Run()")
+	}
+	// // let's have some config for the new repo
+	// err = createFile(".hg/hgrc", "[ui]\nusername=me-myself\n", hgcl.RepoRoot)
+	return nil
+} // createRepo()
 
 // composeStartupConfig handles the different config settings that will be used
 // to make the connection with the Hg CS. It concerns specific Hg settings.
