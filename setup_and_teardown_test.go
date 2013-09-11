@@ -19,7 +19,7 @@ func setup(t *testing.T) (hct *HgClient) {
 	hgexe := "hg"
 
 	var err error
-	testdir, err = ioutil.TempDir("", "gohg_test_")
+	testdir, err = createTempdir(t)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,7 +47,7 @@ func setup(t *testing.T) (hct *HgClient) {
 func teardown(t *testing.T, hct *HgClient) {
 	err := hct.Disconnect()
 	if err != nil {
-		t.Errorf("from Disconnect(): %s", err.Error())
+		t.Errorf("teardown(): %s", err.Error())
 	}
 	err = os.RemoveAll(testdir)
 	if err != nil {
@@ -86,9 +86,6 @@ func createAndCommitFile(t *testing.T, hct *HgClient, testfile string, fileconte
 
 func createTempdir(t *testing.T) (string, error) {
 	tempdir, err := ioutil.TempDir("", "gohg_temp_")
-	if err != nil {
-		t.Fatal(err)
-	}
 	return tempdir, err
 }
 
