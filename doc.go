@@ -18,7 +18,7 @@ gohg; see further.
 
 Currently gohg is developed with Go1.1.1. Though I started with the Go1.0
 versions, I can't remember having had to change one or two minor things when
-moving to Go1.1.1.
+moving to Go1.1.1. Updating to Go1.1.2 required no changes neither.
 
 ▪ Platform
 
