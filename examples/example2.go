@@ -7,7 +7,7 @@
 package main
 
 import (
-	. "bitbucket.org/gohg/gohg"
+	hg "bitbucket.org/gohg/gohg"
 	"fmt"
 	"log"
 )
@@ -19,17 +19,17 @@ func main() {
 	repo := "."
 	var cfg []string
 
-	hgcl := NewHgClient()
+	hgcl := hg.NewHgClient()
 	if err := hgcl.Connect(hgexe, repo, cfg, false); err != nil {
 		log.Fatal(err)
 	}
 	defer hgcl.Disconnect()
 
-	hc := NewLogCmd(nil, nil)
-	o := make([]HgOption, 2)
-	var lim Limit = 2
+	hc := hg.NewLogCmd(nil, nil)
+	o := make([]hg.HgOption, 2)
+	var lim hg.Limit = 2
 	o[0] = lim
-	var verb Verbose = true
+	var verb hg.Verbose = true
 	o[1] = verb
 	hc.SetOptions(o)
 	// hc.SetParams([]string{"\"my param\""})

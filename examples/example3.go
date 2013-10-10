@@ -7,7 +7,7 @@
 package main
 
 import (
-	. "bitbucket.org/gohg/gohg"
+	hg "bitbucket.org/gohg/gohg"
 	"fmt"
 	"log"
 )
@@ -19,7 +19,7 @@ func main() {
 	repo := "."
 	var cfg []string
 
-	hgcl := NewHgClient()
+	hgcl := hg.NewHgClient()
 	if err := hgcl.Connect(hgexe, repo, cfg, false); err != nil {
 		log.Fatal(err)
 	}

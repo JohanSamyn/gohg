@@ -8,14 +8,14 @@
 package main
 
 import (
-	. "bitbucket.org/gohg/gohg"
+	hg "bitbucket.org/gohg/gohg"
 	"fmt"
 	"log"
 )
 
 func main() {
 	var err error
-	hc := NewHgClient()
+	hc := hg.NewHgClient()
 	if err = hc.Connect("", "", nil, false); err != nil {
 		log.Fatal(err)
 	}
@@ -29,7 +29,7 @@ func main() {
 
 	var l []byte
 	files := []string{}
-	if l, err = hc.Log([]HgOption{Limit(2)}, files); err != nil {
+	if l, err = hc.Log([]hg.HgOption{hg.Limit(2)}, files); err != nil {
 		fmt.Println(err)
 	}
 	fmt.Printf("\"log -l 2\" for repo %s:\n%s\n", hc.RepoRoot(), l)

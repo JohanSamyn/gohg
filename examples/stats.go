@@ -11,7 +11,7 @@
 package main
 
 import (
-	. "bitbucket.org/gohg/gohg"
+	hg "bitbucket.org/gohg/gohg"
 	"fmt"
 	"log"
 	"strconv"
@@ -19,13 +19,13 @@ import (
 )
 
 func main() {
-	hc := NewHgClient()
+	hc := hg.NewHgClient()
 	if err := hc.Connect("", "", nil, false); err != nil {
 		log.Fatal(err)
 	}
 	defer hc.Disconnect()
 
-	t, err := hc.Tip([]HgOption{Template("{rev}")}, nil)
+	t, err := hc.Tip([]hg.HgOption{hg.Template("{rev}")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -40,7 +40,7 @@ func main() {
 	// don't count empty value after last \n
 	files := len(strings.Split(string(m), "\n")) - 1
 
-	h, err := hc.Heads([]HgOption{Template("{rev}\n")}, nil)
+	h, err := hc.Heads([]hg.HgOption{hg.Template("{rev}\n")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -48,7 +48,7 @@ func main() {
 	// don't count empty value after last \n
 	heads := len(strings.Split(string(h), "\n")) - 1
 
-	b, err := hc.Branches([]HgOption{Quiet(true)}, nil)
+	b, err := hc.Branches([]hg.HgOption{hg.Quiet(true)}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -56,7 +56,7 @@ func main() {
 	// don't count empty value after last \n
 	branches := len(strings.Split(string(b), "\n")) - 1
 
-	tg, err := hc.Tags([]HgOption{Quiet(true)}, nil)
+	tg, err := hc.Tags([]hg.HgOption{hg.Quiet(true)}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -65,7 +65,7 @@ func main() {
 	// don't count tip
 	tags := len(strings.Split(string(tg), "\n")) - 1 - 1
 
-	au, err := hc.Log([]HgOption{Template("{author}\n")}, nil)
+	au, err := hc.Log([]hg.HgOption{hg.Template("{author}\n")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -81,7 +81,7 @@ func main() {
 	}
 	authors := len(am)
 
-	mg, err := hc.Log([]HgOption{Rev("merge()"), Template("{rev}\n")}, nil)
+	mg, err := hc.Log([]hg.HgOption{hg.Rev("merge()"), hg.Template("{rev}\n")}, nil)
 	if err != nil {
 		fmt.Println(err)
 		return
