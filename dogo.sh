@@ -4,7 +4,7 @@ mod=0
 
 if [[ "$newpath" != */usr/local/go/bin* ]]
 then
-  newpath=$newgopath:/usr/local/go/bin
+  newpath=$newpath:/usr/local/go/bin
   mod=1
 fi
 
