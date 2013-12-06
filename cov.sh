@@ -7,7 +7,7 @@ package=$1
 ceiling=$2
 regex=$3
 
-if [ "$package" == "" -o "$ceiling" == "" -o "$regex" == "" ]
+if [[ "$package" = "" -o "$ceiling" = "" -o "$regex" = "" ]]
 then
   echo
   echo    Usage: cov.sh "<package> -ceiling=<nn> <regex-to-filter-functions>"
@@ -20,17 +20,17 @@ then
   echo
 else
   echo === Deleting existing logfiles...
-  if [ -d covdata ]
+  if [[ -d covdata ]]
   then
-    if [ -f covdata/coverage.json ]
+    if [[ -f covdata/coverage.json ]]
     then
       rm covdata/coverage.json
     fi
-    if [ -f covdata/coverage.log ]
+    if [[ -f covdata/coverage.log ]]
     then
       rm covdata/coverage.log
     fi
-    if [ -f covdata/coverage-annotate.log ]
+    if [[ -f covdata/coverage-annotate.log ]]
     then
       rm covdata/coverage-annotate.log
     fi

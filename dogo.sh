@@ -14,7 +14,7 @@ then
   mod=1
 fi
 
-if [ $mod == 1 ]
+if [[ "$mod" = "1" ]]
 then
   PATH=$newpath
   export PATH
@@ -25,7 +25,7 @@ mod=0
 
 if [[ "$newgopath" != */usr/local/golib* ]]
 then
-  if [ "$newgopath" == "" ]
+  if [[ "$newgopath" = "" ]]
   then
     newgopath=/usr/local/golib
   else
@@ -40,9 +40,8 @@ then
   mod=1
 fi
 
-if [ $mod == 1 ]
+if [[ "$mod" = "1" ]]
 then
   GOPATH=$newgopath
   export GOPATH
 fi
-
