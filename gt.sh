@@ -27,7 +27,7 @@ else
         then
           go test $2 $3 $4 $5 $6 $7 $8 $9 client.go options.go add.go version.go setup_and_teardown_test.go $1.go $1_test.go
         else
-          if [[ "$1" = "commit" ]
+          if [[ "$1" = "commit" ]]
           then
             # uses tip in test
             go test $2 $3 $4 $5 $6 $7 $8 $9 client.go options.go add.go version.go setup_and_teardown_test.go tip.go $1.go $1_test.go
