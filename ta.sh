@@ -5,7 +5,7 @@ shel=`ps -p $$ | tail -1 | awk '{print $NF}'`
 if [[ "$shel" = "bash" ]]; then
   arg="-p "
 else # probably zsh
-  arg="\?"
+  arg="?"
 fi
 
 echo ----------------------------------------
