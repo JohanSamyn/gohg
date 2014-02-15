@@ -15,6 +15,8 @@ changeset info for instance.
 
 It is as much an occasion for me to experience working with Go :) .
 
+[![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)
+
 ### Features
 
 - Choice of what hg command/version to use (default = 'hg').
