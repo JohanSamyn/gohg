@@ -26,6 +26,7 @@ func TestHgClient_Branches(t *testing.T) {
 	f.Sync()
 	f.Close()
 
+
 	cmd := exec.Command(hct.HgExe(), "-R", hct.RepoRoot(), "ci", "-Am\"test\"")
 	if err := cmd.Run(); err != nil {
 		t.Fatal(err)
