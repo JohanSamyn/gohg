@@ -1,4 +1,4 @@
-# gohg - a Go client library for Mercurial
+# gohg - a Go client library for Mercurial   [![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)
 
 ### What it is
 
@@ -15,19 +15,18 @@ changeset info for instance.
 
 It is as much an occasion for me to experience working with Go :) .
 
-[![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)
 
 ### Features
 
 - Choice of what hg command/version to use (default = 'hg').
 - Choice of repo to work on (default = '.').
-- Possibility to first create a new repo on the fly before connecting to it (see the fourth param to Connect()).
+- First create a new repo on the fly before connecting to it (see the 4th param to Connect()).
 - Commands implemented so far: add, addremove, annotate, archive, branches, clone, commit, diff, export, forget, heads, identify, init, log, manifest, merge, pull, push, remove, serve, showconfig, status, summary, tags, tip, update, verify, version.
-- All options implemented for all implemented commands (except global --color and --print0 for status).
-- Possibility to obtain the full commandstring that was passed to Mercurial.
-- Possibility to pass _any_ command to Hg, allowing for use of extensions, and future commands when they are not yet implemented by gohg.
-- Commands returning changeset info do that in a go-like way, using a slice of structs, where each element is a changeset. _TODO_
-- Possibility to ask for 'raw' Hg output (as shown on stdout when issuing a hg command from a terminal). _TODO_
+- Options implemented so far: all options for all implemented commands (except global --color and --print0 for status).
+- Obtain the full commandstring that was passed to Mercurial (for showing in the GUI f.i.).
+- Pass _any_ command to Hg, allowing for use of extensions, and future commands when they are not yet implemented by gohg.
+- Commands returning changeset info do that in a Go-like way, using a slice of structs, where each element is a changeset. _TODO_
+- Ask for 'raw' Hg output (as shown on stdout when issuing a hg command from a terminal). _TODO_
 
 ### Compatibility
 
@@ -35,20 +34,23 @@ It is as much an occasion for me to experience working with Go :) .
 
 For Mercurial any version starting from 1.9 should be ok, cause that's the one
 where the Command Server was introduced. If you send wrong options to it through
-gohg, or commands or options not yet supported in your Hg version, you'll simply
-get back an error from Hg, as gohg does not check them.
-But on the other hand gohg allows issuing new commands, not yet fully implemented
+gohg, or commands or options not yet supported (or obsolete) in your Hg version,
+you'll simply get back an error from Hg itself, as gohg does not check them.
+But on the other hand gohg allows issuing new commands, not yet implemented
 by gohg; see the documentation.
 
 ###### Go
 
-Currently gohg is developed with Go1.1.2. Though I started with the Go1.0
+Currently gohg is developed with Go1.2. Though I started with the Go1.0
 versions, I can't remember having had to change more than one or two minor
-things when moving to Go1.1.1. Updating to Go1.1.2 required no changes neither.
+things when moving to Go1.1.1. Updating to Go1.1.2 required no changes at all.
+I have an issue though with Go1.2, on Windows only, causing some tests using
+os.exec.Command to fail. I'll have to look into that further, to find out if I
+should report a bug.
 
 ###### Platform
 
-I'm developing and testing both on Windows 7 and Ubuntu 12.04. But I suppose
+I'm developing and testing both on Windows 7 and Ubuntu 12.04/13.04/13.10. But I suppose
 it should work on any other platform that supports Mercurial and Go.
 
 ### Dependencies
@@ -75,14 +77,14 @@ along with a few others.)
     package main
 
     import (
-        . "bitbucket.org/gohg/gohg"
+        hg "bitbucket.org/gohg/gohg"
         "fmt"
         "log"
     )
 
     func main() {
         var err error
-        hc := NewHgClient()
+        hc := hg.NewHgClient()
         if err = hc.Connect("", "", nil); err != nil {
             log.Fatal(err)
         }
@@ -96,7 +98,7 @@ along with a few others.)
 
         var l []byte
         files := []string{}
-        if l, err = hc.Log([]Option{Limit(2)}, files); err != nil {
+        if l, err = hc.Log([]hg.Option{hg.Limit(2)}, files); err != nil {
             fmt.Println(err)
         }
         fmt.Printf("\"log -l 2\" for repo %s:\n%s\n", hc.RepoRoot(), l)
@@ -116,6 +118,6 @@ Or you could send a patch or a pull request.
 
 ### License
 
-Copyright 2012-2013, The gohg Authors. All rights reserved.
+Copyright 2012-2014, The gohg Authors. All rights reserved.
 Use of this source code is governed by a BSD style license
 that can be found in the LICENSE.md file.
