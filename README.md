@@ -1,4 +1,6 @@
-# gohg - a Go client library for Mercurial   [![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)
+# gohg - a Go client library for Mercurial
+
+[![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)
 
 ### What it is
 
