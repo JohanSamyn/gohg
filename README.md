@@ -43,10 +43,10 @@ by gohg; see the documentation.
 
 ###### Go
 
-Currently gohg is developed with Go1.2. Though I started with the Go1.0
-versions, I can't remember having had to change more than one or two minor
+Currently gohg is currently developed with Go1.21. Though I started with the
+Go1.0 versions, I can't remember having had to change more than one or two minor
 things when moving to Go1.1.1. Updating to Go1.1.2 required no changes at all.
-I have an issue though with Go1.2, on Windows only, causing some tests using
+I had an issue though with Go1.2, on Windows only, causing some tests using
 os.exec.Command to fail. I'll have to look into that further, to find out if I
 should report a bug.
 
