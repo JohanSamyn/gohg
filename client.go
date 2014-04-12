@@ -22,8 +22,8 @@ import (
 	"strings"
 )
 
-// Type HgClient will act as the entrypoint through which all interaction
-// with the Mercurial Command Server will take place.
+// Type HgClient acts as the entrypoint through which all interaction
+// with the Mercurial Command Server takes place.
 // If you want to keep a pool of connections to multiple repos, you can create
 // multiple HgClient instances, each connecting to its own Hg CS.
 type HgClient struct {
@@ -62,9 +62,9 @@ func NewHgClient() *HgClient {
 //	initrepo
 //		When a repo exitsts for reponame, then initrepo is ignored.
 //		When no repo is found for reponame, and initrepo is true,
-//		then Connect() will first create the repository before connecting.
+//		  then Connect() will first create the repository before connecting.
 //		When no repo is found for reponame, and initrepo is false,
-//		then Connect() will return an error.
+//		  then Connect() will return an error.
 //
 // Returns an error if the connection could not be established properly.
 func (hgcl *HgClient) Connect(hgexe string, reponame string, config []string, initrepo bool) error {
