@@ -16,13 +16,14 @@ type HgCmd struct {
 	Options []HgOption
 	Params  []string
 
-	// I keep this field private to make prohibit tampering with the series
+	// I keep this field private to prohibit tampering with the series
 	// of options that is valid for a command.
 	cmdOpts interface{}
 
 	cmd []string
 }
 
+// Cset:	Should be moved into a separate sourcefile, together with any other Mercurial related stuff.
 type Cset struct {
 	Rev    int
 	Node   string
