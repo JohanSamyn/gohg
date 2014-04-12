@@ -74,7 +74,9 @@ type (
 	Logfile           string // -l --logfile
 	Message           string // -m --message
 	Modified          bool   // -m --modified
+
 	// Mq          bool   //    --mq
+
 	Name         string // -n --name NAME
 	NewBranch    bool   //    --new-branch
 	NoDates      bool   //    --nodates
@@ -594,7 +596,7 @@ func addBoolOption(optval bool, optname string, optstr string, cmdOpts interface
 		fld.SetBool(optval) // add the value to the <cmd>Opts struct
 		*hgcmd = append(*hgcmd, optstr)
 	} else {
-		return fmt.Errorf("adBoolOption(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
+		return fmt.Errorf("addBoolOption(): command %s has no option %s", strings.Title((*hgcmd)[0]), optname)
 	}
 	return nil
 }
