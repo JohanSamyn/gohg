@@ -18,17 +18,10 @@ go test $*
 paause
 
 echo ----------------------------------------
-echo running: go run examples/stats.go
-echo ----------------------------------------
-go run examples/stats.go
-paause
-
-echo ----------------------------------------
 echo running: go run examples/readme-test.go
 echo ----------------------------------------
 go run examples/readme-test.go
 paause
-
 echo ----------------------------------------
 echo running: go run examples/example1.go
 echo ----------------------------------------
@@ -45,3 +38,9 @@ echo ----------------------------------------
 echo running: go run examples/example3.go
 echo ----------------------------------------
 go run examples/example3.go
+
+echo ----------------------------------------
+echo running: go run examples/stats.go
+echo ----------------------------------------
+go run examples/stats.go
+paause

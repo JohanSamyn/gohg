@@ -9,12 +9,6 @@ go test %*
 pause
 
 echo ----------------------------------------
-echo running: go run examples\stats.go
-echo ----------------------------------------
-go run examples\stats.go
-pause
-
-echo ----------------------------------------
 echo running: go run examples\readme-test.go
 echo ----------------------------------------
 go run examples\readme-test.go
@@ -36,3 +30,9 @@ echo ----------------------------------------
 echo running: go run examples\example3.go
 echo ----------------------------------------
 go run examples\example3.go
+
+echo ----------------------------------------
+echo running: go run examples\stats.go
+echo ----------------------------------------
+go run examples\stats.go
+pause
