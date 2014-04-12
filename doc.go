@@ -9,21 +9,24 @@ Compatibility
 
 For Mercurial any version starting from 1.9 should be ok, cause that's the one
 where the Command Server was introduced. If you send wrong options to it through
-gohg, or commands or options not yet supported in your Hg version, you'll simply
-get back an error from Hg itself, as gohg does not check them.
+gohg, or commands or options not yet supported (or obsolete) in your Hg version,
+you'll simply get back an error from Hg itself, as gohg does not check them.
 But on the other hand gohg allows issuing new commands, not yet implemented by
 gohg; see further.
 
 ▪ Go
 
-Currently gohg is developed with Go1.1.1. Though I started with the Go1.0
-versions, I can't remember having had to change one or two minor things when
-moving to Go1.1.1. Updating to Go1.1.2 required no changes neither.
+Currently gohg is currently developed with Go1.2.1. Though I started with the
+Go1.0 versions, I can't remember having had to change one or two minor things
+when moving to Go1.1.1. Updating to Go1.1.2 required no changes at all.
+I had an issue though with Go1.2, on Windows only, causing some tests using
+os.exec.Command to fail. I'll have to look into that further, to find out if I
+should report a bug.
 
 ▪ Platform
 
-I'm developing and testing both on Windows 7 and Ubuntu 12.04. But I suppose
-it should work on any other platform that supports Hg and Go.
+I'm developing and testing both on Windows 7 and Ubuntu 12.04/13.04/13.10.
+But I suppose it should work on any other platform that supports Hg and Go.
 
 Dependencies
 
@@ -40,13 +43,12 @@ to have gohg available in your GOPATH.
 
 Import the package
 
-Start with importing the gohg package:
-  import . "bitbucket.org/gohg/gohg"
+Start with importing the gohg package. Examples:
+  import gohg "bitbucket.org/gohg/gohg"
 
-No real need to import as 'gohg', as the main three types you need have a name
-that starts with 'Hg': HgClient, HgCmd and HgOption. (Notable exceptions are the
-different types that represent each option. But as their names are kind of
-typical for Hg, I considered prefixing them with 'Hg' would look too ugly.)
+  or
+
+  import hg "bitbucket.org/gohg/gohg"
 
 Connecting the Mercurial Command Server
 
@@ -82,7 +84,7 @@ Though this is currently not implemented yet.
 
 This fourth parameter allows you to indicate that you want gohg to first create
 a new Mercurial repo if it does not already exist in the path given by the
-second parameter. See the API documentation for more detailed info.
+second parameter. See the documentation for more detailed info.
 
 5. The returnvalue:
 
@@ -119,7 +121,7 @@ This is done with commands, and gohg offers 3 ways to use them.
 
 3. The ExecCmd() method of the HgClient type.
 
-Each of which has its own reason of existance.
+Each of which has its own reason of existence.
 
 Commands return a byte slice containing the resulting data, and eventually an
 error. But there are a few exceptions (see api docs).
@@ -128,14 +130,14 @@ error. But there are a few exceptions (see api docs).
   err := hgcl.Init(nil, "~/mynewrepo") // only returns an error eventually
   vers, err:= hgcl.Version()           // vers is a string of the form '2.4'
 
-If a command fails, the returned error contains 5 elements: 1) the internal
-routine where the error was trapped, 2) the name of the HgClient command that
-was run, 3) the returncode by Mercurial, 4) the full command that was passed
-to the Hg CS, and 5) the eventual error message returned by Mercurial.
+If a command fails, the returned error contains 5 elements: 1) the name of the
+internal routine where the error was trapped, 2) the name of the HgClient
+command that was run, 3) the returncode by Mercurial, 4) the full command that
+was passed to the Hg CS, and 5) the eventual error message returned by Mercurial.
 
 So the command
 
-  idinfo, err := hgcl.Identify([]HgOption{Verbose(true)}, []string{"C:\\DEV\\myrepo"})
+  idinfo, err := hgcl.Identify([]hg.HgOption{hg.Verbose(true)}, []string{"C:\\DEV\\myrepo"})
 
 could return something like the following in the err variable when it fails:
 
@@ -158,7 +160,7 @@ with a capital letter of course.
 
 An example (also see examples/example1.go):
 
-  log, err := hgcl.Log([]HgOption{Limit(2)}, []string("my-file"))
+  log, err := hgcl.Log([]hg.HgOption{hg.Limit(2)}, []string("my-file"))
   if err != nil {
       fmt.Printf(err)
       ...
@@ -171,13 +173,11 @@ syntactic sugar. If you just want to simply issue a command, nothing more, they
 are the way to go.
 
 The only way to obtain the commandstring sent to Hg when using these command
-methods, is by calling the HgClient.ShowLastCmd() method afterwards:
+methods, is by calling the HgClient.ShowLastCmd() method afterwards before
+issuing any other commands:
 
-  log, err := hgcl.Log([]HgOption{Limit(2)}, []string("my-file"))
-  fmt.Printf("%s", hc.ShowLastCmd()) // prints: log --limit 2 my-file
-
-But you have to do this before performing any other command, as the name of the
-method already suggests.
+  log, err := hgcl.Log([]hg.HgOption{hg.Limit(2)}, []string("my-file"))
+  fmt.Printf("%s", hgcl.ShowLastCmd()) // prints: log --limit 2 my-file
 
 Commands - the HgCmd type
 
@@ -195,12 +195,12 @@ times, and show the building of the command step by step.)
 
 An example (also see examples/example2.go):
 
-  opts := make([]HgOption, 2)
+  opts := make([]hg.HgOption, 2)
   var lim Limit = 2
   opts[0] = lim
   var verb Verbose = true
   opts[1] = verb
-  cmd, _ := NewHgCmd("log", opts, nil, new(logOpts))
+  cmd, _ := hg.NewHgCmd("log", opts, nil, new(hg.logOpts))
   cmd.SetOptions(opts)
   cmdline, _ := cmd.CmdLine(hgcl)
   fmt.Printf("%s\n", cmdline) // output: log --limit 2 -v
@@ -232,7 +232,7 @@ Options and Parameters
 
 Just like on the commandline, options come before parameters.
 
-  opts := []HgOption{Verbose(true), Limit(2)}
+  opts := []hg.HgOption{hg.Verbose(true), hg.Limit(2)}
   params := []string{"mytool.go"}
   log, err := hgcl.Log(opts, params)
 
@@ -243,9 +243,9 @@ the option (= type conversion of the value to the option type). You can pass any
 number of options, as the elements of a slice. Options can occur more than once
 if appropriate (see the ones marked with '[+]' in the Mercurial help).
 
-  log, err := hgcl.Log([]HgOption{Verbose(true)}, nil)                 // bool
-  log, err := hgcl.Log([]HgOption{Limit(2)}, nil)                      // int
-  log, err := hgcl.Log([]HgOption{User("John Doe"), User("me")}, nil)  // string, repeated option
+  log, err := hgcl.Log([]hg.HgOption{hg.Verbose(true)}, nil)                 // bool
+  log, err := hgcl.Log([]hg.HgOption{hg.Limit(2)}, nil)                      // int
+  log, err := hgcl.Log([]hg.HgOption{hg.User("John Doe"), hg.User("me")}, nil)  // string, repeated option
 
 Parameters are used to provide any arguments for a command that are not options.
 They are passed in as a string or a slice of strings, depending on the command.
@@ -286,7 +286,8 @@ the ExecCmd method.
 ▪ If multiple Hg CSs are used against the same repo, it is up to Mercurial
 to handle this correctly.
 
-▪ Mercurial is always run in english. No internationalization yet.
+▪ Mercurial is always run in english. Internationalization is not necessary
+here, as the conversation with Hg is internal to the application.
 
 Feedback
 
@@ -297,7 +298,7 @@ Or you could send a patch or a pull request.
 
 License
 
-Copyright 2012-2013, The gohg Authors. All rights reserved.
+Copyright 2012-2014, The gohg Authors. All rights reserved.
 
 Use of this source code is governed by a BSD style license that can be found in
 the LICENSE.md file.
