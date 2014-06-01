@@ -512,6 +512,8 @@ CHANNEL_LOOP:
 		default:
 			if strings.IndexAny(ch, "abcfghijklmnpqstuvwxyzABCDEFGHJKMNOPQRSTUVWXYZ") != -1 {
 				return nil, nil, 0, fmt.Errorf("runInHg(): unexpected channel '%s' %q detected", ch, ch)
+			} else {
+				break CHANNEL_LOOP
 			}
 		} // switch ch
 	} // for true
