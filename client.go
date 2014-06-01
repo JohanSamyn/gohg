@@ -510,8 +510,7 @@ CHANNEL_LOOP:
 		case "I":
 		case "L":
 		default:
-			// unexpected required channel
-			if ch == strings.ToUpper(ch) {
+			if strings.IndexAny(ch, "abcfghijklmnpqstuvwxyzABCDEFGHJKMNOPQRSTUVWXYZ") != -1 {
 				return nil, nil, 0, fmt.Errorf("runInHg(): unexpected channel '%s' detected", ch)
 			}
 		} // switch ch
