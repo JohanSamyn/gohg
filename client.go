@@ -510,7 +510,10 @@ CHANNEL_LOOP:
 		case "I":
 		case "L":
 		default:
-			return nil, nil, 0, fmt.Errorf("runInHg(): unexpected channel '%s' detected", ch)
+			// Some commands return noting, so an empty channel is quite normal then.
+			if ch != "" {
+				return nil, nil, 0, fmt.Errorf("runInHg(): unexpected channel '%s' detected", ch)
+			}
 		} // switch ch
 	} // for true
 
