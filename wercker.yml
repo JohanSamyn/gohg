@@ -13,7 +13,7 @@ build:
             code: |
                 cd $WERCKER_SOURCE_DIR
                 go version
-                go get -t ./...
+                go get -t
 
         # Build the project
         - script:
@@ -34,4 +34,5 @@ build:
             username: johan.samyn@gmail.com
             password: $EMAIL_PASSWORD
             host: smtp.gmail.com:587
-            failed-subject: "wercker: JohanSamyn/gohg: build of master by Johan Samyn failed."
+            # passed-subject: "wercker [PASS]: JohanSamyn/gohg: build of master by Johan Samyn passed."
+            failed-subject: "wercker [FAIL]: JohanSamyn/gohg: build of master by Johan Samyn failed."
