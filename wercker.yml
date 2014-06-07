@@ -34,3 +34,4 @@ build:
             username: johan.samyn@gmail.com
             password: $EMAIL_PASSWORD
             host: smtp.gmail.com:587
+
