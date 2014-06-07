@@ -1,1 +1,11 @@
-box: wercker/golang
+box: wercker/golang@1.1.2
+steps:
+    - wercker/email-notify@1.0.0
+build:
+    after-steps:
+        - email-notify:
+        		from: alerts@wercker.com
+        		to: johan.samyn@gmail.com
+        		username: johan.samyn@gmail.com
+        		password: $EMAIL_PASSWORD
+        		host: smtp.gmail.com:587
