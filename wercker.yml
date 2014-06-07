@@ -6,7 +6,6 @@ steps:
 build:
     steps:
         - setup-go-workspace
-
         # Gets the dependencies
         - script:
             name: go get
@@ -26,7 +25,6 @@ build:
             name: go test
             code: |
                 go test
-
     after-steps:
         - email-notify:
             from: alerts@wercker.com
@@ -34,3 +32,4 @@ build:
             username: johan.samyn@gmail.com
             password: $EMAIL_PASSWORD
             host: smtp.gmail.com:587
+            failed-subject: "wercker: JohanSamyn/gohg: build of master by Johan Samyn failed."
