@@ -27,6 +27,16 @@ build:
             code: |
                 go test
 
+        # Run the examples
+        - script:
+            name: run examples
+            code: |
+                go run examples/readme-test.go
+                go run examples/example1.go
+                go run examples/example2.go
+                go run examples/example3.go
+                go run examples/stats.go
+
     after-steps:
         - email-notify:
             from: alerts@wercker.com
@@ -34,5 +44,5 @@ build:
             username: johan.samyn@gmail.com
             password: $EMAIL_PASSWORD
             host: smtp.gmail.com:587
-            # passed-subject: "wercker [PASS]: JohanSamyn/gohg: build of master by Johan Samyn passed."
+            passed-subject: "wercker [PASS]: JohanSamyn/gohg: build of master by Johan Samyn passed."
             failed-subject: "wercker [FAIL]: JohanSamyn/gohg: build of master by Johan Samyn failed."
