@@ -1,4 +1,8 @@
 box: wercker/golang@1.1.2
+
+steps:
+    - wercker/email-notify@1.0.0
+
 build:
     steps:
         - setup-go-workspace
@@ -22,7 +26,7 @@ build:
             name: go test
             code: |
                 go test
-        - wercker/email-notify@1.0.0
+
     after-steps:
         - email-notify:
             from: alerts@wercker.com
