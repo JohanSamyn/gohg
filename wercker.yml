@@ -4,8 +4,8 @@ steps:
 build:
     after-steps:
         - email-notify:
-        		from: alerts@wercker.com
-        		to: johan.samyn@gmail.com
-        		username: johan.samyn@gmail.com
-        		password: $EMAIL_PASSWORD
-        		host: smtp.gmail.com:587
+            from: alerts@wercker.com
+            to: johan.samyn@gmail.com
+            username: johan.samyn@gmail.com
+            password: $EMAIL_PASSWORD
+            host: smtp.gmail.com:587
