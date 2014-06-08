@@ -1,0 +1,19 @@
+language: go
+
+go:
+    - 1.2.2
+
+script:
+    - echo "TRAVIS_GO_VERSION="$TRAVIS_GO_VERSION
+    - go version
+    - go env
+    - go get -t
+    - go build
+    - go test
+
+notifications:
+    email:
+        recipients:
+            - johan.samyn@gmail.com
+        on_success: change
+        on_failure: always
