@@ -7,12 +7,14 @@ build:
     steps:
         - setup-go-workspace
 
-        # Gets the dependencies
+        # Get the dependencies
         - script:
             name: go get
             code: |
                 cd $WERCKER_SOURCE_DIR
+                pwd
                 go version
+                go env
                 go get -t
 
         # Build the project
@@ -41,8 +43,10 @@ build:
         - email-notify:
             from: alerts@wercker.com
             to: johan.samyn@gmail.com
-            username: johan.samyn@gmail.com
-            password: $EMAIL_PASSWORD
+#            username: johan.samyn@gmail.com
+#            password: $EMAIL_PASSWORD
+            username: gohg@gmail.com
+            password: $GOHG_EMAIL_PASSWORD
             host: smtp.gmail.com:587
-            passed-subject: "wercker [PASS]: JohanSamyn/gohg: build of master by Johan Samyn passed."
-            failed-subject: "wercker [FAIL]: JohanSamyn/gohg: build of master by Johan Samyn failed."
+            passed-subject: "wercker [PASS]: gohg: build passed"
+            failed-subject: "wercker [FAIL]: gohg: build failed"
