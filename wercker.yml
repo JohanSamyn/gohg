@@ -29,7 +29,7 @@ build:
         - script:
             name: go test
             code: |
-                go test
+                go test -v
 
         # Run the examples
         - script:
