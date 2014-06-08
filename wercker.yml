@@ -41,7 +41,7 @@ build:
                 mkdir -p /home/ubuntu/go/pkg/linux_amd64/bitbucket.org/gohg
                 find /home/ubuntu -name gohg.a
                 cp /home/ubuntu/go/pkg/linux_amd64/github.com/JohanSamyn/gohg.a /home/ubuntu/go/pkg/linux_amd64/bitbucket.org/gohg/gohg.a
-                # Now run them.
+                # Now run them..
                 go run examples/readme-test.go
                 go run examples/example1.go
                 go run examples/example2.go
