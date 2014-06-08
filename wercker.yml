@@ -33,6 +33,10 @@ build:
         - script:
             name: run examples
             code: |
+                # The examples import the gohg package from bitbucket.org/gohg/gohg.
+                mkdir -p $GOPATH/pkg/linux_amd64/bitbucket.org/gohg/gohg
+                cp $WERCKER_SOURCE_DIR/gohg.a $GOPATH/pkg/linux_amd64/bitbucket.org/gohg/gohg/gohg.a
+                # Now run them.
                 go run examples/readme-test.go
                 go run examples/example1.go
                 go run examples/example2.go
