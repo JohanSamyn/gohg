@@ -45,7 +45,7 @@ build:
             to: johan.samyn@gmail.com
 #            username: johan.samyn@gmail.com
 #            password: $EMAIL_PASSWORD
-            username: gohg@gmail.com
+            username: gohg.project
             password: $GOHG_EMAIL_PASSWORD
             host: smtp.gmail.com:587
             passed-subject: "wercker [PASS]: gohg: build passed"
