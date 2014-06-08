@@ -5,6 +5,7 @@ go:
 
 script:
     - echo "TRAVIS_GO_VERSION="$TRAVIS_GO_VERSION
+#
     - go version
     - go env
     - go get -t
