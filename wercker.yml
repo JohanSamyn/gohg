@@ -36,8 +36,8 @@ build:
                 # The examples import the gohg package from bitbucket.org/gohg/gohg,
                 # as that is the real home of the gohg package (github is only used
                 # to be able to do CI with wercker).
-                # As we now know it builds ok, we simply 'go get' the package,
-                # as any other user would do.
+                # As we know at this point it builds ok, we simply 'go get' the
+                # package, as any other user would do.
                 go get bitbucket.org/gohg/gohg
                 # clone the gohg repo for running the examples on it.
                 hg clone https://bitbucket.org/gohg/gohg /home/ubuntu/go/src/
