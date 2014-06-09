@@ -21,9 +21,7 @@ build:
         - script:
             name: go build
             code: |
-                # As we need the gohg.a to run the examples,
-                # we use 'go install' instead of 'go build'.
-                go install
+                go build
 
         # Test the project
         - script:
@@ -36,19 +34,11 @@ build:
             name: run examples
             code: |
                 # The examples import the gohg package from bitbucket.org/gohg/gohg,
-                # as that is the real home of the gohg package (github is used to be
-                # able to do CI with wercker).
-                mkdir -p /home/ubuntu/go/pkg/linux_amd64/bitbucket.org/gohg
-                find /home/ubuntu -name gohg.a
-                cp /home/ubuntu/go/pkg/linux_amd64/github.com/JohanSamyn/gohg.a /home/ubuntu/go/pkg/linux_amd64/bitbucket.org/gohg/gohg.a
-                # another approach
-                mkdir -p /home/ubuntu/go/src/linux_amd64/bitbucket.org/gohg
-                cd /home/ubuntu/go/src/linux_amd64/bitbucket.org/gohg
-                ln -s /home/ubuntu/go/pkgsrc/github.com/JohanSamyn/gohg
-                # And what if I simply did:
+                # as that is the real home of the gohg package (github is only used
+                # to be able to do CI with wercker).
+                # As we now know it builds ok, we simply 'go get' the package,
+                # as any other user would do.
                 go get bitbucket.org/gohg/gohg
-                find /home/ubuntu -name gohg.a
-                # Now run them.
                 go run examples/readme-test.go
                 go run examples/example1.go
                 go run examples/example2.go
@@ -59,10 +49,10 @@ build:
         - email-notify:
             from: alerts@wercker.com
             to: johan.samyn@gmail.com
-            username: johan.samyn@gmail.com
-            password: $EMAIL_PASSWORD
-#            username: gohg.project
-#            password: $GOHG_EMAIL_PASSWORD
+#            username: johan.samyn@gmail.com
+#            password: $EMAIL_PASSWORD
+            username: gohg.project@gmail.com
+            password: $GOHG_EMAIL_PASSWORD
             host: smtp.gmail.com:587
             passed-subject: "wercker [PASS]: gohg: build passed"
             failed-subject: "wercker [FAIL]: gohg: build failed"
