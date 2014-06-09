@@ -64,9 +64,9 @@ func TestHgClient_Branches(t *testing.T) {
 		t.Fatalf("Test Branches Active: expected:\n%s\n but got:\n%s\n", expected, got)
 	}
 
-	// This test was disabled because of a problem on drone.io.
-	// drone.io uses Mercurial v2.0.2.
-	// To be investigated.
+	// This test causes problems on drone.io.
+	// Running builds on app.wercker.com works correctly, even with this test
+	// enabled, and also when running all examples.
 	// test Closed option
 
 	cmd = exec.Command(hct.HgExe(), "-R", hct.RepoRoot(), "update", "default")
