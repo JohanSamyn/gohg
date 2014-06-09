@@ -40,8 +40,10 @@ build:
                 # package, as any other user would do.
                 go get bitbucket.org/gohg/gohg
                 # clone the gohg repo for running the examples on it.
-                hg clone https://bitbucket.org/gohg/gohg /home/ubuntu/go/src/
-                cd /home/ubuntu/go/src/bitbucket/org/gohg/gohg
+                mkdir -p /home/ubuntu/go/src/bitbucket.org/gohg
+                cd /home/ubuntu/go/src/bitbucket/org/gohg
+                hg clone https://bitbucket.org/gohg/gohg .
+                cd gohg
                 # Now run them.
                 go run examples/readme-test.go
                 go run examples/example1.go
