@@ -39,6 +39,10 @@ build:
                 # As we now know it builds ok, we simply 'go get' the package,
                 # as any other user would do.
                 go get bitbucket.org/gohg/gohg
+                # clone the gohg repo for running the examples on it.
+                hg clone https://bitbucket.org/gohg/gohg /home/ubuntu/go/src/
+                cd /home/ubuntu/go/src/bitbucket/org/gohg/gohg
+                # Now run them.
                 go run examples/readme-test.go
                 go run examples/example1.go
                 go run examples/example2.go
