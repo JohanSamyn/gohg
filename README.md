@@ -1,7 +1,7 @@
-# gohg - a Go client library for Mercurial
+# gohg - a Go client library for Mercurial  
   
   
-[![wercker status](https://app.wercker.com/status/be2e7f6feed00063ea688ebaf4be67f9/m "wercker status")](https://app.wercker.com/project/bykey/be2e7f6feed00063ea688ebaf4be67f9)
+[![wercker status](https://app.wercker.com/status/be2e7f6feed00063ea688ebaf4be67f9/m "wercker status")](https://app.wercker.com/project/bykey/be2e7f6feed00063ea688ebaf4be67f9)  
   
   
 ### What it is
