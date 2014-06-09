@@ -1,9 +1,8 @@
 # gohg - a Go client library for Mercurial
 
 
-[![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)
-
 [![wercker status](https://app.wercker.com/status/be2e7f6feed00063ea688ebaf4be67f9/s "wercker status")](https://app.wercker.com/project/bykey/be2e7f6feed00063ea688ebaf4be67f9)
+
 
 ### What it is
 
