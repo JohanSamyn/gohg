@@ -1,9 +1,7 @@
-# gohg - a Go client library for Mercurial  
-  
-  
-[![wercker status](https://app.wercker.com/status/be2e7f6feed00063ea688ebaf4be67f9/m "wercker status")](https://app.wercker.com/project/bykey/be2e7f6feed00063ea688ebaf4be67f9)  
-  
-  
+# gohg - a Go client library for Mercurial
+
+[![wercker status](https://app.wercker.com/status/be2e7f6feed00063ea688ebaf4be67f9/m "wercker status")](https://app.wercker.com/project/bykey/be2e7f6feed00063ea688ebaf4be67f9)
+
 ### What it is
 
 This project provides a [Go](http://golang.org) client library for the
@@ -18,7 +16,6 @@ Well, some results will eventually be wrapped in a more Go-like form, like
 changeset info for instance.
 
 It is as much an occasion for me to experience working with Go :) .
-
 
 ### Features
 
