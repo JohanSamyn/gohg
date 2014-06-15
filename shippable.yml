@@ -13,6 +13,8 @@ install:
     # first create an install folder for 'go get -t'
     - mkdir -p /home/minion/golib
     - export GOPATH=$GOPATH:/home/minion/golib
+    # exploring folders
+    - tree /home/minion/projects/539b4df0af6d77fe0105b8c5/code
     - go get -t
 
 script:
