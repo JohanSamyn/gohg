@@ -6,14 +6,14 @@ go:
     - 1.2.2
 
 install:
-    # first create an install folder for 'go get -t'
-    - mkdir -p /home/minion/golib/src
-    - mkdir /home/minion/golib/pkg
-    - mkdir /home/minion/golib/bin
-    - export GOPATH=$GOPATH:/home/minion/golib
     # exploring folders
     - sudo apt-get -y install tree
     - tree /home/minion
+    # first create an install folder for 'go get -t'
+    - mkdir -p /home/minion/golib/src
+    #- mkdir /home/minion/golib/pkg
+    #- mkdir /home/minion/golib/bin
+    - export GOPATH=$GOPATH:/home/minion/golib
     - sudo mkdir /home/minion/projects/539b4df0af6d77fe0105b8c5/src
     - sudo cp -r /home/minion/projects/539b4df0af6d77fe0105b8c5/code/* /home/minion/projects/539b4df0af6d77fe0105b8c5/src/
     - sudo cd /home/minion/projects/539b4df0af6d77fe0105b8c5/src
