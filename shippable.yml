@@ -7,15 +7,21 @@ go:
 
 install:
     # first create an install folder for 'go get -t'
-    - mkdir -p /home/minion/golib
+    - mkdir -p /home/minion/golib/src
+    - mkdir /home/minion/golib/pkg
+    - mkdir /home/minion/golib/bin
     - export GOPATH=$GOPATH:/home/minion/golib
     # exploring folders
     - sudo apt-get -y install tree
-    - tree /home/minion/projects/539b4df0af6d77fe0105b8c5/code
+    - tree /home/minion
+    - sudo mkdir /home/minion/projects/539b4df0af6d77fe0105b8c5/scr
+    - sudo cp -r /home/minion/projects/539b4df0af6d77fe0105b8c5/src
+    - sudo cd /home/minion/projects/539b4df0af6d77fe0105b8c5/src
     # install dependencies
     - go get -t
 
 script:
+    - sudo cd /home/minion/projects/539b4df0af6d77fe0105b8c5/src
     - go version
     - hg version
     - go env
