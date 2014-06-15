@@ -14,8 +14,8 @@ install:
     # exploring folders
     - sudo apt-get -y install tree
     - tree /home/minion
-    - sudo mkdir /home/minion/projects/539b4df0af6d77fe0105b8c5/scr
-    - sudo cp -r /home/minion/projects/539b4df0af6d77fe0105b8c5/src
+    - sudo mkdir /home/minion/projects/539b4df0af6d77fe0105b8c5/src
+    - sudo cp -r /home/minion/projects/539b4df0af6d77fe0105b8c5/code/* /home/minion/projects/539b4df0af6d77fe0105b8c5/src/
     - sudo cd /home/minion/projects/539b4df0af6d77fe0105b8c5/src
     # install dependencies
     - go get -t
