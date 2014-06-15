@@ -11,6 +11,8 @@ before_install:
 
 install:
     # first create an install folder for 'go get -t'
+    - mkdir -p /home/minion/golib
+    - GOPATH=$GOPATH:/home/minion/golib
     - go get -t
 
 script:
