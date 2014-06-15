@@ -16,7 +16,7 @@ install:
     #- mkdir /home/minion/golib/pkg
     #- mkdir /home/minion/golib/bin
     - export GOPATH=$GOPATH:/home/minion/golib
-    - sudo rm /home/minion/projects/scr
+    - sudo rm /home/minion/projects/539b4df0af6d77fe0105b8c5/scr
     - sudo mkdir /home/minion/projects/539b4df0af6d77fe0105b8c5/src
     - sudo mkdir /home/minion/projects/539b4df0af6d77fe0105b8c5/pkg
     - sudo mkdir /home/minion/projects/539b4df0af6d77fe0105b8c5/bin
