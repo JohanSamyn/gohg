@@ -42,11 +42,11 @@ build:
                 # Use the gohg repo for running the examples on it.
                 cd /home/ubuntu/go/src/bitbucket.org/gohg/gohg
                 # Now run them.
-                go run examples/readme-test.go
-                go run examples/example1.go
-                go run examples/example2.go
-                go run examples/example3.go
-                go run examples/stats.go
+                go run examples/readme-test/readme-test.go
+                go run examples/example1/example1.go
+                go run examples/example2/example2.go
+                go run examples/example3/example3.go
+                go run examples/stats/stats.go
 
     after-steps:
         - email-notify:
