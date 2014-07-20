@@ -1,8 +1,10 @@
 # gohg - a Go client library for Mercurial
 
-[![wercker status](https://app.wercker.com/status/be2e7f6feed00063ea688ebaf4be67f9/m "wercker status")](https://app.wercker.com/project/bykey/be2e7f6feed00063ea688ebaf4be67f9)
-[![Build Status](https://travis-ci.org/JohanSamyn/gohg.svg?branch=master)](https://travis-ci.org/JohanSamyn/gohg)
-[![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)
+<table cellspacing="20"><tr>
+<td>[![wercker status](https://app.wercker.com/status/be2e7f6feed00063ea688ebaf4be67f9/m "wercker status")](https://app.wercker.com/project/bykey/be2e7f6feed00063ea688ebaf4be67f9)</td>
+<td>[![Build Status](https://travis-ci.org/JohanSamyn/gohg.svg?branch=master)](https://travis-ci.org/JohanSamyn/gohg)</td>
+<td>[![Build Status](https://drone.io/bitbucket.org/gohg/gohg/status.png)](https://drone.io/bitbucket.org/gohg/gohg/latest)</td>
+</tr><table>
 
 ### What it is
 
